@@ -62,91 +62,94 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#000000] text-white">
+    <div className="min-h-screen flex flex-col bg-[#E1E4E8] text-[#202024]">
       {/* 1. Global Navigation Bar */}
-      <header className="h-16 px-4 sm:px-8 border-b border-white/10 bg-[#0D0D0D]/95 backdrop-blur-md sticky top-0 z-40 flex items-center justify-between">
+      <header className="h-16 px-4 sm:px-8 border-b border-[#E1E4E9] bg-white/95 backdrop-blur-md sticky top-0 z-40 flex items-center justify-between">
         {/* Brand Lockup */}
         <div className="flex items-center gap-3">
           <div
-            className="w-9 h-9 rounded-2xl p-0.5 shadow-md shadow-black/80 flex items-center justify-center shrink-0 bg-neutral-800 border border-neutral-700"
+            className="w-9 h-9 rounded-2xl p-0.5 shadow-sm flex items-center justify-center shrink-0 border border-[#E1E4E9]"
+            style={{
+              background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 40%, #8A2BE2 100%)',
+            }}
           >
-            <div className="w-full h-full rounded-[14px] bg-[#121212] flex items-center justify-center">
-              <span className="font-shadow-script text-xl text-white">S</span>
+            <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
+              <span className="font-shadow-script text-xl text-[#202024]">S</span>
             </div>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-shadow-script text-2xl text-white tracking-wide drop-shadow-[0_2px_8px_rgba(255,255,255,0.2)]">
+              <span className="font-shadow-script text-2xl text-[#202024] tracking-wide">
                 Shadow
               </span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-900 text-neutral-300 border border-neutral-700 uppercase tracking-wider hidden sm:inline-flex items-center gap-1">
-                <Sparkles size={10} />
-                Stealth Edition
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#777982] border border-[#E1E4E9] uppercase tracking-wider hidden sm:inline-flex items-center gap-1">
+                <Sparkles size={10} className="text-[#FF0A78]" />
+                Reference Colors
               </span>
             </div>
           </div>
         </div>
 
         {/* View Mode Switcher */}
-        <div className="flex items-center p-1 bg-neutral-950 border border-white/10 rounded-2xl gap-1">
+        <div className="flex items-center p-1 bg-[#F1F3F6] border border-[#E1E4E9] rounded-2xl gap-1">
           <button
-            onClick={() => setViewMode('shadow-auth')}
+            onClick={() => setViewMode('side-by-side')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              viewMode === 'shadow-auth'
-                ? 'bg-neutral-800 text-white shadow-md border border-neutral-700'
-                : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
+              viewMode === 'side-by-side'
+                ? 'bg-white text-[#202024] shadow-sm border border-[#E1E4E9]'
+                : 'text-[#777982] hover:text-[#202024] hover:bg-white/60'
             }`}
           >
-            <Sparkles size={14} className={viewMode === 'shadow-auth' ? 'text-white' : 'text-neutral-400'} />
-            <span className="hidden sm:inline">Shadow Auth (3 Screens)</span>
-            <span className="sm:hidden">Auth UI</span>
+            <Columns3 size={14} className={viewMode === 'side-by-side' ? 'text-[#FF0A78]' : ''} />
+            <span className="hidden sm:inline">3 App Mockups</span>
+            <span className="sm:hidden">3 Phones</span>
           </button>
 
           <button
             onClick={() => setViewMode('single')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'single'
-                ? 'bg-neutral-800 text-white shadow-md border border-neutral-700'
-                : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
+                ? 'bg-white text-[#202024] shadow-sm border border-[#E1E4E9]'
+                : 'text-[#777982] hover:text-[#202024] hover:bg-white/60'
             }`}
           >
-            <Smartphone size={14} />
+            <Smartphone size={14} className={viewMode === 'single' ? 'text-[#FF0A78]' : ''} />
             <span className="hidden sm:inline">Interactive Phone</span>
             <span className="sm:hidden">Single</span>
-          </button>
-
-          <button
-            onClick={() => setViewMode('side-by-side')}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              viewMode === 'side-by-side'
-                ? 'bg-neutral-800 text-white shadow-md border border-neutral-700'
-                : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
-            }`}
-          >
-            <Columns3 size={14} />
-            <span className="hidden sm:inline">3 App Mockups</span>
-            <span className="sm:hidden">3 Phones</span>
           </button>
 
           <button
             onClick={() => setViewMode('gallery')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'gallery'
-                ? 'bg-neutral-800 text-white shadow-md border border-neutral-700'
-                : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
+                ? 'bg-white text-[#202024] shadow-sm border border-[#E1E4E9]'
+                : 'text-[#777982] hover:text-[#202024] hover:bg-white/60'
             }`}
           >
-            <LayoutGrid size={14} />
+            <LayoutGrid size={14} className={viewMode === 'gallery' ? 'text-[#FF0A78]' : ''} />
             <span className="hidden sm:inline">All 5 Screens Gallery</span>
             <span className="sm:hidden">All 5</span>
+          </button>
+
+          <button
+            onClick={() => setViewMode('shadow-auth')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              viewMode === 'shadow-auth'
+                ? 'bg-white text-[#202024] shadow-sm border border-[#E1E4E9]'
+                : 'text-[#777982] hover:text-[#202024] hover:bg-white/60'
+            }`}
+          >
+            <Sparkles size={14} className={viewMode === 'shadow-auth' ? 'text-[#FF0A78]' : ''} />
+            <span className="hidden sm:inline">Shadow Auth (3 Screens)</span>
+            <span className="sm:hidden">Auth UI</span>
           </button>
 
           <button
             onClick={() => setViewMode('code')}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               viewMode === 'code'
-                ? 'bg-neutral-800 text-white shadow-md border border-neutral-700'
-                : 'text-neutral-400 hover:text-white hover:bg-neutral-900'
+                ? 'bg-white text-[#202024] shadow-sm border border-[#E1E4E9]'
+                : 'text-[#777982] hover:text-[#202024] hover:bg-white/60'
             }`}
           >
             <Code size={14} />
@@ -157,7 +160,7 @@ export default function App() {
 
         {/* Global Brand Indicator */}
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-neutral-400 hidden sm:inline">
+          <span className="text-xs font-semibold text-[#777982] hidden sm:inline">
             Shadow v1.0
           </span>
         </div>
@@ -167,14 +170,15 @@ export default function App() {
       <main className="flex-1 flex flex-col">
         {/* VIEW 1: SINGLE INTERACTIVE PHONE */}
         {viewMode === 'single' && (
-          <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 bg-[#000000]">
-            <div className="max-w-md w-full mb-3 text-center">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-semibold">
-                <Sparkles size={12} />
+          <div className="relative flex-1 flex flex-col items-center justify-center p-3 sm:p-6 bg-[#E1E4E8] overflow-hidden">
+            <ShadowBackgroundDesign screenType="presentation" />
+            <div className="relative z-10 max-w-md w-full mb-3 text-center">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-semibold shadow-xs">
+                <Sparkles size={12} className="text-[#FF0A78]" />
                 Live Interactive Shadow Experience
               </span>
-              <p className="text-[11px] text-neutral-400 mt-1">
-                Feed, Stories, Explore, Reels, and Profile in pure Black & Matt Black monochrome stealth.
+              <p className="text-[11px] text-[#777982] mt-1">
+                Feed, Stories, Explore, Reels, and Profile in reference light and dark palettes.
               </p>
 
               {/* Quick Tab Jump Chips */}
@@ -192,8 +196,8 @@ export default function App() {
                     onClick={() => setCurrentTab(tab.id as any)}
                     className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
                       currentTab === tab.id
-                        ? 'bg-neutral-800 text-white shadow-lg border border-neutral-700 scale-105'
-                        : 'bg-neutral-900/60 text-neutral-400 hover:text-white hover:bg-neutral-900 border border-neutral-800'
+                        ? 'bg-[#FF0A78] text-white shadow-md scale-105'
+                        : 'bg-white/80 text-[#777982] hover:text-[#202024] hover:bg-white border border-[#E1E4E9]'
                     }`}
                   >
                     {tab.label}
@@ -202,25 +206,28 @@ export default function App() {
               </div>
             </div>
 
-            <PhoneSimulator
-              isDark={isDark}
-              onToggleTheme={toggleTheme}
-              activeTab={currentTab}
-              onTabChange={setCurrentTab}
-              onSelectStory={setActiveStory}
-            />
+            <div className="relative z-10">
+              <PhoneSimulator
+                isDark={isDark}
+                onToggleTheme={toggleTheme}
+                activeTab={currentTab}
+                onTabChange={setCurrentTab}
+                onSelectStory={setActiveStory}
+              />
+            </div>
           </div>
         )}
 
-        {/* VIEW 2: 3 DEVICES SIDE-BY-SIDE (MATCHING SCREENSHOT 1) */}
+        {/* VIEW 2: 3 DEVICES SIDE-BY-SIDE (EXACT MATCH TO REFERENCE IMAGE) */}
         {viewMode === 'side-by-side' && (
-          <div className="flex-1 overflow-x-auto p-4 sm:p-8 bg-gradient-to-b from-[#000000] via-[#0D0D0D] to-[#000000]">
-            <div className="min-w-fit mx-auto flex items-start justify-center gap-6 sm:gap-10 pb-12">
-              {/* Phone 1: Feed / Home (Light Mode) */}
+          <div className="relative flex-1 overflow-x-auto p-4 sm:p-8 bg-[#E1E4E8] min-h-[calc(100vh-4rem)] flex flex-col justify-center">
+            <ShadowBackgroundDesign screenType="presentation" />
+            <div className="relative z-10 min-w-fit mx-auto flex items-start justify-center gap-6 sm:gap-10 pb-12">
+              {/* Phone 1: Feed / Home (Light Mode - Left Phone in Reference) */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  Feed / Home (Matt Black)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-bold shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78] animate-pulse" />
+                  Feed / Home (Light)
                 </span>
                 <PhoneSimulator
                   isDark={false}
@@ -230,25 +237,25 @@ export default function App() {
                 />
               </div>
 
-              {/* Phone 2: Feed / Home (Dark Mode) */}
+              {/* Phone 2: Explore / Populares (Dark Mode - Center Phone in Reference) */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  Feed / Home (Pure Black)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#151517]/95 backdrop-blur-md border border-[#38383D] text-[#F7F7F9] text-xs font-bold shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78] animate-pulse" />
+                  Explore / Populares (Dark)
                 </span>
                 <PhoneSimulator
                   isDark={true}
                   onToggleTheme={toggleTheme}
-                  activeTab="home"
+                  activeTab="explore"
                   onSelectStory={setActiveStory}
                 />
               </div>
 
-              {/* Phone 3: Profile Mauricio Lopez (Light Mode) */}
+              {/* Phone 3: Profile Mauricio Lopez (Light Mode - Right Phone in Reference) */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-neutral-400 animate-pulse" />
-                  Profile Mauricio Lopez (Stealth)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-bold shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#8A2BE2] animate-pulse" />
+                  Profile Mauricio Lopez (Light)
                 </span>
                 <PhoneSimulator
                   isDark={false}
@@ -263,13 +270,14 @@ export default function App() {
 
         {/* VIEW 3: ALL 5 SCREENS GALLERY (MATCHING SCREENSHOTS 1, 2, 3) */}
         {viewMode === 'gallery' && (
-          <div className="flex-1 overflow-x-auto p-4 sm:p-8 bg-gradient-to-b from-[#000000] via-[#0D0D0D] to-[#000000]">
-            <div className="min-w-fit mx-auto flex items-start justify-center gap-6 sm:gap-8 pb-12">
+          <div className="relative flex-1 overflow-x-auto p-4 sm:p-8 bg-[#E1E4E8]">
+            <ShadowBackgroundDesign screenType="presentation" />
+            <div className="relative z-10 min-w-fit mx-auto flex items-start justify-center gap-6 sm:gap-8 pb-12">
               {/* Screen 1: Feed Light */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-white" />
-                  Feed / Home (Matt Black)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-bold shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78]" />
+                  Feed / Home (Light)
                 </span>
                 <PhoneSimulator
                   isDark={false}
@@ -281,9 +289,9 @@ export default function App() {
 
               {/* Screen 2: Feed Dark */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-white" />
-                  Feed / Home (Pure Black)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#151517]/95 backdrop-blur-md border border-[#38383D] text-[#F7F7F9] text-xs font-bold shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78]" />
+                  Feed / Home (Dark)
                 </span>
                 <PhoneSimulator
                   isDark={true}
@@ -295,9 +303,9 @@ export default function App() {
 
               {/* Screen 3: Explore Dark (Screenshot 2) */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-white" />
-                  Explore / Discover (Stealth)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#151517]/95 backdrop-blur-md border border-[#38383D] text-[#F7F7F9] text-xs font-bold shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78]" />
+                  Explore / Discover (Dark)
                 </span>
                 <PhoneSimulator
                   isDark={true}
@@ -309,9 +317,9 @@ export default function App() {
 
               {/* Screen 4: TV Videos Light (Screenshot 3) */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-neutral-400" />
-                  TV / Videos (Stealth)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-bold shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#FF0A78]" />
+                  TV / Reels (Light)
                 </span>
                 <PhoneSimulator
                   isDark={false}
@@ -323,9 +331,9 @@ export default function App() {
 
               {/* Screen 5: Profile Mauricio Lopez Light */}
               <div className="flex flex-col items-center gap-3">
-                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 text-xs font-bold shadow-md">
-                  <span className="w-2 h-2 rounded-full bg-neutral-400" />
-                  Profile Mauricio Lopez (Stealth)
+                <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#E1E4E9] text-[#202024] text-xs font-bold shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-[#8A2BE2]" />
+                  Profile Mauricio Lopez (Light)
                 </span>
                 <PhoneSimulator
                   isDark={false}

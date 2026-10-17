@@ -941,8 +941,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
     <div
       className={`relative w-[360px] sm:w-[380px] h-[780px] rounded-[44px] shadow-2xl flex flex-col overflow-hidden border transition-all duration-300 select-none ${
         isDark
-          ? 'bg-[#000000] text-white border-white/10 shadow-black'
-          : 'bg-[#121212] text-white border-white/10 shadow-black'
+          ? 'bg-[#101010] text-[#F7F7F9] border-[#38383D] shadow-2xl shadow-black/70'
+          : 'bg-[#F7F8FA] text-[#202024] border-[#E1E4E9] shadow-2xl shadow-[#9295A6]/30'
       }`}
     >
       {/* Floating Feedback Toast for Follows & Saves */}
@@ -966,13 +966,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               : 'relative z-20 shrink-0'
           }`}
         >
-          <span className={currentTab === 'reels' ? 'text-white font-bold' : isDark ? 'text-white' : 'text-slate-900'}>
+          <span className={currentTab === 'reels' ? 'text-white font-bold' : isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'}>
             9:41
           </span>
           <div className="w-24 h-4 bg-black/80 rounded-full flex items-center justify-center">
             <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
           </div>
-          <div className={`flex items-center gap-1.5 opacity-80 ${currentTab === 'reels' ? 'text-white' : ''}`}>
+          <div className={`flex items-center gap-1.5 opacity-85 ${currentTab === 'reels' ? 'text-white' : isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'}`}>
             {/* Signal */}
             <div className="flex items-end gap-0.5 h-2.5">
               <span className="w-0.5 h-1 bg-current rounded-xs" />
@@ -1000,35 +1000,37 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               aria-label="Open My Shadow directly from Home Feed"
             >
               <div
-                className="w-9 h-9 rounded-full p-[1.5px] shadow-md shadow-black flex items-center justify-center transition-all group-hover:scale-105"
+                className="w-9 h-9 rounded-full p-[1.5px] shadow-md shadow-black/30 flex items-center justify-center transition-all group-hover:scale-105"
                 style={{
-                  background: 'linear-gradient(135deg, #2A2A2A 0%, #161616 50%, #0A0A0A 100%)',
+                  background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                 }}
               >
                 <div
                   className={`w-full h-full rounded-full flex items-center justify-center transition-colors ${
-                    isDark ? 'bg-[#000000]' : 'bg-[#121212]'
+                    isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                   }`}
                 >
                   <PremiumPawnInsignia
                     size={16}
                     glow={false}
-                    className="text-white"
+                    className={isDark ? 'text-white' : 'text-[#202024]'}
                   />
                 </div>
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-neutral-400 border-2 border-black shadow-xs" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#FF0A78] border-2 border-white shadow-xs" />
             </button>
           ) : currentTab === 'profile' ? (
             <button
               onClick={() => handleTabChange('create')}
               className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
-                isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-white/10 text-white'
+                isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-black/5 text-[#202024]'
               }`}
               title="Create Post (+) • Share artwork & stories"
               aria-label="Create Post"
             >
-              <div className="w-7 h-7 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white shadow-xs">
+              <div className={`w-7 h-7 rounded-full border flex items-center justify-center shadow-xs ${
+                isDark ? 'border-[#38383D] bg-[#29292D] text-[#F7F7F9]' : 'border-[#E1E4E9] bg-[#FFFFFF] text-[#202024]'
+              }`}>
                 <Plus size={16} strokeWidth={2.8} />
               </div>
             </button>
@@ -1042,8 +1044,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               <h1
                 className={`text-3xl font-shadow-script tracking-wide ${
                   isDark
-                    ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]'
-                    : 'text-white'
+                    ? 'text-[#F7F7F9] drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]'
+                    : 'text-[#202024]'
                 }`}
               >
                 Shadow
@@ -1051,13 +1053,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             )}
           </div>
 
-          {/* Right Actions: Theme switch (ONLY ON PROFILE PAGE) + Profile Button */}
+          {/* Right Actions: Theme switch (ONLY ON PROFILE PAGE) + Profile / Chat Button */}
           <div className="flex items-center gap-1.5">
             {currentTab === 'profile' && (
               <button
                 onClick={onToggleTheme}
                 className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-                  isDark ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-neutral-800 hover:bg-neutral-700 text-white'
+                  isDark ? 'bg-[#303036] hover:bg-[#38383D] text-[#F7F7F9] border border-[#38383D]' : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] text-[#202024] border border-[#E1E4E9] shadow-xs'
                 }`}
                 title={isDark ? 'Modo Claro' : 'Modo Oscuro'}
               >
@@ -1065,7 +1067,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               </button>
             )}
 
-            {/* Profile Button */}
+            {/* Profile Button or Chat Icon with notification badge */}
             <button
               onClick={() => handleTabChange('profile')}
               className={`relative w-8 h-8 rounded-[11px] flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
@@ -1076,31 +1078,29 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               <div
                 className={`w-7.5 h-7.5 rounded-[10px] p-[1.5px] transition-all ${
                   currentTab === 'profile'
-                    ? 'ring-2 ring-white/60 shadow-md shadow-black'
+                    ? 'ring-2 ring-[#FF0A78] shadow-md shadow-black/20'
                     : ''
                 }`}
                 style={{
-                  background: 'linear-gradient(135deg, #2A2A2A 0%, #181818 50%, #0E0E0E 100%)',
+                  background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 40%, #8A2BE2 100%)',
                 }}
               >
                 <div
                   className={`w-full h-full rounded-[8px] p-[1px] ${
-                    isDark ? 'bg-[#000000]' : 'bg-[#121212]'
+                    isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                   }`}
                 >
                   <div
                     className="w-full h-full rounded-[7px]"
                     style={{
-                      background: 'linear-gradient(135deg, #242424 0%, #121212 100%)',
+                      background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 100%)',
                     }}
                   />
                 </div>
               </div>
               {currentTab === 'profile' && (
                 <div
-                  className={`absolute -bottom-1.5 w-2.5 h-[2px] rounded-full ${
-                    isDark ? 'bg-white' : 'bg-[#12131D]'
-                  }`}
+                  className="absolute -bottom-1.5 w-2.5 h-[2px] rounded-full bg-[#FF0A78]"
                 />
               )}
             </button>
@@ -1171,19 +1171,21 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       <div
                         className={`w-16 h-16 rounded-[20px] p-[2.5px] transition-transform group-hover:scale-105 ${
                           story.hasUnseen || (story.isCurrentUser && hasActiveStory)
-                            ? 'shadow-md shadow-black ring-1 ring-white/50'
+                            ? 'shadow-md shadow-[#FF0A78]/25 ring-1 ring-[#FF0A78]'
                             : ''
                         }`}
                         style={{
                           background:
                             story.isCurrentUser && !hasActiveStory
-                              ? 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(50,50,50,0.4) 100%)'
+                              ? isDark
+                                ? 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(50,50,50,0.4) 100%)'
+                                : 'linear-gradient(135deg, #E1E4E9 0%, #D5D9E0 100%)'
                               : story.gradient,
                         }}
                       >
                         <div
                           className={`w-full h-full rounded-[17px] p-[2px] ${
-                            isDark ? 'bg-[#000000]' : 'bg-[#121212]'
+                            isDark ? 'bg-[#101010]' : 'bg-[#F7F8FA]'
                           }`}
                         >
                           <div
@@ -1210,10 +1212,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             e.stopPropagation();
                             setIsCameraOverlayOpen(true);
                           }}
-                          className="absolute -bottom-0.5 -right-0.5 w-5.5 h-5.5 rounded-[7px] flex items-center justify-center text-white border-2 text-[10px] font-bold shadow-md hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+                          className={`absolute -bottom-0.5 -right-0.5 w-5.5 h-5.5 rounded-[7px] flex items-center justify-center text-white border-2 text-[10px] font-bold shadow-md hover:scale-110 active:scale-95 transition-transform cursor-pointer ${
+                            isDark ? 'border-[#101010]' : 'border-[#F7F8FA]'
+                          }`}
                           style={{
-                            background: 'linear-gradient(135deg, #2A2A2A 0%, #121212 100%)',
-                            borderColor: isDark ? '#000000' : '#121212',
+                            background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 100%)',
                           }}
                           title="Open Camera · Create 24h Story"
                         >
@@ -1225,10 +1228,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <span
                       className={`text-[11px] font-medium tracking-tight text-center max-w-[66px] truncate ${
                         story.hasUnseen || (story.isCurrentUser && hasActiveStory)
-                          ? 'text-white font-bold'
+                          ? isDark ? 'text-[#F7F7F9] font-bold' : 'text-[#202024] font-bold'
                           : isDark
-                          ? 'text-neutral-400'
-                          : 'text-neutral-400'
+                          ? 'text-[#C1C1C9]'
+                          : 'text-[#777982]'
                       }`}
                     >
                       {story.username}
@@ -1242,7 +1245,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             <div className="px-5 my-2 flex items-center justify-between gap-3">
               <h2
                 className={`text-xl font-extrabold tracking-tight ${
-                  isDark ? 'text-white' : 'text-[#12131D]'
+                  isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                 }`}
               >
                 Explorar
@@ -1250,15 +1253,17 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               <div
                 className={`flex-1 h-9.5 px-3.5 rounded-full flex items-center gap-2 border transition-colors ${
                   isDark
-                    ? 'bg-[#141414] border-white/10 text-white'
-                    : 'bg-[#181818] border-white/10 text-white shadow-xs'
+                    ? 'bg-[#303036] border-[#3A3A40] text-[#F5F5F7]'
+                    : 'bg-[#FFFFFF] border-[#ECEEF2] text-[#303036] shadow-xs'
                 }`}
               >
-                <Search size={15} className="opacity-50 shrink-0" />
+                <Search size={15} className={`shrink-0 ${isDark ? 'text-[#A9A9B2]' : 'text-[#A1A4AD]'}`} />
                 <input
                   type="text"
                   placeholder="Buscar"
-                  className="w-full bg-transparent text-xs focus:outline-none placeholder-neutral-500"
+                  className={`w-full bg-transparent text-xs focus:outline-none ${
+                    isDark ? 'placeholder-[#B4B4BC] text-[#F5F5F7]' : 'placeholder-[#9A9CA5] text-[#303036]'
+                  }`}
                 />
               </div>
             </div>
@@ -1273,8 +1278,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       aria-hidden="true"
                       className={`absolute inset-0 translate-y-2.5 scale-[0.97] rounded-[32px] pointer-events-none transition-all duration-300 ${
                         isDark
-                          ? 'bg-[#121212] border border-white/10 shadow-lg shadow-black/60'
-                          : 'bg-[#181818] border border-white/10 shadow-lg shadow-black/40'
+                          ? 'bg-[#29292D] border border-[#38383D] shadow-lg shadow-black/40'
+                          : 'bg-[#FFFFFF] border border-[#E9EBEF] shadow-lg shadow-[#9295A6]/15'
                       }`}
                     />
 
@@ -1282,8 +1287,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div
                       className={`relative z-10 rounded-[32px] p-3.5 transition-all duration-300 ${
                         isDark
-                          ? 'bg-[#121212] border border-white/10 shadow-xl shadow-black/50'
-                          : 'bg-[#181818] border border-white/10 shadow-xl shadow-black/30'
+                          ? 'bg-[#29292D] border border-[#38383D] shadow-xl shadow-black/50'
+                          : 'bg-[#FFFFFF] border border-[#E9EBEF] shadow-xl shadow-[#9295A6]/18'
                       }`}
                     >
                       {/* Post Header */}
@@ -1298,7 +1303,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           >
                             <div
                               className={`w-full h-full rounded-[9px] p-[1.5px] ${
-                                isDark ? 'bg-[#000000]' : 'bg-[#121212]'
+                                isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
                               <div
@@ -1310,12 +1315,15 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           <div>
                             <div className="flex items-center gap-1.5 flex-wrap">
                               <p
-                                className="text-xs font-bold leading-tight text-white"
+                                className={`text-xs font-bold leading-tight ${
+                                  isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
+                                }`}
                               >
                                 {post.author.username}
                               </p>
                               <PawnRankBadge
                                 variant="compact"
+                                isDark={isDark}
                                 onClick={(e) => {
                                   e?.stopPropagation?.();
                                   triggerToast('Shadow Rank: PAWN (Rank I)', 'sparkles');
@@ -1328,8 +1336,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                 }}
                                 className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all active:scale-90 cursor-pointer ${
                                   followedAuthors[post.author.username]
-                                    ? 'border border-neutral-600 text-neutral-300 bg-neutral-800'
-                                    : 'bg-black hover:bg-neutral-900 text-white shadow-xs border border-white/10'
+                                    ? isDark
+                                      ? 'border border-[#38383D] text-[#C1C1C9] bg-[#1C1C20]'
+                                      : 'border border-[#E5E7EB] text-[#777982] bg-[#F1F3F6]'
+                                    : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-xs'
                                 }`}
                               >
                                 {followedAuthors[post.author.username] ? (
@@ -1345,7 +1355,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                 )}
                               </button>
                             </div>
-                            <p className="text-[10px] text-slate-400 leading-tight mt-0.5">
+                            <p className={`text-[10px] leading-tight mt-0.5 ${
+                              isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                            }`}>
                               {post.author.location ? `${post.author.location} • ` : ''}
                               {post.timeAgo}
                             </p>
@@ -1355,7 +1367,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         <div className="flex items-center opacity-80 hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => setShareModalPost(post)}
-                            className="p-1.5 hover:scale-110 active:scale-95 transition-all text-current cursor-pointer rounded-full hover:bg-white/10"
+                            className={`p-1.5 hover:scale-110 active:scale-95 transition-all cursor-pointer rounded-full ${
+                              isDark ? 'text-[#C1C1C9] hover:bg-white/10' : 'text-[#777982] hover:bg-black/5'
+                            }`}
                             title="Share post"
                           >
                             <Share2 size={18} />
@@ -1388,33 +1402,37 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                         {/* Floating Bottom Engagement Controls */}
                         <div className="mt-auto flex items-center justify-between pt-2">
-                          {/* Like Button & Count Pill */}
+                          {/* Like Button & Count Pill (Section 9) */}
                           <div className="flex items-center gap-1.5">
-                            {/* Matt black circular button with a white heart icon */}
+                            {/* Circular #FF0A78 like button with white heart */}
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleLikePost(post.id);
                               }}
-                              className={`w-7.5 h-7.5 rounded-full bg-neutral-900 hover:bg-neutral-800 active:scale-90 flex items-center justify-center text-white border border-neutral-700 shadow-md shadow-black transition-all cursor-pointer ${
-                                post.isLiked ? 'scale-105 ring-2 ring-white/60 bg-neutral-800' : ''
+                              className={`w-7.5 h-7.5 rounded-full bg-[#FF0A78] hover:bg-[#E1306C] active:scale-90 flex items-center justify-center text-white shadow-md transition-all cursor-pointer ${
+                                post.isLiked ? 'scale-105 ring-2 ring-white/80' : ''
                               }`}
                               title={post.isLiked ? 'Liked' : 'Like'}
                               aria-label="Like post"
                             >
                               <Heart
                                 size={14}
-                                className={post.isLiked ? 'fill-white text-white' : 'text-neutral-400'}
+                                className="fill-white text-white"
                               />
                             </button>
 
-                            {/* Neutral rounded pill immediately to the right, displaying likes count */}
+                            {/* Like-count pill: Light #E5E5E7 bg with #303036 text; Dark #3A3A40 bg with #F5F5F7 text */}
                             <div
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleLikePost(post.id);
                               }}
-                              className="px-2 py-0.5 rounded-full bg-neutral-900/90 border border-neutral-700 text-white text-[10.5px] font-bold shadow-xs select-none cursor-pointer leading-none flex items-center justify-center"
+                              className={`px-2 py-0.5 rounded-full text-[10.5px] font-bold shadow-xs select-none cursor-pointer leading-none flex items-center justify-center ${
+                                isDark
+                                  ? 'bg-[#3A3A40] text-[#F5F5F7]'
+                                  : 'bg-[#E5E5E7] text-[#303036]'
+                              }`}
                               title={`${post.likesCount.toLocaleString()} likes`}
                             >
                               {post.likesCount.toLocaleString()}
@@ -1464,27 +1482,27 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                 isSaved: post.isSaved,
                               });
                             }}
-                            className="w-9 h-9 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-lg active:scale-95 hover:scale-105 transition-all cursor-pointer"
+                            className="w-9 h-9 rounded-full bg-white text-[#202024] flex items-center justify-center shadow-lg active:scale-95 hover:scale-105 transition-all cursor-pointer"
                             title="View comments"
                           >
-                            <MessageCircle size={17} className="text-slate-900" />
+                            <MessageCircle size={17} className="text-[#202024]" />
                           </button>
                         </div>
                       </div>
 
-                      {/* Caption & Metadata */}
+                      {/* Caption & Metadata (Section 11) */}
                       <div className="mt-2.5 px-1 space-y-1">
                         <p
                           className={`text-xs ${
-                            isDark ? 'text-slate-400' : 'text-slate-600'
+                            isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'
                           }`}
                         >
                           Liked by{' '}
-                          <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          <span className={`font-bold ${isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'}`}>
                             danieldelax
                           </span>{' '}
                           and{' '}
-                          <span className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          <span className={`font-bold ${isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'}`}>
                             {post.likesCount.toLocaleString()} others
                           </span>
                         </p>
@@ -1492,30 +1510,30 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         <p className="text-xs leading-relaxed">
                           <span
                             className={`font-black mr-1 ${
-                              isDark ? 'text-white' : 'text-slate-900'
+                              isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                             }`}
                           >
                             {post.captionTitle}
                           </span>
-                          <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+                          <span className={isDark ? 'text-[#C1C1C9]' : 'text-[#202024]'}>
                             {post.captionBody}
                           </span>
                         </p>
 
                         <button
                           className={`text-xs block mt-1 hover:underline ${
-                            isDark ? 'text-slate-500' : 'text-slate-400'
+                            isDark ? 'text-[#92929B] hover:text-[#F7F7F9]' : 'text-[#A0A2AA] hover:text-[#202024]'
                           }`}
                         >
                           View all {post.commentsCount} comments
                         </button>
 
-                        {/* Exact comment from reference Image 2 */}
+                        {/* Exact comment from reference image */}
                         <p className="text-xs leading-relaxed mt-0.5">
-                          <span className={`font-bold mr-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          <span className={`font-bold mr-1 ${isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'}`}>
                             Perla_Pipol
                           </span>
-                          <span className={isDark ? 'text-slate-300' : 'text-slate-700'}>
+                          <span className={isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'}>
                             This edit is so incredible, pure genius!!
                           </span>
                         </p>
@@ -1581,25 +1599,27 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               ))}
             </div>
 
-            {/* Search Bar with Live Controlled Input, Scan & Cancel */}
+            {/* Search Bar with Live Controlled Input, Scan & Cancel (Section 6) */}
             <div className="px-5 my-3">
               <div className="flex items-center gap-2">
                 <div
                   className={`h-11 px-4 rounded-full flex items-center justify-between border transition-all flex-1 ${
                     isDark
-                      ? 'bg-[#141414] border-white/10 text-white focus-within:border-white/40 focus-within:ring-1 focus-within:ring-white/20'
-                      : 'bg-[#181818] border-white/10 text-white shadow-xs focus-within:border-white/40 focus-within:ring-1 focus-within:ring-white/20'
+                      ? 'bg-[#303036] border-[#3A3A40] text-[#F5F5F7] focus-within:border-white/40'
+                      : 'bg-[#FFFFFF] border-[#ECEEF2] text-[#303036] shadow-xs focus-within:border-black/30'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                    <Search size={16} className="opacity-50 shrink-0" />
+                    <Search size={16} className={`shrink-0 ${isDark ? 'text-[#A9A9B2]' : 'text-[#A1A4AD]'}`} />
                     <input
                       type="text"
                       value={exploreSearchQuery}
                       onChange={(e) => setExploreSearchQuery(e.target.value)}
                       onFocus={() => setIsExploreSearchFocused(true)}
-                      placeholder="Search creators, #tags, aesthetics..."
-                      className="w-full bg-transparent text-xs focus:outline-none placeholder-neutral-500"
+                      placeholder="Buscar"
+                      className={`w-full bg-transparent text-xs focus:outline-none ${
+                        isDark ? 'placeholder-[#B4B4BC] text-[#F5F5F7]' : 'placeholder-[#9A9CA5] text-[#303036]'
+                      }`}
                     />
                   </div>
 
@@ -1980,7 +2000,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 <div className="px-5 mt-2 mb-3">
                   <h2
                     className={`text-xl font-extrabold tracking-tight ${
-                      isDark ? 'text-white' : 'text-[#12131D]'
+                      isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                     }`}
                   >
                     Popular
@@ -2860,22 +2880,22 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
           <div className="pb-28">
               {/* Top Avatar & Info */}
               <div className="flex flex-col items-center px-6 pt-3">
-                {/* Large Centered Avatar with stealth gradient ring (Curved Square) */}
+                {/* Large Centered Avatar with vivid story ring (Section 10) */}
                 <div
                   className="w-22 h-22 rounded-[28px] p-[3.5px] shadow-xl mb-3.5"
                   style={{
-                    background: 'linear-gradient(135deg, #333333 0%, #1A1A1A 50%, #0D0D0D 100%)',
+                    background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                   }}
                 >
                   <div
                     className={`w-full h-full rounded-[24px] p-[3px] ${
-                      isDark ? 'bg-[#08080C]' : 'bg-black'
+                      isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                     }`}
                   >
                     <div
                       className="w-full h-full rounded-[21px]"
                       style={{
-                        background: 'linear-gradient(135deg, #242424 0%, #121212 100%)',
+                        background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 50%, #4F46E5 100%)',
                       }}
                     />
                   </div>
@@ -2884,12 +2904,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 {/* Mauricio Lopez Title & Username */}
                 <h2
                   className={`text-xl font-bold tracking-tight ${
-                    isDark ? 'text-white' : 'text-white'
+                    isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                   }`}
                 >
                   Mauricio Lopez
                 </h2>
-                <span className="text-[11px] font-semibold text-slate-400 mb-2">
+                <span className={`text-[11px] font-semibold mb-2 ${
+                  isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                }`}>
                   @maoo.lopez
                 </span>
 
@@ -2897,26 +2919,32 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 <div
                   className={`w-full max-w-[325px] rounded-[24px] p-3 mb-2.5 border transition-all duration-300 ${
                     isDark
-                      ? 'bg-[#121212]/95 border-white/10 shadow-xl shadow-black/60'
-                      : 'bg-neutral-900/95 border-white/10 shadow-lg shadow-black/40'
+                      ? 'bg-[#29292D] border-[#38383D] shadow-xl shadow-black/50 text-[#F7F7F9]'
+                      : 'bg-[#FFFFFF] border-[#E5E7EB] shadow-lg shadow-[#9295A6]/15 text-[#202024]'
                   }`}
                 >
                   {/* Header row: Shadow Identity label + Shadow ID */}
-                  <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/5">
+                  <div className={`flex items-center justify-between pb-2 mb-2.5 border-b ${
+                    isDark ? 'border-white/5' : 'border-black/5'
+                  }`}>
                     <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                      <span className="text-[10px] font-extrabold tracking-wider uppercase text-slate-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF0A78] animate-pulse" />
+                      <span className={`text-[10px] font-extrabold tracking-wider uppercase ${
+                        isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                      }`}>
                         Shadow Identity
                       </span>
                     </div>
                     <button
                       onClick={() => triggerToast('Shadow ID copied: shdw_mlopez89')}
-                      className="flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-colors cursor-pointer"
+                      className={`flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-md border transition-colors cursor-pointer ${
+                        isDark ? 'bg-white/5 hover:bg-white/10 text-slate-300 border-white/10' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                      }`}
                       title="Click to copy Shadow ID"
                     >
-                      <span className="text-white font-bold">ID:</span>
+                      <span className="font-bold">ID:</span>
                       <span>shdw_mlopez89</span>
-                      <Copy size={10} className="text-slate-400 ml-0.5" />
+                      <Copy size={10} className="ml-0.5 opacity-60" />
                     </button>
                   </div>
 
@@ -2932,25 +2960,31 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   </div>
 
                   {/* Secondary Row: Independent Verification Status + Rank Progression Demo Button */}
-                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5">
+                  <div className={`flex items-center justify-between gap-2 pt-1 border-t ${
+                    isDark ? 'border-white/5' : 'border-black/5'
+                  }`}>
                     {/* Rank Elevate Trigger Button */}
                     <button
                       onClick={handlePromoteRank}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[9.5px] font-extrabold transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 bg-white/5 hover:bg-white/10 border-white/20 text-white shadow-xs"
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[9.5px] font-extrabold transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 shadow-xs ${
+                        isDark ? 'bg-white/5 hover:bg-white/10 border-white/20 text-white' : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-800'
+                      }`}
                       title="Simulate Shadow Rank Progression: PAWN ↔ KNIGHT"
                     >
-                      <Sparkles size={11} className="text-white animate-pulse" />
+                      <Sparkles size={11} className="text-[#FF0A78] animate-pulse" />
                       <span>{mauricioRank === 'PAWN' ? 'Elevate to KNIGHT' : 'Revert to PAWN'}</span>
                     </button>
 
                     {/* Verification Status (Independent from Rank) */}
                     <button
                       onClick={() => setShowVerificationModal(true)}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all hover:scale-105 active:scale-95 cursor-pointer bg-white/5 border-white/20 text-white"
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                        isDark ? 'bg-white/5 border-white/20 text-white' : 'bg-slate-100 border-slate-200 text-slate-800'
+                      }`}
                       title="Independent Verification Status - Tap to toggle & inspect"
                     >
                       {isMauricioVerified ? (
-                        <ShieldCheck size={12} className="shrink-0 text-white" />
+                        <ShieldCheck size={12} className="shrink-0 text-[#2ECC71]" />
                       ) : (
                         <ShieldAlert size={12} className="shrink-0 text-neutral-400" />
                       )}
@@ -2963,14 +2997,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
               <p
                 className={`text-xs text-center max-w-[290px] mb-1 ${
-                  isDark ? 'text-slate-400' : 'text-slate-400'
+                  isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'
                 }`}
               >
                 UI/UX Design & Photography · Zihuatanejo, Mexico
               </p>
 
-              <p className="text-xs text-neutral-300 font-bold text-center mb-4 tracking-tight">
-                #Life Style #Design #Photography #Urban #Art
+              <p className="text-xs text-[#4F46E5] font-bold text-center mb-4 tracking-tight">
+                #LifeStyle #Design #Photography #Urban #Art
               </p>
 
               {/* 3 Stats: 735 post | 876 seguidores | 568 seguidos */}
@@ -2978,56 +3012,71 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 <div className="text-center">
                   <span
                     className={`block text-base font-extrabold ${
-                      isDark ? 'text-white' : 'text-white'
+                      isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                     }`}
                   >
                     735
                   </span>
-                  <span className="text-[11px] text-slate-400 font-medium">Post</span>
+                  <span className={`text-[11px] font-medium ${isDark ? 'text-[#92929B]' : 'text-[#777982]'}`}>
+                    Post
+                  </span>
                 </div>
 
                 <div className="text-center">
                   <span
                     className={`block text-base font-extrabold ${
-                      isDark ? 'text-white' : 'text-white'
+                      isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                     }`}
                   >
                     {isFollowingMauricio ? 877 : 876}
                   </span>
-                  <span className="text-[11px] text-slate-400 font-medium">Followers</span>
+                  <span className={`text-[11px] font-medium ${isDark ? 'text-[#92929B]' : 'text-[#777982]'}`}>
+                    Followers
+                  </span>
                 </div>
 
                 <div className="text-center">
                   <span
                     className={`block text-base font-extrabold ${
-                      isDark ? 'text-white' : 'text-white'
+                      isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                     }`}
                   >
                     568
                   </span>
-                  <span className="text-[11px] text-slate-400 font-medium">Following</span>
+                  <span className={`text-[11px] font-medium ${isDark ? 'text-[#92929B]' : 'text-[#777982]'}`}>
+                    Following
+                  </span>
                 </div>
               </div>
 
-              {/* Actions Row: Follow + Create Post (+) */}
+              {/* Actions Row: Follow ("Seguir" vibrant gradient) + Create Post (+) */}
               <div className="w-full max-w-[280px] flex items-center gap-2 mb-5">
                 <button
                   onClick={() => setIsFollowingMauricio(!isFollowingMauricio)}
-                  className={`flex-1 h-10 rounded-full font-bold text-xs shadow-lg flex items-center justify-center transition-all active:scale-95 cursor-pointer ${
+                  className={`flex-1 h-10 rounded-full font-bold text-xs shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer text-white ${
                     isFollowingMauricio
                       ? isDark
-                        ? 'bg-white/10 text-white border border-white/20'
-                        : 'bg-neutral-800 text-white border border-white/10'
-                      : 'bg-black hover:bg-neutral-900 text-white border border-white/20'
+                        ? 'bg-[#29292D] text-[#F7F7F9] border border-[#38383D]'
+                        : 'bg-[#F1F3F6] text-[#202024] border border-[#E1E4E9]'
+                      : 'hover:brightness-110 active:brightness-95'
                   }`}
+                  style={
+                    !isFollowingMauricio
+                      ? { background: 'linear-gradient(90deg, #FF0A78 0%, #E1306C 45%, #8A2BE2 100%)' }
+                      : undefined
+                  }
                 >
-                  {isFollowingMauricio ? 'Following' : 'Follow'}
+                  {isFollowingMauricio ? 'Following' : 'Seguir'}
                 </button>
 
                 {/* Create Post Button with Plus (+) icon */}
                 <button
                   onClick={() => handleTabChange('create')}
-                  className="h-10 px-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border bg-neutral-900 hover:bg-neutral-800 border-white/20 text-white"
+                  className={`h-10 px-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border ${
+                    isDark
+                      ? 'bg-[#29292D] hover:bg-[#38383D] border-[#38383D] text-[#F7F7F9]'
+                      : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024] shadow-xs'
+                  }`}
                   title="Create New Post (+)"
                 >
                   <Plus size={15} strokeWidth={2.6} />
@@ -3039,8 +3088,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   onClick={() => handleTabChange('auth')}
                   className={`h-10 px-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border ${
                     isDark
-                      ? 'bg-black text-white hover:bg-neutral-900 border-white/20'
-                      : 'bg-black text-white hover:bg-neutral-900 border-white/20'
+                      ? 'bg-[#29292D] text-[#F7F7F9] hover:bg-[#38383D] border-[#38383D]'
+                      : 'bg-[#FFFFFF] text-[#202024] hover:bg-[#F1F3F6] border-[#E1E4E9] shadow-xs'
                   }`}
                   title="Open Shadow Login Page"
                 >
@@ -3061,12 +3110,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div
                       className="w-15 h-15 rounded-[18px] p-[2px] transition-transform group-hover:scale-105"
                       style={{
-                        background: 'linear-gradient(135deg, #2E2E2E 0%, #161616 100%)',
+                        background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 40%, #8A2BE2 100%)',
                       }}
                     >
                       <div
                         className={`w-full h-full rounded-[16px] p-[2px] ${
-                          isDark ? 'bg-[#08080C]' : 'bg-black'
+                          isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                         }`}
                       >
                         <div
@@ -3078,9 +3127,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                     {hl.isAdd && (
                       <div
-                        className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-[6px] text-white flex items-center justify-center text-[10px] font-bold border-2 border-white/40 shadow-sm"
+                        className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-[6px] text-white flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm"
                         style={{
-                          background: 'linear-gradient(135deg, #2A2A2A 0%, #141414 100%)',
+                          background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 100%)',
                         }}
                       >
                         <Plus size={10} strokeWidth={3} />
@@ -3089,7 +3138,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   </div>
                   <span
                     className={`text-[10px] font-medium text-center truncate max-w-[56px] ${
-                      isDark ? 'text-slate-400' : 'text-slate-400'
+                      isDark ? 'text-[#92929B]' : 'text-[#777982]'
                     }`}
                   >
                     {hl.title}
@@ -3101,12 +3150,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             {/* Profile Tabs: Posts, Tagged, IGTV */}
             <div
               className={`flex border-b text-xs font-semibold px-4 mb-3 ${
-                isDark ? 'border-white/10' : 'border-white/10'
+                isDark ? 'border-[#38383D]' : 'border-[#E5E7EB]'
               }`}
             >
               {(['posts', 'tags', 'igtv'] as const).map((tab) => {
                 const isSelected = activeProfileTab === tab;
-                const label = tab === 'posts' ? 'Posts' : tab === 'tags' ? 'Tagged' : 'IGTV';
+                const label = tab === 'posts' ? 'Posts' : tab === 'tags' ? 'Etiquetas' : 'IGTV';
                 return (
                   <button
                     key={tab}
@@ -3114,15 +3163,17 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     className={`flex-1 py-3 text-center relative transition-colors cursor-pointer ${
                       isSelected
                         ? isDark
-                          ? 'text-white'
-                          : 'text-white font-bold'
-                        : 'text-neutral-400 hover:text-white'
+                          ? 'text-[#F7F7F9] font-bold'
+                          : 'text-[#202024] font-bold'
+                        : isDark
+                        ? 'text-[#92929B] hover:text-[#F7F7F9]'
+                        : 'text-[#777982] hover:text-[#202024]'
                     }`}
                   >
                     {label}
                     {isSelected && (
                       <div
-                        className="absolute bottom-0 left-1/4 right-1/4 h-[2.5px] rounded-full bg-white"
+                        className="absolute bottom-0 left-1/4 right-1/4 h-[2.5px] rounded-full bg-[#FF0A78]"
                       />
                     )}
                   </button>

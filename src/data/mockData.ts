@@ -128,32 +128,32 @@ export const INITIAL_STORIES: StoryItem[] = [
   {
     id: 'user_story',
     username: 'Your story',
-    gradient: 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 50%, #0E0E0E 100%)',
+    gradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
     avatarGradient: 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 50%, #0E0E0E 100%)',
     isCurrentUser: true,
   },
   {
     id: 'story_luz',
     username: 'Luz.anzo',
-    gradient: 'linear-gradient(135deg, #242424 0%, #161616 50%, #0A0A0A 100%)',
+    gradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
     avatarGradient: 'linear-gradient(135deg, #242424 0%, #121212 100%)',
   },
   {
     id: 'story_alice',
     username: 'Alice_002',
-    gradient: 'linear-gradient(135deg, #2C2C2C 0%, #1C1C1C 50%, #121212 100%)',
+    gradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
     avatarGradient: 'linear-gradient(135deg, #262626 0%, #141414 100%)',
   },
   {
     id: 'story_perla',
     username: 'Perla_Pipol',
-    gradient: 'linear-gradient(135deg, #222222 0%, #141414 50%, #080808 100%)',
+    gradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
     avatarGradient: 'linear-gradient(135deg, #202020 0%, #101010 100%)',
   },
   {
     id: 'story_carlos',
     username: 'Carlos_v',
-    gradient: 'linear-gradient(135deg, #282828 0%, #181818 50%, #0C0C0C 100%)',
+    gradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
     avatarGradient: 'linear-gradient(135deg, #282828 0%, #0E0E0E 100%)',
   },
 ];
@@ -164,7 +164,7 @@ export const INITIAL_POSTS: PostItem[] = [
     author: {
       name: 'Maoo Lopez',
       username: 'Maoo.lopez',
-      avatarGradient: 'linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 50%, #0E0E0E 100%)',
+      avatarGradient: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 50%, #8A2BE2 100%)',
     },
     timeAgo: '20m ago',
     gradient: 'linear-gradient(180deg, #262626 0%, #1A1A1A 35%, #121212 65%, #0A0A0A 100%)',
@@ -225,25 +225,25 @@ export const CATEGORIES: CategoryItem[] = [
     id: 'igtv',
     title: 'IGTV',
     iconName: 'Tv',
-    gradient: 'linear-gradient(135deg, #282828 0%, #141414 100%)',
+    gradient: 'linear-gradient(180deg, #FF0A78 0%, #FF8A00 100%)',
   },
   {
     id: 'tienda',
     title: 'SHOP',
     iconName: 'ShoppingBag',
-    gradient: 'linear-gradient(135deg, #242424 0%, #121212 100%)',
+    gradient: 'linear-gradient(180deg, #4F46E5 0%, #3B82F6 100%)',
   },
   {
     id: 'viajes',
     title: 'TRAVEL',
     iconName: 'Plane',
-    gradient: 'linear-gradient(135deg, #222222 0%, #101010 100%)',
+    gradient: 'linear-gradient(180deg, #8A2BE2 0%, #7B2CBF 100%)',
   },
   {
     id: 'fitness',
     title: 'FITNESS',
     iconName: 'Dumbbell',
-    gradient: 'linear-gradient(135deg, #262626 0%, #151515 100%)',
+    gradient: 'linear-gradient(180deg, #FF0A78 0%, #E1306C 100%)',
   },
 ];
 
@@ -303,23 +303,23 @@ export const HIGHLIGHTS: HighlightItem[] = [
   {
     id: 'hl_1',
     title: 'Best shots',
-    gradient: 'linear-gradient(145deg, #2A2A2A 0%, #181818 50%, #101010 100%)',
+    gradient: 'linear-gradient(145deg, #FF0A78 0%, #E1306C 40%, #8A2BE2 100%)',
     isAdd: true,
   },
   {
     id: 'hl_2',
     title: 'My vibe',
-    gradient: 'linear-gradient(145deg, #222222 0%, #161616 50%, #0C0C0C 100%)',
+    gradient: 'linear-gradient(145deg, #4F46E5 0%, #8A2BE2 50%, #FF0A78 100%)',
   },
   {
     id: 'hl_3',
     title: 'Favorites',
-    gradient: 'linear-gradient(145deg, #252525 0%, #191919 50%, #121212 100%)',
+    gradient: 'linear-gradient(145deg, #FF8A00 0%, #FF0A78 50%, #8A2BE2 100%)',
   },
   {
     id: 'hl_4',
     title: 'Food',
-    gradient: 'linear-gradient(145deg, #202020 0%, #151515 50%, #0D0D0D 100%)',
+    gradient: 'linear-gradient(145deg, #8A2BE2 0%, #E1306C 50%, #FFB347 100%)',
   },
 ];
 

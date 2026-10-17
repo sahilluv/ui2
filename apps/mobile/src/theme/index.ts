@@ -23,80 +23,82 @@ export interface ThemeColors {
 }
 
 export const semUiPalette = {
-  red: '#DB2828',
-  orange: '#F2711C',
-  yellow: '#FBBD08',
-  olive: '#B5CC18',
-  green: '#21BA45',
-  teal: '#00B5AD',
-  blue: '#2185D0',
-  violet: '#6435C9',
-  purple: '#A333C8',
-  pink: '#E03997',
-  brown: '#A5673F',
-  grey: '#767676',
-  black: '#1B1C1D',
-  brandRose: '#E1306C',
+  primaryPink: '#FF0A78',
+  deepMagenta: '#E1306C',
+  secondaryPink: '#F72585',
+  vividPurple: '#8A2BE2',
+  deepPurple: '#7B2CBF',
+  blueViolet: '#4F46E5',
+  orange: '#FF8A00',
+  yellowOrange: '#FFB347',
+  red: '#FF0A78',
+  green: '#2ECC71',
+  grey: '#777982',
+  black: '#101010',
+  white: '#FFFFFF',
+  brandRose: '#FF0A78',
 };
 
 export const lightColors: ThemeColors = {
-  background: '#FFFFFF',
-  surface: '#FFFFFF',
-  elevatedSurface: '#F7F8FA',
-  text: '#1B1C1D', // Sem UI Charcoal text (14.5:1 contrast against #FFFFFF - WCAG AAA)
-  secondaryText: '#555963', // High legibility secondary (6.2:1 contrast - WCAG AA)
-  tertiaryText: '#767676', // Sem UI Grey (4.54:1 contrast - WCAG AA compliant >= 4.5:1)
-  border: '#E0E1E2', // Sem UI standard border
-  cardBorder: '#D4D4D5', // Sem UI segment border
-  inputBackground: '#F4F5F7',
-  badgeBackground: '#DB2828', // Sem UI Negative Red
-  accent: '#E1306C', // Brand signature rose
-  accentGradient: ['#E1306C', '#C13584', '#833AB4'],
-  storyGradient: ['#E1306C', '#F2711C', '#FBBD08'],
-  heartRed: '#DB2828',
-  tabActive: '#1B1C1D',
-  tabInactive: '#767676',
-  divider: '#EDEDED',
-  positive: '#21BA45',
-  negative: '#DB2828',
-  warning: '#F2711C',
-  info: '#00B5AD',
+  background: '#F7F8FA', // Main light screen background (Section 2)
+  surface: '#FFFFFF', // Pure white surface (Section 2)
+  elevatedSurface: '#F1F3F6', // Secondary light surface (Section 2)
+  text: '#202024', // Primary text (Section 11)
+  secondaryText: '#777982', // Secondary text (Section 11)
+  tertiaryText: '#A0A2AA', // Muted labels (Section 11)
+  border: '#E1E4E9', // Light neutral borders (Section 2)
+  cardBorder: '#E9EBEF', // Subtle edge (Section 4)
+  inputBackground: '#FFFFFF', // Search background (Section 6)
+  badgeBackground: '#FF0A78', // Primary bright pink
+  accent: '#FF0A78', // Primary bright pink (Section 7)
+  accentGradient: ['#FF0A78', '#E1306C', '#8A2BE2', '#FF8A00', '#FFB347'],
+  storyGradient: ['#FF0A78', '#E1306C', '#8A2BE2'],
+  heartRed: '#FF0A78',
+  tabActive: '#FF0A78', // Active accent (Section 12)
+  tabInactive: '#A3A5AD', // Inactive icons (Section 12)
+  divider: '#E5E7EB', // Subtle separators (Section 2)
+  positive: '#2ECC71',
+  negative: '#FF0A78',
+  warning: '#FF8A00',
+  info: '#4F46E5',
 };
 
 export const darkColors: ThemeColors = {
-  background: '#12131A', // Sem UI Inverted deep obsidian
-  surface: '#1A1B24', // Sem UI Inverted card surface
-  elevatedSurface: '#222430', // Sem UI Inverted elevated segment
-  text: '#FFFFFF', // 16.0:1 contrast against #12131A
-  secondaryText: '#D4D4D5', // Sem UI light grey text (9.2:1 contrast)
-  tertiaryText: '#8E92A0', // Sem UI muted grey (4.8:1 contrast - WCAG AA)
-  border: 'rgba(255, 255, 255, 0.12)',
-  cardBorder: 'rgba(255, 255, 255, 0.08)',
-  inputBackground: '#161720',
-  badgeBackground: '#DB2828',
-  accent: '#E1306C',
-  accentGradient: ['#E1306C', '#991BEA', '#2185D0'],
-  storyGradient: ['#E1306C', '#F2711C', '#FBBD08'],
-  heartRed: '#FF2A55',
-  tabActive: '#FFFFFF',
-  tabInactive: '#8E92A0',
-  divider: 'rgba(255, 255, 255, 0.08)',
+  background: '#101010', // Main dark screen background (Section 3)
+  surface: '#151517', // Near-black surface (Section 3)
+  elevatedSurface: '#29292D', // Dark elevated card surface (Section 3)
+  text: '#F7F7F9', // Primary text (Section 11)
+  secondaryText: '#C1C1C9', // Secondary text (Section 11)
+  tertiaryText: '#92929B', // Muted text (Section 11)
+  border: '#38383D', // Standard border (Section 13)
+  cardBorder: '#38383D', // Subtle border (Section 4)
+  inputBackground: '#303036', // Search background (Section 6)
+  badgeBackground: '#FF0A78',
+  accent: '#FF0A78', // Primary bright pink (Section 7)
+  accentGradient: ['#FF0A78', '#E1306C', '#8A2BE2', '#FF8A00', '#FFB347'],
+  storyGradient: ['#FF0A78', '#E1306C', '#8A2BE2'],
+  heartRed: '#FF0A78',
+  tabActive: '#FF0A78', // Active accent (Section 12)
+  tabInactive: '#C0C0C8', // Inactive icons (Section 12)
+  divider: '#303036', // Subtle separator (Section 13)
   positive: '#2ECC71',
-  negative: '#FF4D4D',
-  warning: '#F39C12',
-  info: '#00B5AD',
+  negative: '#FF0A78',
+  warning: '#FF8A00',
+  info: '#4F46E5',
 };
 
 export const shadowGradients = {
-  mainFeed: ['#4E137D', '#791DA6', '#C724B1', '#FF3B8A'],
-  softPastel: ['#7A58E6', '#B77DE8', '#F5A7C4', '#FCD5B5'],
-  deepMoody: ['#232A3B', '#161B26', '#0F131D'],
-  tealCyan: ['#0A3A40', '#0E626B', '#13928E', '#20C997'],
-  warmBronze: ['#3A2C27', '#5C3E33', '#855E4E'],
-  categoryTV: ['#7928CA', '#A855F7'],
-  categoryShop: ['#EC4899', '#F43F5E'],
-  categoryTravel: ['#06B6D4', '#3B82F6'],
-  categoryFitness: ['#F97316', '#FB7185'],
+  mainFeed: ['#FF0A78', '#E1306C', '#8A2BE2', '#FF8A00'],
+  softPastel: ['#FF0A78', '#E1306C', '#8A2BE2'],
+  storyRing: ['#FF0A78', '#E1306C', '#8A2BE2', '#4F46E5'],
+  primaryMulti: ['#FF0A78', '#E1306C', '#8A2BE2', '#FF8A00', '#FFB347'],
+  categoryTV: ['#FF0A78', '#FF8A00'],
+  categoryShop: ['#4F46E5', '#3B82F6'],
+  categoryTravel: ['#8A2BE2', '#7B2CBF'],
+  categoryFitness: ['#FF0A78', '#E1306C'],
+  deepMoody: ['#29292D', '#151517', '#101010'],
+  tealCyan: ['#4F46E5', '#8A2BE2'],
+  warmBronze: ['#FF8A00', '#FF0A78', '#E1306C'],
 };
 
 export const themeRadius = {

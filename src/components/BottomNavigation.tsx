@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Tv, MessageCircle, Home, Bell, Plus } from 'lucide-react';
+import { Search, MessageCircle, Bell } from 'lucide-react';
 import { TabType } from './PhoneSimulator';
 
 interface BottomNavigationProps {
@@ -34,7 +34,9 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       icon: (active, shrunk) => (
         <svg
           viewBox="0 0 24 24"
-          className={`${shrunk ? 'w-4 h-4' : 'w-5 h-5'} fill-current transition-transform duration-300`}
+          className={`${shrunk ? 'w-4 h-4' : 'w-5 h-5'} fill-current transition-transform duration-300 ${
+            active ? 'text-[#FF0A78]' : isDark ? 'text-[#C0C0C8]' : 'text-[#A3A5AD]'
+          }`}
         >
           <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
         </svg>
@@ -47,7 +49,9 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
         <Search
           size={shrunk ? 17 : 21}
           strokeWidth={active ? 2.5 : 2}
-          className="transition-transform duration-300"
+          className={`transition-all duration-300 ${
+            active ? 'text-[#FF0A78]' : isDark ? 'text-[#C0C0C8]' : 'text-[#A3A5AD]'
+          }`}
         />
       ),
     },
@@ -59,10 +63,12 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           className={`${
             shrunk ? 'w-8 h-8' : 'w-10 h-10'
           } rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 border border-white/20 ${
-            active ? 'scale-110 shadow-[0_4px_16px_rgba(0,0,0,0.8)]' : 'shadow-[0_2px_10px_rgba(0,0,0,0.5)] hover:scale-105'
+            active
+              ? 'scale-110 shadow-[0_4px_16px_rgba(255,10,120,0.5)]'
+              : 'shadow-[0_2px_10px_rgba(0,0,0,0.3)] hover:scale-105'
           }`}
           style={{
-            background: 'linear-gradient(135deg, #2A2A2A 0%, #161616 50%, #0A0A0A 100%)',
+            background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 25%, #8A2BE2 50%, #FF8A00 75%, #FFB347 100%)',
           }}
         >
           <div className="w-5 h-5 rounded-[6px] border-2 border-white flex items-center justify-center p-0.5">
@@ -82,12 +88,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
             strokeWidth={active ? 2.5 : 2}
             className={`transition-all duration-300 ${
               active
-                ? isDark
-                  ? 'fill-current text-white'
-                  : 'fill-current text-[#111827]'
+                ? 'fill-current text-[#FF0A78]'
                 : isDark
-                ? 'text-[#8E92A4]'
-                : 'text-[#8A909E]'
+                ? 'text-[#C0C0C8]'
+                : 'text-[#A3A5AD]'
             }`}
           />
         </div>
@@ -104,12 +108,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
             strokeWidth={active ? 2.5 : 2}
             className={`transition-all duration-300 ${
               active
-                ? isDark
-                  ? 'fill-current text-white'
-                  : 'fill-current text-[#111827]'
+                ? 'fill-current text-[#FF0A78]'
                 : isDark
-                ? 'text-[#8E92A4]'
-                : 'text-[#8A909E]'
+                ? 'text-[#C0C0C8]'
+                : 'text-[#A3A5AD]'
             }`}
           />
         </div>
@@ -124,25 +126,23 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       }`}
     >
       <nav
-        className={`pointer-events-auto relative rounded-full flex items-center justify-between p-1.5 transition-all duration-300 select-none backdrop-blur-2xl backdrop-saturate-200 ${
+        className={`pointer-events-auto relative rounded-full flex items-center justify-between p-1.5 transition-all duration-300 select-none backdrop-blur-2xl ${
           isShrunk
-            ? 'h-11 px-2 w-full max-w-[300px] shadow-xl'
-            : 'h-14 px-2.5 w-full max-w-[350px] shadow-2xl'
+            ? 'h-11 px-2 w-full max-w-[300px] shadow-lg'
+            : 'h-14 px-2.5 w-full max-w-[350px] shadow-xl'
         } ${
           isDark
-            ? 'bg-[#08080C]/95 border border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] text-white'
-            : 'bg-white/95 border border-slate-200/90 shadow-[0_12px_36px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.9)] text-[#111827]'
+            ? 'bg-[#303036]/95 border border-[#38383D] shadow-[0_12px_36px_rgba(0,0,0,0.5)] text-[#F7F7F9]'
+            : 'bg-[#FFFFFF]/95 border border-[#E5E7EB] shadow-[0_12px_36px_rgba(146,149,166,0.2)] text-[#202024]'
         }`}
       >
         {/* Top Rim Specular Glare */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-6 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none rounded-full"
+          className="absolute inset-x-6 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none rounded-full"
         />
 
-        {/* ======================================================== */}
-        {/* TAB BUTTONS                                              */}
-        {/* ======================================================== */}
+        {/* Tab Buttons */}
         {tabs.map((tab) => {
           const isActive = tab.id === currentTab;
           const isCenterTab = tab.id === 'reels';
@@ -157,12 +157,10 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                 isCenterTab
                   ? 'bg-transparent'
                   : isActive
-                  ? isDark
-                    ? 'text-white'
-                    : 'text-[#111827]'
+                  ? 'text-[#FF0A78]'
                   : isDark
-                  ? 'hover:text-white text-[#8E92A4]'
-                  : 'hover:text-[#111827] text-[#8A909E]'
+                  ? 'text-[#C0C0C8] hover:text-[#F7F7F9]'
+                  : 'text-[#A3A5AD] hover:text-[#202024]'
               }`}
               title={tab.label}
               aria-label={tab.label}
@@ -176,16 +174,14 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
               >
                 {tab.icon(isActive, isShrunk)}
 
-                {/* Badge (Brand purple badge with white text) */}
+                {/* Badge (Reference-inspired bright pink badge with white text) */}
                 {tab.badge && tab.badge > 0 && (
                   <span
                     className={`absolute ${
                       isShrunk
                         ? '-top-1 -right-1 min-w-3.5 h-3.5 px-0.5 text-[8px]'
                         : '-top-1 -right-2 min-w-4 h-4 px-1 text-[9px]'
-                    } rounded-full bg-[#1A1A1A] text-white font-black flex items-center justify-center shadow-md leading-none border ${
-                      isDark ? 'border-white/20' : 'border-neutral-400'
-                    } transition-transform duration-300 ${
+                    } rounded-full bg-[#FF0A78] text-white font-black flex items-center justify-center shadow-md leading-none border border-white/40 transition-transform duration-300 ${
                       isActive ? 'scale-90' : 'animate-pulse'
                     }`}
                   >
@@ -193,6 +189,11 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
                   </span>
                 )}
               </div>
+
+              {/* Active Indicator Dot from Reference */}
+              {isActive && !isCenterTab && (
+                <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#FF0A78]" />
+              )}
             </button>
           );
         })}
