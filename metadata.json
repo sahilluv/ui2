@@ -1,0 +1,6 @@
+{
+  "name": "Shadow - Concept Mobile App & Expo Code",
+  "description": "High-fidelity interactive mobile experience and production-ready React Native + Expo code for Shadow, featuring Feed, Discover, Create, Notifications, and Profile with dark/light themes and gradients.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

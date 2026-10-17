@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shadow
+      POSTGRES_USER: shadow
+      POSTGRES_PASSWORD: shadowpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U shadow -d shadow']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    network_mode: host
+    restart: unless-stopped
+    command: ['redis-server', '--appendonly', 'no']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    image: node:22-bookworm
+    working_dir: /workspace
+    network_mode: host
+    volumes:
+      - .:/workspace
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      IS_ALLOY: ${IS_ALLOY:-false}
+      NODE_ENV: development
+      PORT: '3000'
+      DATABASE_URL: postgresql://shadow:shadowpassword@127.0.0.1:5432/shadow
+      REDIS_URL: redis://127.0.0.1:6379
+    command: >
+      bash -lc "npm install &&
+      npx prisma generate &&
+      npx prisma migrate deploy &&
+      npm run start:dev --workspace apps/api"
+
+  mobile:
+    image: node:22-bookworm
+    working_dir: /workspace
+    network_mode: host
+    volumes:
+      - .:/workspace
+    depends_on:
+      - api
+    environment:
+      IS_ALLOY: ${IS_ALLOY:-false}
+      EXPO_WEB_PORT: '8081'
+      EXPO_PUBLIC_API_BASE_URL: http://localhost:3000
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+    command: >
+      bash -lc "npm install &&
+      npm run web --workspace apps/mobile"
+
+volumes:
+  postgres_data:
