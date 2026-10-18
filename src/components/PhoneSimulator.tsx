@@ -1061,7 +1061,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
                   isDark ? 'bg-[#303036] hover:bg-[#38383D] text-[#F7F7F9] border border-[#38383D]' : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] text-[#202024] border border-[#E1E4E9] shadow-xs'
                 }`}
-                title={isDark ? 'Modo Claro' : 'Modo Oscuro'}
+                title={isDark ? 'Light Mode' : 'Dark Mode'}
               >
                 {isDark ? <Sun size={14} /> : <Moon size={14} />}
               </button>
@@ -1073,7 +1073,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               className={`relative w-8 h-8 rounded-[11px] flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
                 currentTab === 'profile' ? 'scale-105' : 'hover:scale-105'
               }`}
-              title="Perfil de Usuario"
+              title="User Profile"
             >
               <div
                 className={`w-7.5 h-7.5 rounded-[10px] p-[1.5px] transition-all ${
@@ -1241,14 +1241,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               })}
             </div>
 
-            {/* Explorar Section & Search Control */}
+            {/* Explore Section & Search Control */}
             <div className="px-5 my-2 flex items-center justify-between gap-3">
               <h2
                 className={`text-xl font-extrabold tracking-tight ${
                   isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                 }`}
               >
-                Explorar
+                Explore
               </h2>
               <div
                 className={`flex-1 h-9.5 px-3.5 rounded-full flex items-center gap-2 border transition-colors ${
@@ -1260,7 +1260,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 <Search size={15} className={`shrink-0 ${isDark ? 'text-[#A9A9B2]' : 'text-[#A1A4AD]'}`} />
                 <input
                   type="text"
-                  placeholder="Buscar"
+                  placeholder="Search"
                   className={`w-full bg-transparent text-xs focus:outline-none ${
                     isDark ? 'placeholder-[#B4B4BC] text-[#F5F5F7]' : 'placeholder-[#9A9CA5] text-[#303036]'
                   }`}
@@ -1616,7 +1616,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       value={exploreSearchQuery}
                       onChange={(e) => setExploreSearchQuery(e.target.value)}
                       onFocus={() => setIsExploreSearchFocused(true)}
-                      placeholder="Buscar"
+                      placeholder="Search"
                       className={`w-full bg-transparent text-xs focus:outline-none ${
                         isDark ? 'placeholder-[#B4B4BC] text-[#F5F5F7]' : 'placeholder-[#9A9CA5] text-[#303036]'
                       }`}
@@ -2051,7 +2051,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   <PullUpRefresh
                     onRefresh={async () => {
                       await new Promise((r) => setTimeout(r, 700));
-                      triggerToast('Explorar synced with trending creative posts!', 'sparkles');
+                      triggerToast('Explore synced with trending creative posts!', 'sparkles');
                     }}
                     isDark={isDark}
                     label="Pull up to refresh explore"
@@ -2359,7 +2359,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
         {/* SCREEN 4: CHAT & DIRECT MESSAGES        */}
         {/* ======================================= */}
         {(currentTab === 'chat' || currentTab === 'shop') && (
-          <div className="flex flex-col h-full pb-4">
+          <div className={`flex flex-col h-full pb-4 ${isDark ? 'bg-[#101010] text-[#F7F7F9]' : 'bg-[#F7F8FA] text-[#202024]'}`}>
             {activeChatUserId ? (
               // ACTIVE CHAT THREAD (Fully Conversable)
               (() => {
@@ -2371,14 +2371,16 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     {/* Chat Thread Header */}
                     <div
                       className={`px-4 py-2.5 flex items-center justify-between border-b shrink-0 ${
-                        isDark ? 'border-white/10 bg-[#0F111D]/80 backdrop-blur-md' : 'border-black/5 bg-white/80 backdrop-blur-md'
+                        isDark
+                          ? 'border-[#38383D] bg-[#151517]/95 backdrop-blur-md'
+                          : 'border-[#E5E7EB] bg-[#FFFFFF]/95 backdrop-blur-md'
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <button
                           onClick={() => setActiveChatUserId(null)}
                           className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
-                            isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-black/5 text-slate-800'
+                            isDark ? 'hover:bg-[#1C1C20] text-[#F7F7F9]' : 'hover:bg-[#F1F3F6] text-[#202024]'
                           }`}
                           title="Back to conversations"
                         >
@@ -2387,27 +2389,52 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                         <div className="relative shrink-0">
                           <div
-                            className="w-9 h-9 rounded-full p-[1.5px]"
-                            style={{ background: activeContact.avatarGradient }}
+                            className="w-9 h-9 rounded-full p-[1.5px] transition-transform hover:scale-105"
+                            style={{
+                              background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
+                            }}
                           >
-                            <div className={`w-full h-full rounded-full ${isDark ? 'bg-[#0B0C14]' : 'bg-white'}`} />
+                            <div
+                              className={`w-full h-full rounded-full p-[1px] ${
+                                isDark ? 'bg-[#151517]' : 'bg-[#FFFFFF]'
+                              }`}
+                            >
+                              <div
+                                className="w-full h-full rounded-full"
+                                style={{ background: activeContact.avatarGradient }}
+                              />
+                            </div>
                           </div>
                           {activeContact.online && (
-                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#0B0C14]" />
+                            <span
+                              className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#2ECC71] border-2 ${
+                                isDark ? 'border-[#151517]' : 'border-[#FFFFFF]'
+                              }`}
+                            />
                           )}
                         </div>
 
                         <div className="min-w-0">
                           <div className="flex items-center gap-1">
-                            <span className={`text-xs font-extrabold truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                            <span
+                              className={`text-xs font-extrabold truncate ${
+                                isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
+                              }`}
+                            >
                               {activeContact.name}
                             </span>
                             {activeContact.verified && (
-                              <PawnRankBadge variant="coin" size="sm" />
+                              <PawnRankBadge variant="coin" size="sm" isDark={isDark} />
                             )}
                           </div>
-                          <span className="text-[10px] text-neutral-300 font-semibold block leading-tight">
-                            {activeContact.online ? '● Active now' : activeContact.lastSeen}
+                          <span className="text-[10px] font-semibold block leading-tight">
+                            {activeContact.online ? (
+                              <span className="text-[#2ECC71]">● Active now</span>
+                            ) : (
+                              <span className={isDark ? 'text-[#92929B]' : 'text-[#777982]'}>
+                                {activeContact.lastSeen}
+                              </span>
+                            )}
                           </span>
                         </div>
                       </div>
@@ -2415,21 +2442,33 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       <div className="flex items-center gap-1 opacity-80 text-current">
                         <button
                           onClick={() => triggerToast(`Calling ${activeContact.name}...`, 'sparkles')}
-                          className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
+                          className={`p-1.5 rounded-full transition-colors ${
+                            isDark
+                              ? 'text-[#C1C1C9] hover:text-[#F7F7F9] hover:bg-[#1C1C20]'
+                              : 'text-[#777982] hover:text-[#202024] hover:bg-[#F1F3F6]'
+                          }`}
                           title="Voice Call"
                         >
                           <Phone size={15} />
                         </button>
                         <button
                           onClick={() => triggerToast(`Starting video with ${activeContact.name}...`, 'sparkles')}
-                          className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
+                          className={`p-1.5 rounded-full transition-colors ${
+                            isDark
+                              ? 'text-[#C1C1C9] hover:text-[#F7F7F9] hover:bg-[#1C1C20]'
+                              : 'text-[#777982] hover:text-[#202024] hover:bg-[#F1F3F6]'
+                          }`}
                           title="Video Call"
                         >
                           <Video size={16} />
                         </button>
                         <button
                           onClick={() => triggerToast(`${activeContact.name} is a verified Shadow artist`, 'sparkles')}
-                          className="p-1.5 rounded-full hover:bg-white/10 transition-colors"
+                          className={`p-1.5 rounded-full transition-colors ${
+                            isDark
+                              ? 'text-[#C1C1C9] hover:text-[#F7F7F9] hover:bg-[#1C1C20]'
+                              : 'text-[#777982] hover:text-[#202024] hover:bg-[#F1F3F6]'
+                          }`}
                         >
                           <Info size={15} />
                         </button>
@@ -2440,8 +2479,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 no-scrollbar">
                       {/* Security / Encryption Pill */}
                       <div className="flex justify-center my-1">
-                        <span className="text-[9px] font-semibold text-slate-400 bg-white/5 border border-white/5 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                          <Shield size={10} className="text-neutral-300" />
+                        <span
+                          className={`text-[9px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1 ${
+                            isDark
+                              ? 'text-[#92929B] bg-[#1C1C20] border border-[#38383D]'
+                              : 'text-[#777982] bg-[#FFFFFF] border border-[#E5E7EB] shadow-xs'
+                          }`}
+                        >
+                          <Shield size={10} className="text-[#FF0A78]" />
                           End-to-end encrypted · Shadow Peer
                         </span>
                       </div>
@@ -2451,21 +2496,36 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         return (
                           <div
                             key={m.id}
-                            className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-1 duration-200`}
+                            className={`flex flex-col ${
+                              isMe ? 'items-end' : 'items-start'
+                            } animate-in fade-in slide-in-from-bottom-1 duration-200`}
                           >
                             <div
                               className={`max-w-[80%] px-3.5 py-2 rounded-2xl text-xs leading-relaxed select-text shadow-sm ${
                                 isMe
-                                  ? 'text-white rounded-br-xs font-medium bg-neutral-900 border border-white/20'
+                                  ? 'text-white rounded-br-xs font-medium shadow-sm'
                                   : isDark
-                                  ? 'bg-[#141414] text-neutral-200 border border-white/10 rounded-bl-xs'
-                                  : 'bg-neutral-900 text-white border border-white/10 rounded-bl-xs shadow-xs'
+                                  ? 'bg-[#29292D] text-[#F7F7F9] border border-[#38383D] rounded-bl-xs'
+                                  : 'bg-[#FFFFFF] text-[#202024] border border-[#E9EBEF] rounded-bl-xs shadow-xs'
                               }`}
+                              style={
+                                isMe
+                                  ? {
+                                      background:
+                                        'linear-gradient(135deg, #FF0A78 0%, #E1306C 45%, #8A2BE2 100%)',
+                                    }
+                                  : undefined
+                              }
                             >
                               {m.text}
                             </div>
-                            <span className="text-[9px] text-slate-400 mt-0.5 px-1 font-mono">
-                              {m.time} {isMe ? '✓✓' : ''}
+                            <span
+                              className={`text-[9px] mt-0.5 px-1 font-mono flex items-center gap-1 ${
+                                isDark ? 'text-[#92929B]' : 'text-[#A0A2AA]'
+                              }`}
+                            >
+                              <span>{m.time}</span>
+                              {isMe && <span className="text-[#FF0A78] font-bold">✓✓</span>}
                             </span>
                           </div>
                         );
@@ -2473,11 +2533,19 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                       {/* Responsive Typing Indicator */}
                       {isTypingReply && (
-                        <div className="flex items-center gap-1.5 py-1 px-3 rounded-2xl bg-white/5 border border-white/5 text-slate-400 w-fit animate-pulse">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-bounce [animation-delay:0.15s]" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-neutral-600 animate-bounce [animation-delay:0.3s]" />
-                          <span className="text-[10px] ml-1 font-semibold">{activeContact.name} is typing...</span>
+                        <div
+                          className={`flex items-center gap-1.5 py-1 px-3 rounded-2xl w-fit animate-pulse border ${
+                            isDark
+                              ? 'bg-[#29292D] border-[#38383D] text-[#92929B]'
+                              : 'bg-[#FFFFFF] border-[#E9EBEF] text-[#777982] shadow-xs'
+                          }`}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#FF0A78] animate-bounce" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#E1306C] animate-bounce [animation-delay:0.15s]" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#8A2BE2] animate-bounce [animation-delay:0.3s]" />
+                          <span className="text-[10px] ml-1 font-semibold">
+                            {activeContact.name} is typing...
+                          </span>
                         </div>
                       )}
                     </div>
@@ -2493,7 +2561,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         <button
                           key={promptText}
                           onClick={() => handleSendChatMessage(promptText)}
-                          className="text-[10px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap border shrink-0 transition-transform active:scale-95 cursor-pointer bg-white/5 hover:bg-white/10 border-white/10 text-slate-300"
+                          className={`text-[10px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap border shrink-0 transition-transform active:scale-95 cursor-pointer ${
+                            isDark
+                              ? 'bg-[#29292D] hover:bg-[#303036] border-[#38383D] text-[#F7F7F9]'
+                              : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024] shadow-xs'
+                          }`}
                         >
                           {promptText}
                         </button>
@@ -2503,7 +2575,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     {/* Chat Input Field */}
                     <div
                       className={`p-2.5 border-t shrink-0 ${
-                        isDark ? 'border-white/10 bg-[#08080C]' : 'border-white/10 bg-[#121212]'
+                        isDark ? 'border-[#38383D] bg-[#151517]' : 'border-[#E5E7EB] bg-[#FFFFFF]'
                       }`}
                     >
                       <form
@@ -2513,14 +2585,18 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         }}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${
                           isDark
-                            ? 'bg-[#141414] border-white/10 focus-within:border-white/30'
-                            : 'bg-neutral-900 border-white/10 focus-within:border-white/30'
+                            ? 'bg-[#303036] border-[#3A3A40] text-[#F5F5F7] focus-within:border-[#FF0A78]'
+                            : 'bg-[#F1F3F6] border-[#ECEEF2] text-[#303036] shadow-xs focus-within:border-[#FF0A78] focus-within:bg-[#FFFFFF]'
                         }`}
                       >
                         <button
                           type="button"
                           onClick={() => triggerToast('Emoji reactions opened', 'sparkles')}
-                          className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                          className={`transition-colors cursor-pointer ${
+                            isDark
+                              ? 'text-[#A9A9B2] hover:text-[#F5F5F7]'
+                              : 'text-[#A1A4AD] hover:text-[#303036]'
+                          }`}
                         >
                           <Smile size={16} />
                         </button>
@@ -2530,13 +2606,21 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           value={chatInputText}
                           onChange={(e) => setChatInputText(e.target.value)}
                           placeholder={`Message ${activeContact.name}...`}
-                          className="flex-1 bg-transparent text-xs focus:outline-none text-white placeholder-slate-500"
+                          className={`flex-1 bg-transparent text-xs focus:outline-none ${
+                            isDark
+                              ? 'text-[#F5F5F7] placeholder-[#B4B4BC]'
+                              : 'text-[#303036] placeholder-[#9A9CA5]'
+                          }`}
                         />
 
                         <button
                           type="button"
                           onClick={() => triggerToast('Attach media (Photo / 3D model)', 'sparkles')}
-                          className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                          className={`transition-colors cursor-pointer ${
+                            isDark
+                              ? 'text-[#A9A9B2] hover:text-[#F5F5F7]'
+                              : 'text-[#A1A4AD] hover:text-[#303036]'
+                          }`}
                         >
                           <Paperclip size={15} />
                         </button>
@@ -2546,8 +2630,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           disabled={!chatInputText.trim()}
                           className={`w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer ${
                             chatInputText.trim()
-                              ? 'bg-black text-white shadow-md border border-white/20 scale-100'
-                              : 'text-slate-500 opacity-60'
+                              ? 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-md active:scale-95'
+                              : isDark
+                              ? 'text-[#A9A9B2] opacity-40'
+                              : 'text-[#A1A4AD] opacity-40'
                           }`}
                           title="Send Message"
                         >
@@ -2566,43 +2652,64 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   <div>
                     <h2
                       className={`text-xl font-extrabold tracking-tight ${
-                        isDark ? 'text-white' : 'text-[#1F1F2E]'
+                        isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                       }`}
                     >
                       Direct Messages
                     </h2>
-                    <p className="text-[11px] text-slate-400">
+                    <p
+                      className={`text-[11px] ${
+                        isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                      }`}
+                    >
                       Real-time peer chat with Shadow creators
                     </p>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-black text-white border border-white/20">
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-black border ${
+                      isDark
+                        ? 'bg-[#29292D] text-[#FF0A78] border-[#38383D]'
+                        : 'bg-[#FFFFFF] text-[#FF0A78] border-[#E1E4E9] shadow-xs'
+                    }`}
+                  >
                     4 Active
                   </span>
                 </div>
 
-                {/* Search Bar */}
+                {/* Search Bar (Section 6 Search Fields) */}
                 <div className="px-5 mb-3">
                   <div
-                    className={`flex items-center gap-2 px-3 py-2 rounded-2xl border text-xs ${
+                    className={`flex items-center gap-2 px-3.5 py-2 rounded-full border text-xs transition-colors ${
                       isDark
-                        ? 'bg-[#151726] border-white/10 text-slate-300'
-                        : 'bg-slate-100 border-black/5 text-slate-700'
+                        ? 'bg-[#303036] border-[#3A3A40] text-[#F5F5F7] focus-within:border-[#FF0A78]'
+                        : 'bg-[#FFFFFF] border-[#ECEEF2] text-[#303036] shadow-xs focus-within:border-[#FF0A78]'
                     }`}
                   >
-                    <Search size={14} className="text-slate-400 shrink-0" />
+                    <Search
+                      size={15}
+                      className={`shrink-0 ${isDark ? 'text-[#A9A9B2]' : 'text-[#A1A4AD]'}`}
+                    />
                     <input
                       type="text"
                       value={chatSearchQuery}
                       onChange={(e) => setChatSearchQuery(e.target.value)}
-                      placeholder="Search conversations..."
-                      className="bg-transparent w-full focus:outline-none placeholder-slate-400 text-xs"
+                      placeholder="Buscar conversaciones..."
+                      className={`bg-transparent w-full focus:outline-none text-xs ${
+                        isDark
+                          ? 'placeholder-[#B4B4BC] text-[#F5F5F7]'
+                          : 'placeholder-[#9A9CA5] text-[#303036]'
+                      }`}
                     />
                   </div>
                 </div>
 
-                {/* Active Now Row (Story-like circles) */}
+                {/* Active Now Row (Story-like circles with Section 10 Story Rings) */}
                 <div className="px-5 mb-4">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider block mb-2 ${
+                      isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                    }`}
+                  >
                     Active Creators
                   </span>
                   <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
@@ -2614,16 +2721,38 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       >
                         <div className="relative">
                           <div
-                            className="w-12 h-12 rounded-[14px] p-[2px] transition-transform group-hover:scale-105"
-                            style={{ background: user.avatarGradient }}
+                            className="w-12 h-12 rounded-[16px] p-[2px] transition-transform group-hover:scale-105"
+                            style={{
+                              background:
+                                'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
+                            }}
                           >
-                            <div className={`w-full h-full rounded-[12px] ${isDark ? 'bg-[#0B0C14]' : 'bg-white'}`} />
+                            <div
+                              className={`w-full h-full rounded-[14px] p-[1.5px] ${
+                                isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
+                              }`}
+                            >
+                              <div
+                                className="w-full h-full rounded-[12px]"
+                                style={{ background: user.avatarGradient }}
+                              />
+                            </div>
                           </div>
                           {user.online && (
-                            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-[3px] bg-white border-2 border-[#0B0C14]" />
+                            <span
+                              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#2ECC71] border-2 ${
+                                isDark ? 'border-[#101010]' : 'border-[#FFFFFF]'
+                              }`}
+                            />
                           )}
                         </div>
-                        <span className="text-[10px] font-semibold text-slate-300 max-w-[48px] truncate">
+                        <span
+                          className={`text-[10px] font-semibold max-w-[50px] truncate transition-colors ${
+                            isDark
+                              ? 'text-[#C1C1C9] group-hover:text-[#F7F7F9]'
+                              : 'text-[#777982] group-hover:text-[#202024]'
+                          }`}
+                        >
                           {user.name.split(' ')[0]}
                         </span>
                       </div>
@@ -2632,7 +2761,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 </div>
 
                 {/* Conversation Threads List */}
-                <div className="divide-y divide-white/5 px-2 pb-28">
+                <div
+                  className={`divide-y px-2 pb-28 ${
+                    isDark ? 'divide-[#303036]' : 'divide-[#E5E7EB]'
+                  }`}
+                >
                   {CHAT_USERS.filter(
                     (u) =>
                       u.name.toLowerCase().includes(chatSearchQuery.toLowerCase()) ||
@@ -2646,19 +2779,47 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         key={user.id}
                         onClick={() => setActiveChatUserId(user.id)}
                         className={`px-3 py-3 rounded-2xl flex items-center gap-3 transition-all cursor-pointer ${
-                          isDark ? 'hover:bg-white/5 active:bg-white/10' : 'hover:bg-black/5 active:bg-black/10'
+                          isDark
+                            ? 'hover:bg-[#1C1C20] active:bg-[#29292D]'
+                            : 'hover:bg-[#FFFFFF] active:bg-[#F1F3F6]'
                         }`}
                       >
                         {/* Avatar */}
                         <div className="relative shrink-0">
                           <div
-                            className="w-12 h-12 rounded-[14px] p-[2px]"
-                            style={{ background: user.avatarGradient }}
+                            className={`w-12 h-12 rounded-[16px] p-[2px] ${
+                              user.unread
+                                ? ''
+                                : isDark
+                                ? 'border border-[#38383D]'
+                                : 'border border-[#E5E7EB]'
+                            }`}
+                            style={
+                              user.unread
+                                ? {
+                                    background:
+                                      'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
+                                  }
+                                : undefined
+                            }
                           >
-                            <div className={`w-full h-full rounded-[12px] ${isDark ? 'bg-[#0B0C14]' : 'bg-white'}`} />
+                            <div
+                              className={`w-full h-full rounded-[14px] p-[1.5px] ${
+                                isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
+                              }`}
+                            >
+                              <div
+                                className="w-full h-full rounded-[12px]"
+                                style={{ background: user.avatarGradient }}
+                              />
+                            </div>
                           </div>
                           {user.online && (
-                            <span className="absolute bottom-0 right-0 w-3 h-3 rounded-[3px] bg-white border-2 border-[#0B0C14]" />
+                            <span
+                              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#2ECC71] border-2 ${
+                                isDark ? 'border-[#101010]' : 'border-[#FFFFFF]'
+                              }`}
+                            />
                           )}
                         </div>
 
@@ -2668,21 +2829,33 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             <div className="flex items-center gap-1.5 min-w-0">
                               <span
                                 className={`text-xs font-bold truncate ${
-                                  isDark ? 'text-white' : 'text-slate-900'
+                                  isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
                                 }`}
                               >
                                 {user.name}
                               </span>
-                              {user.verified && <PawnRankBadge variant="coin" size="sm" />}
+                              {user.verified && (
+                                <PawnRankBadge variant="coin" size="sm" isDark={isDark} />
+                              )}
                             </div>
-                            <span className="text-[10px] text-slate-400 font-mono shrink-0">
+                            <span
+                              className={`text-[10px] font-mono shrink-0 ${
+                                isDark ? 'text-[#92929B]' : 'text-[#A0A2AA]'
+                              }`}
+                            >
                               {lastMsg?.time || 'Just now'}
                             </span>
                           </div>
 
                           <p
                             className={`text-xs truncate ${
-                              user.unread ? 'font-bold text-white' : 'text-slate-400'
+                              user.unread
+                                ? isDark
+                                  ? 'font-bold text-[#F7F7F9]'
+                                  : 'font-bold text-[#202024]'
+                                : isDark
+                                ? 'text-[#92929B]'
+                                : 'text-[#777982]'
                             }`}
                           >
                             {lastMsg ? (
@@ -2696,9 +2869,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           </p>
                         </div>
 
-                        {/* Unread dot */}
+                        {/* Unread dot in primary bright pink #FF0A78 */}
                         {user.unread && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-white shadow-sm shrink-0" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#FF0A78] shadow-xs shrink-0 animate-pulse" />
                         )}
                       </div>
                     );
@@ -2717,10 +2890,18 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             {/* Notifications Header */}
             <div className="px-5 pt-2 pb-3 flex items-center justify-between shrink-0">
               <div>
-                <h2 className={`text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h2
+                  className={`text-xl font-extrabold tracking-tight ${
+                    isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
+                  }`}
+                >
                   Activity
                 </h2>
-                <p className="text-[11px] text-slate-400">
+                <p
+                  className={`text-[11px] ${
+                    isDark ? 'text-[#92929B]' : 'text-[#777982]'
+                  }`}
+                >
                   {notificationsList.filter((n) => !n.isRead).length > 0
                     ? `${notificationsList.filter((n) => !n.isRead).length} new updates`
                     : 'All caught up'}
@@ -2734,9 +2915,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     setHasUnreadNotifs(false);
                     triggerToast('Marked all notifications as read', 'sparkles');
                   }}
-                  className="flex items-center gap-1 text-[11px] font-bold text-white hover:text-neutral-200 px-2.5 py-1 rounded-full bg-neutral-900 border border-white/20 transition-all cursor-pointer"
+                  className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full border transition-all cursor-pointer shadow-xs ${
+                    isDark
+                      ? 'bg-[#29292D] hover:bg-[#303036] border-[#38383D] text-[#F7F7F9]'
+                      : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024]'
+                  }`}
                 >
-                  <CheckCheck size={13} />
+                  <CheckCheck size={13} className="text-[#FF0A78]" />
                   <span>Mark all read</span>
                 </button>
               )}
@@ -2750,12 +2935,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   <button
                     key={filter}
                     onClick={() => setNotifFilter(filter)}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer capitalize shrink-0 ${
+                    className={`px-3.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer capitalize shrink-0 ${
                       isActive
-                        ? 'bg-black text-white shadow-md hover:bg-neutral-800'
+                        ? 'bg-[#FF0A78] text-white shadow-xs'
                         : isDark
-                        ? 'bg-white/5 hover:bg-white/10 text-slate-400'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                        ? 'bg-[#29292D] hover:bg-[#303036] border border-[#38383D] text-[#C1C1C9] hover:text-[#F7F7F9]'
+                        : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border border-[#E1E4E9] text-[#777982] hover:text-[#202024] shadow-xs'
                     }`}
                   >
                     {filter}
@@ -2765,7 +2950,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             </div>
 
             {/* Notifications List */}
-            <div className="px-3 space-y-1">
+            <div className="px-3 space-y-1.5">
               {notificationsList
                 .filter((item) => {
                   if (notifFilter === 'likes') return item.actionType === 'like';
@@ -2786,34 +2971,50 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       className={`p-2.5 rounded-2xl flex items-center gap-3 transition-colors cursor-pointer border ${
                         !notif.isRead
                           ? isDark
-                            ? 'bg-neutral-900/60 hover:bg-neutral-900 border-white/10'
-                            : 'bg-neutral-900/40 hover:bg-neutral-900 border-white/10'
+                            ? 'bg-[#29292D] hover:bg-[#303036] border-[#38383D] shadow-sm'
+                            : 'bg-[#FFFFFF] hover:bg-[#F7F8FA] border-[#E9EBEF] shadow-xs'
                           : isDark
-                          ? 'hover:bg-white/[0.04] border-transparent'
-                          : 'hover:bg-slate-50 border-transparent'
+                          ? 'hover:bg-[#1C1C20] border-transparent'
+                          : 'hover:bg-[#FFFFFF] border-transparent'
                       }`}
                     >
-                      {/* Avatar with Action Icon Badge (Curved Square) */}
+                      {/* Avatar with Action Icon Badge (Curved Squircle) */}
                       <div className="relative shrink-0">
                         <div
-                          className="w-10 h-10 rounded-[13px] p-[2px]"
-                          style={{ background: notif.user.avatarGradient }}
+                          className={`w-10 h-10 rounded-[14px] p-[2px] transition-transform hover:scale-105 ${
+                            !notif.isRead ? '' : isDark ? 'border border-[#38383D]' : 'border border-[#E5E7EB]'
+                          }`}
+                          style={
+                            !notif.isRead
+                              ? {
+                                  background:
+                                    'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
+                                }
+                              : undefined
+                          }
                         >
                           <div
-                            className={`w-full h-full rounded-[11px] ${
-                              isDark ? 'bg-[#0B0C14]' : 'bg-white'
+                            className={`w-full h-full rounded-[12px] p-[1px] ${
+                              isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                             }`}
-                          />
+                          >
+                            <div
+                              className="w-full h-full rounded-[10px]"
+                              style={{ background: notif.user.avatarGradient }}
+                            />
+                          </div>
                         </div>
 
-                        {/* Action Icon Badge */}
+                        {/* Action Icon Badge with Reference Accents */}
                         <div
-                          className={`absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-[5px] flex items-center justify-center text-white text-[9px] shadow-sm ${
+                          className={`absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-[6px] flex items-center justify-center text-white text-[9px] shadow-sm border-2 ${
+                            isDark ? 'border-[#101010]' : 'border-[#FFFFFF]'
+                          } ${
                             notif.actionType === 'like'
-                              ? 'bg-neutral-800 border border-white/20'
+                              ? 'bg-[#FF0A78]'
                               : notif.actionType === 'comment'
-                              ? 'bg-neutral-800 border border-white/20'
-                              : 'bg-black border border-white/20'
+                              ? 'bg-[#8A2BE2]'
+                              : 'bg-[#4F46E5]'
                           }`}
                         >
                           {notif.actionType === 'like' ? (
@@ -2828,13 +3029,31 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <p className={`text-xs leading-snug ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+                        <p
+                          className={`text-xs leading-snug ${
+                            isDark ? 'text-[#F7F7F9]' : 'text-[#202024]'
+                          }`}
+                        >
                           <strong className="font-bold">{notif.user.name}</strong>{' '}
-                          <span className={!notif.isRead ? (isDark ? 'text-white' : 'text-slate-900') : 'text-slate-400'}>
+                          <span
+                            className={
+                              !notif.isRead
+                                ? isDark
+                                  ? 'text-[#F7F7F9] font-medium'
+                                  : 'text-[#202024] font-medium'
+                                : isDark
+                                ? 'text-[#C1C1C9]'
+                                : 'text-[#777982]'
+                            }
+                          >
                             {notif.content}
                           </span>
                         </p>
-                        <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+                        <span
+                          className={`text-[10px] font-mono mt-0.5 block ${
+                            isDark ? 'text-[#92929B]' : 'text-[#A0A2AA]'
+                          }`}
+                        >
                           {notif.timeAgo}
                         </span>
                       </div>
@@ -2846,25 +3065,27 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             e.stopPropagation();
                             handleToggleFollowAuthor(notif.user.username);
                           }}
-                          className={`text-[10px] font-bold px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer ${
+                          className={`text-[10px] font-bold px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer shadow-xs ${
                             followedAuthors[notif.user.username]
                               ? isDark
-                                ? 'bg-white/10 text-white'
-                                : 'bg-slate-200 text-slate-800'
-                              : 'bg-black text-white hover:bg-neutral-800 shadow-sm'
+                                ? 'bg-[#1C1C20] border border-[#38383D] text-[#C1C1C9]'
+                                : 'bg-[#F1F3F6] border border-[#E5E7EB] text-[#777982]'
+                              : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white'
                           }`}
                         >
                           {followedAuthors[notif.user.username] ? 'Following' : 'Follow'}
                         </button>
                       ) : notif.postThumbnailGradient ? (
                         <div
-                          className="w-9 h-9 rounded-xl shrink-0 shadow-sm border border-white/10"
+                          className={`w-9 h-9 rounded-xl shrink-0 shadow-xs border ${
+                            isDark ? 'border-[#38383D]' : 'border-[#E5E7EB]'
+                          }`}
                           style={{ background: notif.postThumbnailGradient }}
                         />
                       ) : null}
 
                       {!notif.isRead && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-[#FF0A78] shadow-xs shrink-0 animate-pulse" />
                       )}
                     </div>
                   );

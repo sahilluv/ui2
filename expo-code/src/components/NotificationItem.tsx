@@ -40,10 +40,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
             {
               backgroundColor:
                 item.actionType === 'like'
-                  ? colors.heartRed
-                  : item.actionType === 'follow'
-                  ? colors.accent
-                  : '#6366F1',
+                  ? '#FF0A78'
+                  : item.actionType === 'comment'
+                  ? '#8A2BE2'
+                  : '#4F46E5',
               borderColor: colors.surface,
             },
           ]}
