@@ -1085,22 +1085,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             )}
           </div>
 
-          {/* Right Actions: Story Camera quick launch on Home + Theme switch (ONLY ON PROFILE PAGE) + Profile / Chat Button */}
+          {/* Right Actions: Theme switch (ONLY ON PROFILE PAGE) + Profile / Chat Button */}
           <div className="flex items-center gap-1.5">
-            {currentTab === 'home' && (
-              <button
-                onClick={() => setIsCameraOverlayOpen(true)}
-                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer border ${
-                  isDark
-                    ? 'bg-[#303036] hover:bg-[#38383D] text-[#F7F7F9] border-[#38383D]'
-                    : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] text-[#202024] border-[#E1E4E9] shadow-xs'
-                }`}
-                title="Open 24h Story Camera (Capture & Share)"
-                aria-label="Open Story Camera"
-              >
-                <Camera size={14} className="text-[#FF0A78]" />
-              </button>
-            )}
 
             {currentTab === 'profile' && (
               <button
