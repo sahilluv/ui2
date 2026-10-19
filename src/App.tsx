@@ -24,11 +24,12 @@ import { StoryItem, INITIAL_STORIES } from './data/mockData';
 type AppViewMode = 'single' | 'side-by-side' | 'gallery' | 'code' | 'shadow-auth';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<AppViewMode>('shadow-auth');
+  const [viewMode, setViewMode] = useState<AppViewMode>('single');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(true);
   const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [currentTab, setCurrentTab] = useState<TabType>('home');
+  const [stories, setStories] = useState<StoryItem[]>(INITIAL_STORIES);
 
   const showAppToast = (msg: string) => {
     setToastMessage(msg);
@@ -41,11 +42,38 @@ export default function App() {
     setIsDark((prev) => !prev);
   };
 
+  const handlePublishStory = (newStoryData: {
+    gradient: string;
+    imageUrl?: string;
+    caption?: string;
+    sticker?: string;
+    musicTrack?: string;
+    locationName?: string;
+  }) => {
+    setStories((prev) =>
+      prev.map((s) => {
+        if (s.isCurrentUser) {
+          return {
+            ...s,
+            gradient: newStoryData.gradient,
+            storyImageUrl: newStoryData.imageUrl,
+            storyCaption: newStoryData.caption,
+            storySticker: newStoryData.sticker,
+            storyTimestamp: 'Just now',
+            hasUnseen: true,
+          };
+        }
+        return s;
+      })
+    );
+    showAppToast('New 24-hour story published! ✨');
+  };
+
   const handleNextStory = () => {
     if (!activeStory) return;
-    const currentIndex = INITIAL_STORIES.findIndex((s) => s.id === activeStory.id);
-    if (currentIndex < INITIAL_STORIES.length - 1) {
-      setActiveStory(INITIAL_STORIES[currentIndex + 1]);
+    const currentIndex = stories.findIndex((s) => s.id === activeStory.id);
+    if (currentIndex < stories.length - 1) {
+      setActiveStory(stories[currentIndex + 1]);
     } else {
       setActiveStory(null);
     }
@@ -53,9 +81,9 @@ export default function App() {
 
   const handlePrevStory = () => {
     if (!activeStory) return;
-    const currentIndex = INITIAL_STORIES.findIndex((s) => s.id === activeStory.id);
+    const currentIndex = stories.findIndex((s) => s.id === activeStory.id);
     if (currentIndex > 0) {
-      setActiveStory(INITIAL_STORIES[currentIndex - 1]);
+      setActiveStory(stories[currentIndex - 1]);
     } else {
       setActiveStory(null);
     }
@@ -213,6 +241,8 @@ export default function App() {
                 activeTab={currentTab}
                 onTabChange={setCurrentTab}
                 onSelectStory={setActiveStory}
+                stories={stories}
+                onPublishStory={handlePublishStory}
               />
             </div>
           </div>
@@ -234,6 +264,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="home"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -248,6 +280,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="explore"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -262,6 +296,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="profile"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
             </div>
@@ -284,6 +320,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="home"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -298,6 +336,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="home"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -312,6 +352,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="explore"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -326,6 +368,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="reels"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
 
@@ -340,6 +384,8 @@ export default function App() {
                   onToggleTheme={toggleTheme}
                   activeTab="profile"
                   onSelectStory={setActiveStory}
+                  stories={stories}
+                  onPublishStory={handlePublishStory}
                 />
               </div>
             </div>
@@ -476,7 +522,7 @@ export default function App() {
       {/* 3. Interactive Fullscreen Story Viewer Modal */}
       <StoryViewerModal
         story={activeStory}
-        stories={INITIAL_STORIES}
+        stories={stories}
         onClose={() => setActiveStory(null)}
         onNext={handleNextStory}
         onPrev={handlePrevStory}

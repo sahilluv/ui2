@@ -3,9 +3,9 @@ import { PostItem, ReelItem, INITIAL_POSTS, INITIAL_REELS } from '../data/mockDa
 import { generateMorePostItems, generateMoreReelItems } from './endlessScrollData';
 
 // Cache keys for multi-tier persistence (Cache Storage API + LocalStorage)
-const FEED_CACHE_KEY = 'shadow_offline_feed_v2';
-const REELS_CACHE_KEY = 'shadow_offline_reels_v2';
-const CACHE_NAME = 'shadow-data-v1';
+const FEED_CACHE_KEY = 'shadow_offline_feed_v5';
+const REELS_CACHE_KEY = 'shadow_offline_reels_v5';
+const CACHE_NAME = 'shadow-data-v2';
 
 // In-memory runtime cache for 0ms access
 let inMemoryFeed: PostItem[] | null = null;

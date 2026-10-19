@@ -103,6 +103,7 @@ export interface MockExploreProfile {
   name: string;
   username: string;
   avatarGradient: string;
+  avatarUrl?: string;
   pawnRank: string;
   verified: boolean;
   bio: string;
@@ -124,6 +125,7 @@ export const MOCK_EXPLORE_PROFILES: MockExploreProfile[] = [
     name: 'Mauricio Lopez',
     username: 'Maoo.lopez',
     avatarGradient: 'linear-gradient(135deg, #2A2A2A 0%, #161616 50%, #0A0A0A 100%)',
+    avatarUrl: '/src/assets/images/avatar_mauricio_designer_1792313922880.jpg',
     pawnRank: 'Rank I',
     verified: true,
     bio: 'Founder @Shadow · Neo-digital design & dark aesthetics',
@@ -135,6 +137,7 @@ export const MOCK_EXPLORE_PROFILES: MockExploreProfile[] = [
     name: 'Elena Rostova',
     username: 'Elena.art',
     avatarGradient: 'linear-gradient(135deg, #242424 0%, #141414 100%)',
+    avatarUrl: '/src/assets/images/avatar_elena_artist_1792313923579.jpg',
     pawnRank: 'Rank I',
     verified: true,
     bio: 'Creative Director · 3D motion, Octane nodes & lighting',
@@ -143,23 +146,25 @@ export const MOCK_EXPLORE_PROFILES: MockExploreProfile[] = [
   },
   {
     id: 'sofia',
-    name: 'Sofia Martinez',
-    username: 'sofia.mtz',
+    name: 'Claire Dubois',
+    username: 'claire_d',
     avatarGradient: 'linear-gradient(135deg, #2E2E2E 0%, #1A1A1A 100%)',
+    avatarUrl: '/src/assets/images/claire_green_profile_1790960159362.jpg',
     pawnRank: 'Rank II',
     verified: true,
-    bio: 'Motion Designer @CyberVibe · Glitch art & visual experiments',
+    bio: 'Visual Systems & UI Shaders @Shadow Lab',
     followers: '12.9K',
     postsCount: 67,
   },
   {
-    id: 'marco',
-    name: 'Marco Rossi',
-    username: 'marco.rossi',
+    id: 'christian',
+    name: 'Christian Lue',
+    username: 'christian.lue',
     avatarGradient: 'linear-gradient(135deg, #242424 0%, #141414 100%)',
+    avatarUrl: '/src/assets/images/avatar_christian_creator_1792313923903.jpg',
     pawnRank: 'Rank III',
-    verified: false,
-    bio: 'Photographer & Visual Artist · Tokyo cyber nightscapes',
+    verified: true,
+    bio: 'Architectural photographer & brutalist forms',
     followers: '8.4K',
     postsCount: 42,
   },
@@ -168,6 +173,7 @@ export const MOCK_EXPLORE_PROFILES: MockExploreProfile[] = [
     name: 'Aria Chen',
     username: 'aria.lens',
     avatarGradient: 'linear-gradient(135deg, #2C2C2C 0%, #161616 100%)',
+    avatarUrl: '/src/assets/images/girl_glasses_bun_1791874584066.jpg',
     pawnRank: 'Rank I',
     verified: true,
     bio: 'Editorial Stylist & Art Director · Milan & New York',
@@ -229,6 +235,15 @@ interface PhoneSimulatorProps {
   onTabChange?: (tab: TabType) => void;
   onSelectStory?: (story: StoryItem) => void;
   standalone?: boolean;
+  stories?: StoryItem[];
+  onPublishStory?: (newStoryData: {
+    gradient: string;
+    imageUrl?: string;
+    caption?: string;
+    sticker?: string;
+    musicTrack?: string;
+    locationName?: string;
+  }) => void;
 }
 
 export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
@@ -238,6 +253,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   onTabChange: externalOnTabChange,
   onSelectStory,
   standalone = true,
+  stories: externalStories,
+  onPublishStory: externalOnPublishStory,
 }) => {
   const [internalTab, setInternalTab] = useState<TabType>('home');
   const currentTab = externalTab ?? internalTab;
@@ -250,6 +267,10 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   const [isViewingMyShadow, setIsViewingMyShadow] = useState(false);
 
   const handleTabChange = (tab: TabType) => {
+    if (tab === 'create') {
+      setIsCameraOverlayOpen(true);
+      return;
+    }
     setIsNavShrunk(false);
     setIsViewingMyShadow(false);
     if (externalOnTabChange) {
@@ -333,7 +354,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   } = useOfflineReels();
 
   // State for stories, likes, followers
-  const [stories, setStories] = useState<StoryItem[]>(INITIAL_STORIES);
+  const [localStories, setLocalStories] = useState<StoryItem[]>(INITIAL_STORIES);
+  const stories = externalStories ?? localStories;
   const [isCameraOverlayOpen, setIsCameraOverlayOpen] = useState(false);
   const [activeReelComments, setActiveReelComments] = useState<ReelItem | null>(null);
   const [isFollowingMauricio, setIsFollowingMauricio] = useState(false);
@@ -370,23 +392,29 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
     imageUrl?: string;
     caption?: string;
     sticker?: string;
+    musicTrack?: string;
+    locationName?: string;
   }) => {
-    setStories((prev) =>
-      prev.map((s) => {
-        if (s.isCurrentUser) {
-          return {
-            ...s,
-            gradient: newStoryData.gradient,
-            storyImageUrl: newStoryData.imageUrl,
-            storyCaption: newStoryData.caption,
-            storySticker: newStoryData.sticker,
-            storyTimestamp: 'Just now',
-            hasUnseen: true,
-          };
-        }
-        return s;
-      })
-    );
+    if (externalOnPublishStory) {
+      externalOnPublishStory(newStoryData);
+    } else {
+      setLocalStories((prev) =>
+        prev.map((s) => {
+          if (s.isCurrentUser) {
+            return {
+              ...s,
+              gradient: newStoryData.gradient,
+              storyImageUrl: newStoryData.imageUrl,
+              storyCaption: newStoryData.caption,
+              storySticker: newStoryData.sticker,
+              storyTimestamp: 'Just now',
+              hasUnseen: true,
+            };
+          }
+          return s;
+        })
+      );
+    }
     triggerToast('New 24-hour story published! ✨', 'sparkles');
   };
 
@@ -402,6 +430,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
       name: 'Elena Rostova',
       username: 'elena.art',
       avatarGradient: 'linear-gradient(135deg, #2A2A2A 0%, #161616 100%)',
+      avatarUrl: '/src/assets/images/avatar_elena_artist_1792313923579.jpg',
       online: true,
       lastSeen: 'Active now',
       status: 'Creative Director · 3D Specialist',
@@ -410,23 +439,25 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
     },
     {
       id: 'sofia',
-      name: 'Sofia Martinez',
-      username: 'sofia.cyber',
+      name: 'Claire Dubois',
+      username: 'claire_d',
       avatarGradient: 'linear-gradient(135deg, #242424 0%, #121212 100%)',
+      avatarUrl: '/src/assets/images/claire_green_profile_1790960159362.jpg',
       online: true,
       lastSeen: 'Active 8m ago',
-      status: 'Motion Designer @CyberVibe',
+      status: 'Visual Systems · Shadow Lab',
       verified: true,
       unread: false,
     },
     {
       id: 'marco',
-      name: 'Marco Rossi',
-      username: 'marco.rossi',
+      name: 'Christian Lue',
+      username: 'christian.lue',
       avatarGradient: 'linear-gradient(135deg, #242424 0%, #141414 100%)',
+      avatarUrl: '/src/assets/images/avatar_christian_creator_1792313923903.jpg',
       online: false,
       lastSeen: 'Active 2h ago',
-      status: 'Photographer & Visual Artist',
+      status: 'Architectural Photographer',
       verified: false,
       unread: false,
     },
@@ -435,6 +466,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
       name: 'Aria Chen',
       username: 'aria.lens',
       avatarGradient: 'linear-gradient(135deg, #2C2C2C 0%, #161616 100%)',
+      avatarUrl: '/src/assets/images/girl_glasses_bun_1791874584066.jpg',
       online: true,
       lastSeen: 'Active now',
       status: 'Editorial Stylist · Milan',
@@ -1053,8 +1085,23 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             )}
           </div>
 
-          {/* Right Actions: Theme switch (ONLY ON PROFILE PAGE) + Profile / Chat Button */}
+          {/* Right Actions: Story Camera quick launch on Home + Theme switch (ONLY ON PROFILE PAGE) + Profile / Chat Button */}
           <div className="flex items-center gap-1.5">
+            {currentTab === 'home' && (
+              <button
+                onClick={() => setIsCameraOverlayOpen(true)}
+                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer border ${
+                  isDark
+                    ? 'bg-[#303036] hover:bg-[#38383D] text-[#F7F7F9] border-[#38383D]'
+                    : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] text-[#202024] border-[#E1E4E9] shadow-xs'
+                }`}
+                title="Open 24h Story Camera (Capture & Share)"
+                aria-label="Open Story Camera"
+              >
+                <Camera size={14} className="text-[#FF0A78]" />
+              </button>
+            )}
+
             {currentTab === 'profile' && (
               <button
                 onClick={onToggleTheme}
@@ -1073,7 +1120,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               className={`relative w-8 h-8 rounded-[11px] flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
                 currentTab === 'profile' ? 'scale-105' : 'hover:scale-105'
               }`}
-              title="User Profile"
+              title="User Profile (Mauricio Lopez)"
+              aria-label="User Profile"
             >
               <div
                 className={`w-7.5 h-7.5 rounded-[10px] p-[1.5px] transition-all ${
@@ -1091,11 +1139,18 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   }`}
                 >
                   <div
-                    className="w-full h-full rounded-[7px]"
+                    className="w-full h-full rounded-[7px] overflow-hidden flex items-center justify-center relative"
                     style={{
                       background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 100%)',
                     }}
-                  />
+                  >
+                    <img
+                      src={stories.find((s) => s.isCurrentUser)?.avatarUrl || '/src/assets/images/avatar_mauricio_designer_1792313922880.jpg'}
+                      alt="Mauricio Lopez Profile"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover rounded-[7px]"
+                    />
+                  </div>
                 </div>
               </div>
               {currentTab === 'profile' && (
@@ -1196,6 +1251,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                               <img
                                 src={story.storyImageUrl}
                                 alt="Current user story thumbnail"
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : story.avatarUrl ? (
+                              <img
+                                src={story.avatarUrl}
+                                alt={story.username}
+                                referrerPolicy="no-referrer"
                                 className="w-full h-full object-cover"
                               />
                             ) : story.isCurrentUser && !hasActiveStory ? (
@@ -1298,18 +1361,27 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           onClick={() => handleTabChange('profile')}
                         >
                           <div
-                            className="w-9 h-9 rounded-[11px] p-[2px]"
+                            className="w-9 h-9 rounded-[11px] p-[2px] shrink-0"
                             style={{ background: post.author.avatarGradient }}
                           >
                             <div
-                              className={`w-full h-full rounded-[9px] p-[1.5px] ${
+                              className={`w-full h-full rounded-[9px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
-                              <div
-                                className="w-full h-full rounded-[7px]"
-                                style={{ background: post.author.avatarGradient }}
-                              />
+                              {post.author.avatarUrl ? (
+                                <img
+                                  src={post.author.avatarUrl}
+                                  alt={post.author.name}
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full object-cover rounded-[7px]"
+                                />
+                              ) : (
+                                <div
+                                  className="w-full h-full rounded-[7px]"
+                                  style={{ background: post.author.avatarGradient }}
+                                />
+                              )}
                             </div>
                           </div>
                           <div>
@@ -1377,12 +1449,26 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         </div>
                       </div>
 
-                      {/* Rounded Media Card (Cinematic Gradient Artwork with Double-Tap to Like) */}
+                      {/* Rounded Media Card (Cinematic Artwork with Double-Tap to Like) */}
                       <div
                         onClick={() => handlePostMediaClick(post)}
-                        className="relative w-full h-[360px] rounded-[24px] overflow-hidden shadow-2xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none"
+                        className="relative w-full h-[360px] rounded-[24px] overflow-hidden shadow-2xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none group"
                         style={{ background: getPostGradient(post.id, post.gradient) }}
                       >
+                        {/* Real Post Artwork Image */}
+                        {post.imageUrl && (
+                          <img
+                            src={post.imageUrl}
+                            alt={post.captionTitle}
+                            referrerPolicy="no-referrer"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                          />
+                        )}
+                        {/* Vignette Overlay for UI legibility */}
+                        {post.imageUrl && (
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/45 pointer-events-none" />
+                        )}
+
                         {/* Big Blooming Heart Burst on Double Tap */}
                         {heartBurstPostId === post.id && (
                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
@@ -1790,10 +1876,24 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                             style={{ background: profile.avatarGradient }}
                                           >
                                             <div
-                                              className={`w-full h-full rounded-full ${
+                                              className={`w-full h-full rounded-full overflow-hidden ${
                                                 isDark ? 'bg-[#0B0C14]' : 'bg-white'
                                               }`}
-                                            />
+                                            >
+                                              {profile.avatarUrl ? (
+                                                <img
+                                                  src={profile.avatarUrl}
+                                                  alt={profile.name}
+                                                  referrerPolicy="no-referrer"
+                                                  className="w-full h-full object-cover"
+                                                />
+                                              ) : (
+                                                <div
+                                                  className="w-full h-full"
+                                                  style={{ background: profile.avatarGradient }}
+                                                />
+                                              )}
+                                            </div>
                                           </div>
                                         </div>
 
@@ -2728,14 +2828,23 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             }}
                           >
                             <div
-                              className={`w-full h-full rounded-[14px] p-[1.5px] ${
+                              className={`w-full h-full rounded-[14px] p-[1.5px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
-                              <div
-                                className="w-full h-full rounded-[12px]"
-                                style={{ background: user.avatarGradient }}
-                              />
+                              {user.avatarUrl ? (
+                                <img
+                                  src={user.avatarUrl}
+                                  alt={user.name}
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full rounded-[12px] object-cover"
+                                />
+                              ) : (
+                                <div
+                                  className="w-full h-full rounded-[12px]"
+                                  style={{ background: user.avatarGradient }}
+                                />
+                              )}
                             </div>
                           </div>
                           {user.online && (
@@ -2804,14 +2913,23 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             }
                           >
                             <div
-                              className={`w-full h-full rounded-[14px] p-[1.5px] ${
+                              className={`w-full h-full rounded-[14px] p-[1.5px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
-                              <div
-                                className="w-full h-full rounded-[12px]"
-                                style={{ background: user.avatarGradient }}
-                              />
+                              {user.avatarUrl ? (
+                                <img
+                                  src={user.avatarUrl}
+                                  alt={user.name}
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full rounded-[12px] object-cover"
+                                />
+                              ) : (
+                                <div
+                                  className="w-full h-full rounded-[12px]"
+                                  style={{ background: user.avatarGradient }}
+                                />
+                              )}
                             </div>
                           </div>
                           {user.online && (
@@ -2994,14 +3112,23 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           }
                         >
                           <div
-                            className={`w-full h-full rounded-[12px] p-[1px] ${
+                            className={`w-full h-full rounded-[12px] p-[1px] overflow-hidden ${
                               isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                             }`}
                           >
-                            <div
-                              className="w-full h-full rounded-[10px]"
-                              style={{ background: notif.user.avatarGradient }}
-                            />
+                            {notif.user.avatarUrl ? (
+                              <img
+                                src={notif.user.avatarUrl}
+                                alt={notif.user.name}
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full rounded-[10px] object-cover"
+                              />
+                            ) : (
+                              <div
+                                className="w-full h-full rounded-[10px]"
+                                style={{ background: notif.user.avatarGradient }}
+                              />
+                            )}
                           </div>
                         </div>
 
@@ -3101,23 +3228,24 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
           <div className="pb-28">
               {/* Top Avatar & Info */}
               <div className="flex flex-col items-center px-6 pt-3">
-                {/* Large Centered Avatar with vivid story ring (Section 10) */}
+                {/* Large Centered Avatar with vivid story ring */}
                 <div
-                  className="w-22 h-22 rounded-[28px] p-[3.5px] shadow-xl mb-3.5"
+                  className="w-22 h-22 rounded-[28px] p-[3.5px] shadow-xl mb-3.5 group cursor-pointer"
                   style={{
                     background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                   }}
+                  onClick={() => triggerToast('Mauricio Lopez · Founder @Shadow', 'sparkles')}
                 >
                   <div
-                    className={`w-full h-full rounded-[24px] p-[3px] ${
+                    className={`w-full h-full rounded-[24px] p-[2.5px] overflow-hidden ${
                       isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                     }`}
                   >
-                    <div
-                      className="w-full h-full rounded-[21px]"
-                      style={{
-                        background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 50%, #4F46E5 100%)',
-                      }}
+                    <img
+                      src="/src/assets/images/avatar_mauricio_designer_1792313922880.jpg"
+                      alt="Mauricio Lopez"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full rounded-[21px] object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 </div>
@@ -3402,32 +3530,66 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               })}
             </div>
 
-            {/* Profile Media Grid (Matt black and charcoal noir rounded cards) */}
+            {/* Profile Media Grid (Curated Showcase Artworks) */}
             <div className="px-4 grid grid-cols-2 gap-3">
-              <div
-                className="w-full h-44 rounded-[22px] shadow-md transition-transform hover:scale-[1.02] cursor-pointer"
-                style={{
-                  background: 'linear-gradient(145deg, #2A2A2A 0%, #1A1A1A 60%, #101010 100%)',
-                }}
-              />
-              <div
-                className="w-full h-44 rounded-[22px] shadow-md transition-transform hover:scale-[1.02] cursor-pointer"
-                style={{
-                  background: 'linear-gradient(145deg, #242424 0%, #161616 60%, #0E0E0E 100%)',
-                }}
-              />
-              <div
-                className="w-full h-44 rounded-[22px] shadow-md transition-transform hover:scale-[1.02] cursor-pointer"
-                style={{
-                  background: 'linear-gradient(145deg, #202020 0%, #141414 60%, #0A0A0A 100%)',
-                }}
-              />
-              <div
-                className="w-full h-44 rounded-[22px] shadow-md transition-transform hover:scale-[1.02] cursor-pointer"
-                style={{
-                  background: 'linear-gradient(145deg, #1C1C1C 0%, #121212 60%, #080808 100%)',
-                }}
-              />
+              {[
+                {
+                  id: 'grid_1',
+                  title: 'Sacrifice | Virus',
+                  img: '/src/assets/images/feed_art_biomorphic_1792313924712.jpg',
+                  likes: '4.5k',
+                },
+                {
+                  id: 'grid_2',
+                  title: 'Noir Refraction',
+                  img: '/src/assets/images/shadow_artwork_one_1790311065756.jpg',
+                  likes: '3.8k',
+                },
+                {
+                  id: 'grid_3',
+                  title: 'Brutalist Dusk',
+                  img: '/src/assets/images/feed_art_brutalist_1792313925585.jpg',
+                  likes: '2.9k',
+                },
+                {
+                  id: 'grid_4',
+                  title: 'Generative Nodes',
+                  img: '/src/assets/images/shadow_artwork_three_1790311086351.jpg',
+                  likes: '5.1k',
+                },
+                {
+                  id: 'grid_5',
+                  title: 'Chroma Echo',
+                  img: '/src/assets/images/shadow_artwork_two_1790311076323.jpg',
+                  likes: '1.9k',
+                },
+                {
+                  id: 'grid_6',
+                  title: 'Quiet Study',
+                  img: '/src/assets/images/girl_reading_armchair_1791874547627.jpg',
+                  likes: '2.4k',
+                },
+              ].map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => triggerToast(`Viewing artwork: ${item.title}`)}
+                  className="group relative w-full h-44 rounded-[22px] shadow-md overflow-hidden transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                >
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2.5">
+                    <span className="text-white text-xs font-bold truncate">{item.title}</span>
+                    <div className="flex items-center gap-1 text-[10px] text-white/90">
+                      <Heart size={10} className="fill-white" />
+                      <span>{item.likes}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

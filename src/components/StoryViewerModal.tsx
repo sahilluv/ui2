@@ -191,6 +191,7 @@ export const StoryViewerModal: React.FC<StoryViewerModalProps> = ({
           <img
             src={story.storyImageUrl}
             alt="Story snapshot"
+            referrerPolicy="no-referrer"
             className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
           />
         )}
@@ -248,10 +249,19 @@ export const StoryViewerModal: React.FC<StoryViewerModalProps> = ({
             <div className="flex items-center gap-2.5 min-w-0">
               {/* Avatar (Curved Square) */}
               <div
-                className="w-9 h-9 rounded-[11px] border-2 border-white/90 p-0.5 flex items-center justify-center shadow-md shrink-0"
+                className="w-9 h-9 rounded-[11px] border-2 border-white/90 p-0.5 flex items-center justify-center shadow-md shrink-0 overflow-hidden"
                 style={{ background: story.avatarGradient }}
               >
-                <div className="w-full h-full rounded-[9px] bg-black/20" />
+                {story.avatarUrl ? (
+                  <img
+                    src={story.avatarUrl}
+                    alt={story.username}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full rounded-[8px] object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-[9px] bg-black/20" />
+                )}
               </div>
 
               {/* Author Title & Timestamp */}
