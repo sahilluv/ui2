@@ -13,6 +13,8 @@ export default function ProfileScreen({ navigation }: any) {
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState<'posts' | 'tags' | 'igtv'>('posts');
+  const [bio, setBio] = useState(identity?.profile?.bio || 'Diseñador visual y Fotografía - Campus Community');
+  const [isEditing, setIsEditing] = useState(false);
 
   const highlights: HighlightItem[] = [
     {
@@ -116,7 +118,13 @@ export default function ProfileScreen({ navigation }: any) {
           highlights={highlights}
           displayName={identity?.name || undefined}
           email={identity?.email || undefined}
-          bio={identity?.profile?.bio || undefined}
+          bio={bio}
+          isEditing={isEditing}
+          onToggleEdit={() => setIsEditing((prev) => !prev)}
+          onSaveBio={(newBio: string) => {
+            setBio(newBio);
+            setIsEditing(false);
+          }}
           shadowRank={identity?.shadowRank?.rankType || undefined}
           verificationStatus={identity?.verification?.status || undefined}
           shadowId={identity?.shadow?.id || undefined}

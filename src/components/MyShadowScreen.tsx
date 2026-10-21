@@ -19,6 +19,8 @@ import {
   Sun,
   Moon,
   Radio,
+  CheckCircle2,
+  ChevronRight,
 } from 'lucide-react';
 import {
   PawnRankBadge,
@@ -763,424 +765,452 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
 
   return (
     <div
-      className={`flex flex-col h-full overflow-y-auto no-scrollbar pb-32 transition-colors ${
-        isDarkTheme ? 'bg-[#12131A] text-white' : 'bg-[#FFFFFF] text-[#1B1C1D]'
-      }`}
+      className="flex flex-col h-full overflow-y-auto no-scrollbar pb-32 bg-[#0D0E14] text-gray-100 select-none font-sans antialiased"
     >
-      {/* ======================================================== */}
-      {/* 1. HEADER (Sem UI Calibrated Background & Rose Wordmark)  */}
-      {/* ======================================================== */}
-      <header
-        className={`sticky top-0 z-30 h-13 px-4 flex items-center justify-between shrink-0 border-b transition-colors ${
-          isDarkTheme
-            ? 'bg-[#12131A]/95 border-white/10 text-white'
-            : 'bg-[#FFFFFF]/95 border-[#E0E1E2] text-[#1B1C1D]'
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onBack}
-            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
-              isDarkTheme ? 'hover:bg-white/10 text-white' : 'hover:bg-[#F2F3F5] text-[#1B1C1D]'
-            }`}
-            title="Return to Home Feed"
-            aria-label="Back to Home Feed"
-          >
-            <ChevronLeft size={22} />
-          </button>
+      {/* Top Hardware Notch / iOS Status Bar Simulator */}
+      <div className="w-full pt-2.5 px-6 pb-1 flex justify-between items-center text-xs font-semibold tracking-tight text-white shrink-0 z-30 opacity-90">
+        <span className="text-xs tracking-normal font-mono">9:41</span>
+        <div className="flex items-center space-x-1.5 text-white/90">
+          <Radio size={12} className="text-white/80" />
+          <span className="text-[10px] font-mono">5G</span>
+          <div className="w-4.5 h-2 border border-white/80 rounded-xs p-0.5 flex items-center">
+            <div className="w-2.5 h-1 bg-white rounded-xs" />
+          </div>
+        </div>
+      </div>
+
+      {/* BEGIN: Top Navigation Header */}
+      <nav className="px-4 py-2 flex items-center justify-between shrink-0 z-20 border-b border-white/10 bg-[#0D0E14]/95 backdrop-blur-md" data-purpose="main-top-navbar">
+        {/* Back Chevron */}
+        <button
+          onClick={onBack}
+          aria-label="Go back"
+          className="w-9 h-9 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 transition active:scale-95 cursor-pointer"
+          title="Return to Feed"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        {/* App Logo / Script Wordmark */}
+        <div className="flex items-center space-x-1">
+          <span className="font-shadow-script text-3xl font-bold tracking-wide text-white drop-shadow-md">Shadow</span>
         </div>
 
-        {/* Center cursive script brand wordmark in signature purple (#7B52B9) */}
-        <div className="flex items-center justify-center">
-          <h1
-            className="text-3xl font-shadow-script font-bold tracking-wide select-none cursor-pointer"
-            style={{
-              color: '#FFFFFF',
-            }}
-          >
-            Shadow
-          </h1>
-        </div>
-
-        {/* Right Action: Sync Consensus, Theme Toggle, & Options */}
-        <div className="flex items-center gap-1">
-          {/* Theme Mode Toggle (Synchronized Sem UI Dark / Light Palette) */}
+        {/* Action Icons (Theme, Sync, Options) */}
+        <div className="flex items-center space-x-2 text-white/80">
           <button
             onClick={() => setInternalDark((prev) => (prev !== null ? !prev : !isDark))}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
-              isDarkTheme ? 'hover:bg-white/10 text-yellow-300' : 'hover:bg-[#F2F3F5] text-[#767676]'
-            }`}
+            aria-label="Toggle theme"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:text-yellow-400 transition cursor-pointer active:scale-95"
             title={isDarkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {isDarkTheme ? <Sun size={15} /> : <Moon size={15} />}
           </button>
-
           <button
             onClick={() => fetchWorldRankings(false)}
             disabled={isFetchingRankings}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
-              isDarkTheme ? 'hover:bg-white/10 text-slate-300' : 'hover:bg-[#F2F3F5] text-[#1B1C1D]'
-            }`}
+            aria-label="Sync data"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:text-white transition active:rotate-180 duration-300 cursor-pointer"
             title="Sync Consensus State"
           >
-            <RefreshCw
-              size={15}
-              className={`text-white ${isFetchingRankings ? 'animate-spin' : ''}`}
-            />
+            <RefreshCw size={14} className={isFetchingRankings ? 'animate-spin text-[#FF007F]' : ''} />
           </button>
-
           <button
-            onClick={() => onToast('Profile options', 'bookmark')}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
-              isDarkTheme ? 'hover:bg-white/10 text-white' : 'hover:bg-[#F2F3F5] text-[#1B1C1D]'
-            }`}
-            title="More options"
+            onClick={() => onToast('Profile settings & options', 'bookmark')}
+            aria-label="More options"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:text-white transition cursor-pointer active:scale-95"
+            title="More Options"
           >
-            <MoreVertical size={19} />
+            <MoreVertical size={16} />
           </button>
         </div>
-      </header>
+      </nav>
+      {/* END: Top Navigation Header */}
 
-      {/* Main Container */}
-      <div className="px-4 pt-3.5 space-y-4">
-        {/* ======================================================== */}
-        {/* 2. PROFILE SECTION (DIRECT REFERENCE MATCH)              */}
-        {/* Circular Avatar on Left | Details & Exact Stats on Right */}
-        {/* Pure White Surface + Clean Crisp Editorial Typography    */}
-        {/* ======================================================== */}
-        <div
-          className={`p-4 rounded-[24px] border transition-all ${
-            isDarkTheme
-              ? 'bg-[#1A1B24] border-white/10 shadow-black/40'
-              : 'bg-[#FFFFFF] border-[#E0E1E2] shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
-          }`}
-        >
-          <div className="flex items-start gap-4">
-            {/* Circular Avatar on Left (Matching Claire Green in reference) */}
-            <div className="relative shrink-0">
-              <div
-                className={`w-20 h-20 rounded-full p-[2px] shadow-sm flex items-center justify-center ${
-                  isDarkTheme ? 'ring-2 ring-white/30' : 'ring-2 ring-white/30'
-                }`}
-                style={{
-                  background: isDarkTheme
-                    ? 'linear-gradient(135deg, #2A2A2A 0%, #161616 100%)'
-                    : 'linear-gradient(135deg, #2A2A2A 0%, #161616 100%)',
-                }}
-              >
-                <div
-                  className={`w-full h-full rounded-full flex items-center justify-center overflow-hidden ${
-                    isDarkTheme ? 'bg-[#12131A]' : 'bg-[#F7F8FA]'
-                  }`}
-                >
-                  <div
-                    className="w-full h-full rounded-full flex items-center justify-center relative overflow-hidden"
-                    style={{
-                      background: isDarkTheme
-                        ? 'radial-gradient(circle at 35% 35%, #3B154C 0%, #171126 60%, #12131A 100%)'
-                        : 'radial-gradient(circle at 35% 35%, #F4ECE1 0%, #E5D5C5 60%, #D8C3AE 100%)',
-                    }}
-                  >
-                    {localRank === 'KNIGHT' ? (
-                      <PremiumKnightInsignia size={38} glow={false} className={isDarkTheme ? 'text-white' : 'text-[#3E2723]'} />
-                    ) : (
-                      <PremiumPawnInsignia size={38} glow={false} className={isDarkTheme ? 'text-white' : 'text-[#3E2723]'} />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Verified Shield Badge on Avatar Rim */}
-              <div
-                className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-white shadow-sm"
-                title="Cryptographically Verified Digital Persona"
-              >
-                <ShieldCheck size={13} className="fill-white/10 text-white" />
-              </div>
-            </div>
-
-            {/* Right Column: Name, Handle & Exact Reference Stats Stack */}
-            <div className="flex-1 min-w-0 pt-0.5">
-              <div className="flex items-center justify-between">
-                <h2 className={`text-base font-extrabold tracking-tight truncate ${isDarkTheme ? 'text-white' : 'text-[#1B1C1D]'}`}>
-                  {currentUser.name}
-                </h2>
-              </div>
-              <p className={`text-xs font-semibold truncate mt-0.5 ${isDarkTheme ? 'text-[#D4D4D5]' : 'text-[#767676]'}`}>
-                @{currentUser.username}
-              </p>
-
-              {/* Clean Stats Stack Matching Sem UI Palette:
-                  ❤️ 1.2k likes (Sem UI Red #DB2828)
-                  🔥 48 streaks (Sem UI Orange #F2711C)
-                  735 posts (#1B1C1D bold) */}
-              <div className="flex items-center gap-4 mt-3">
-                {/* 1. Post Count */}
-                <div className="flex items-center gap-1">
-                  <span className={`text-xs font-extrabold ${isDarkTheme ? 'text-white' : 'text-[#1B1C1D]'}`}>
-                    735
-                  </span>
-                  <span className={`text-[11px] font-medium ${isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'}`}>
-                    posts
-                  </span>
-                </div>
-
-                {/* 2. Streaks Count (Replaces followers) */}
-                <div className="flex items-center gap-1">
-                  <span className={`text-xs font-extrabold ${isDarkTheme ? 'text-white' : 'text-[#1B1C1D]'}`}>
-                    48
-                  </span>
-                  <span className={`text-[11px] font-medium flex items-center gap-0.5 ${isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'}`}>
-                    streaks <Flame size={12} className="fill-neutral-300 text-neutral-300" />
-                  </span>
-                </div>
-
-                {/* 3. Likes Count (Sem UI Red #DB2828) */}
-                <div className="flex items-center gap-1">
-                  <span className={`text-xs font-extrabold ${isDarkTheme ? 'text-white' : 'text-[#1B1C1D]'}`}>
-                    1.2k
-                  </span>
-                  <span className={`text-[11px] font-medium flex items-center gap-0.5 ${isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'}`}>
-                    likes <Heart size={11} className="fill-white text-white" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Shadow ID Capsule, Rank Badge & Progression Control */}
+      {/* BEGIN: Main Scrollable Content Area */}
+      <main className="flex-1 overflow-y-auto no-scrollbar pb-24 px-4 space-y-3.5 pt-2" data-purpose="scrollable-profile-content">
+        {/* BEGIN: User Profile Header */}
+        <section className="flex items-center space-x-4 pt-1" data-purpose="user-profile-summary">
+          {/* Avatar with Instagram Gradient Ring */}
           <div
-            className={`mt-4 pt-3.5 border-t ${
-              isDarkTheme ? 'border-white/10' : 'border-[#E0E1E2]'
-            }`}
+            className="relative group cursor-pointer shrink-0"
+            onClick={handleTogglePromote}
+            title="Click avatar to toggle Rank (Pawn ↔ Knight)"
           >
-            <div className="flex items-center justify-between gap-2 mb-2.5">
-              {/* Shadow ID Capsule with Click-to-Copy */}
-              <button
-                onClick={() => handleCopyId(currentUser.shadowId)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-mono transition-all cursor-pointer active:scale-95 ${
-                  isDarkTheme
-                    ? 'bg-white/5 border-white/10 text-[#D4D4D5] hover:bg-white/10'
-                    : 'bg-[#F7F8FA] border-[#E0E1E2] text-[#1B1C1D] hover:bg-[#F2F3F5]'
-                }`}
-                title="Click to copy Shadow ID"
-              >
-                <span className="text-white font-extrabold text-[10px]">ID:</span>
-                <span>{currentUser.shadowId}</span>
-                <Copy size={11} className={isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676] ml-0.5'} />
-              </button>
-
-              {/* Simulated Rank Progression Toggle Button (PAWN ↔ KNIGHT) */}
-              <button
-                onClick={handleTogglePromote}
-                disabled={isPromoting}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer active:scale-95 ${
-                  localRank === 'KNIGHT'
-                    ? isDarkTheme
-                      ? 'bg-white/10 border-white/20 text-white'
-                      : 'bg-neutral-800 border-white/20 text-white'
-                    : isDarkTheme
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20'
-                    : 'bg-neutral-900 border-white/20 text-white hover:bg-neutral-800'
-                }`}
-                title="Advance from Foundation to Vanguard status"
-              >
-                <Sparkles size={12} className={isPromoting ? 'animate-spin' : ''} />
-                <span>{localRank === 'KNIGHT' ? 'Knight (Vanguard)' : 'Pawn (Foundation)'}</span>
-                <span className={`text-[9px] uppercase tracking-wider ${isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'}`}>Toggle</span>
-              </button>
+            {/* Gradient Outer Ring */}
+            <div
+              className="w-20 h-20 rounded-full p-[2px] border border-white/20 shadow-md transition-transform group-hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, rgb(255, 0, 127) 0%, rgb(184, 0, 165) 50%, rgb(125, 18, 165) 100%)',
+              }}
+            >
+              <div className="w-full h-full rounded-full bg-[#0D0E14] p-[2px] flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full rounded-full bg-[#181822] flex items-center justify-center relative">
+                  {localRank === 'KNIGHT' ? (
+                    <PremiumKnightInsignia size={32} glow={false} className="text-white drop-shadow" />
+                  ) : (
+                    <PremiumPawnInsignia size={32} glow={false} className="text-white drop-shadow" />
+                  )}
+                </div>
+              </div>
             </div>
+            {/* Verified Shield Badge */}
+            <span
+              className="absolute -bottom-1 -right-1 bg-[#171822] w-6 h-6 rounded-full flex items-center justify-center border-2 border-black"
+              style={{ color: 'rgb(255, 0, 127)', boxShadow: 'rgba(255, 0, 127, 0.3) 0px 0px 0px 1px' }}
+              title="Verified Digital Persona"
+            >
+              <ShieldCheck size={11} className="text-[#FF007F]" />
+            </span>
+          </div>
 
-            {/* PawnRankBadge with periodic sheen */}
-            <PawnRankBadge
-              rank={localRank}
-              variant="profile"
-              isDark={isDarkTheme}
-              isPromoting={isPromoting}
-              periodicSheen={true}
-              onClick={handleTogglePromote}
-            />
-
-            {/* Bio & Tagline */}
-            <p className={`text-xs leading-relaxed mt-2.5 ${isDarkTheme ? 'text-[#D4D4D5]' : 'text-[#555963]'}`}>
-              UI/UX Design & Photography · Digital Shadow Identity · Zihuatanejo, Mexico
+          {/* Name, Handle & Quick Stats */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center space-x-1.5">
+              <h1 className="text-lg font-bold text-white tracking-tight truncate">
+                {currentUser.name}
+              </h1>
+              <CheckCircle2 size={14} className="text-sky-400 shrink-0 fill-sky-400/20" />
+            </div>
+            <p className="text-xs text-white/50 font-medium pb-2">
+              @{currentUser.username}
             </p>
-            <div className="flex flex-wrap gap-1.5 mt-1.5">
-              {['#ShadowGenesis', '#CreativeMesh', '#RankUpgrade'].map((tag) => (
-                <span
-                  key={tag}
-                  className="text-[10px] font-bold text-white hover:underline cursor-pointer"
-                  onClick={() => onToast(`Filter tag: ${tag}`)}
-                >
-                  {tag}
-                </span>
-              ))}
+            {/* Interactive Micro Stats */}
+            <div className="grid grid-cols-3 gap-1.5 w-full text-xs">
+              <div
+                onClick={() => onToast('735 Published Creations', 'sparkles')}
+                className="px-2 py-1.5 rounded-xl bg-[#171822] border border-white/10 flex items-center justify-center space-x-1 min-w-0 cursor-pointer hover:border-white/20 transition active:scale-95"
+              >
+                <span className="font-extrabold text-white text-xs">735</span>
+                <span className="text-white/50 text-[9px] uppercase font-semibold tracking-wider truncate">posts</span>
+              </div>
+              <div
+                onClick={() => onToast('48 Days Active Streak 🔥', 'sparkles')}
+                className="px-2 py-1.5 rounded-xl bg-[#171822] border border-white/10 flex items-center justify-center space-x-1 min-w-0 cursor-pointer hover:border-white/20 transition active:scale-95"
+              >
+                <span className="font-extrabold text-white text-xs">48</span>
+                <span className="text-white/50 text-[9px] uppercase font-semibold tracking-wider truncate">streaks</span>
+                <span className="text-[10px] text-[#FF8738] shrink-0">🔥</span>
+              </div>
+              <div
+                onClick={() => onToast('1.2k Community Cheers ❤️', 'sparkles')}
+                className="px-2 py-1.5 rounded-xl bg-[#171822] border border-white/10 flex items-center justify-center space-x-1 min-w-0 cursor-pointer hover:border-white/20 transition active:scale-95"
+              >
+                <span className="font-extrabold text-white text-xs">1.2k</span>
+                <span className="text-white/50 text-[9px] uppercase font-semibold tracking-wider truncate">likes</span>
+                <span className="text-[10px] text-[#FF007F] shrink-0">❤️</span>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+        {/* END: User Profile Header */}
 
-        {/* ======================================================== */}
-        {/* 3. SHADOW HIGHLIGHTS (Squircle Story Highlights)         */}
-        {/* Streaks 🔥 | Genesis ♙ | Ranks ♘ | Nodes 🌐 | Badges 🏆  */}
-        {/* ======================================================== */}
-        <div className="space-y-1.5">
-          <span className={`text-[10px] font-extrabold uppercase tracking-wider px-1 ${isDarkTheme ? 'text-slate-400' : 'text-[#8E8E8E]'}`}>
-            Shadow Highlights
-          </span>
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-1 px-1">
-            {SHADOW_HIGHLIGHTS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onToast(`Viewing highlight: ${item.label}`, 'sparkles')}
-                className="flex flex-col items-center gap-1.5 shrink-0 group cursor-pointer"
+        {/* BEGIN: User ID & Toggle Actions */}
+        <section className="grid grid-cols-12 gap-2.5 pt-1" data-purpose="identity-toggle-bar">
+          <div
+            onClick={() => handleCopyId(currentUser.shadowId)}
+            className="col-span-12 bg-[#171822] border border-white/10 rounded-2xl py-2 px-3.5 flex items-center justify-between text-xs hover:border-white/20 transition cursor-pointer active:scale-98"
+            title="Click to copy Node ID"
+          >
+            <div className="flex items-center space-x-2 truncate">
+              <span className="text-[10px] uppercase font-extrabold text-white/50 tracking-wider">NODE ID</span>
+              <span className="font-mono text-white font-semibold text-xs truncate">{currentUser.shadowId}</span>
+            </div>
+            <div className="flex items-center space-x-2 text-white/60 hover:text-white">
+              <span className="text-[10px] font-semibold text-white/40 tracking-wide">COPIAR</span>
+              <Copy size={12} />
+            </div>
+          </div>
+        </section>
+        {/* END: User ID & Toggle Actions */}
+
+        {/* BEGIN: Rank Status Futuristic Card */}
+        <section className="rounded-2xl p-4 bg-[#171822] border border-white/10 shadow-sm" data-purpose="rank-status-card">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-3">
+              <div
+                onClick={handleTogglePromote}
+                className="w-11 h-11 rounded-xl bg-[#0D0E14] border border-white/10 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#FF007F]/40 transition"
+                title="Tap to toggle promotion"
               >
-                <div
-                  className="w-14 h-14 rounded-[18px] p-[2px] transition-transform duration-300 group-hover:scale-105 active:scale-95 shadow-sm"
-                  style={{ background: item.gradient }}
-                >
-                  <div
-                    className={`w-full h-full rounded-[16px] flex items-center justify-center text-xl shadow-inner ${
-                      isDarkTheme ? 'bg-[#222430]' : 'bg-[#FFFFFF]'
-                    }`}
-                  >
-                    <span>{item.icon}</span>
-                  </div>
+                {localRank === 'KNIGHT' ? (
+                  <PremiumKnightInsignia size={24} glow={false} className="text-white" />
+                ) : (
+                  <PremiumPawnInsignia size={24} glow={false} className="text-white" />
+                )}
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-extrabold text-sm tracking-wider text-white uppercase">{localRank}</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-black text-emerald-400 border border-emerald-400/30">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>
+                    {localRank === 'KNIGHT' ? 'RANK II' : 'RANK I'}
+                  </span>
                 </div>
-                <span className={`text-[10.5px] font-bold tracking-tight text-center ${isDarkTheme ? 'text-[#D4D4D5]' : 'text-[#1B1C1D]'}`}>
-                  {item.label}
-                </span>
-              </button>
+                <p className="text-[11px] text-white/60 font-medium mt-0.5">
+                  {localRank === 'KNIGHT' ? 'Vanguard Status' : 'Foundation Status'}{' '}
+                  <span style={{ color: 'rgb(255, 0, 127)' }}>✦</span> {localRank === 'KNIGHT' ? 'Tier 02' : 'Tier 01'}
+                </p>
+              </div>
+            </div>
+
+            {/* Simulated Rank Progression Toggle Button */}
+            <button
+              onClick={handleTogglePromote}
+              disabled={isPromoting}
+              className="px-3 py-1.5 rounded-xl border border-white/15 text-[10px] font-bold text-white bg-white/5 hover:bg-white/10 active:scale-95 transition cursor-pointer flex items-center gap-1.5"
+              title="Advance from Foundation to Vanguard status"
+            >
+              <Sparkles size={11} className={isPromoting ? 'animate-spin text-[#FF007F]' : 'text-[#FF007F]'} />
+              <span>{localRank === 'KNIGHT' ? 'Revert Pawn' : 'Promote Knight'}</span>
+            </button>
+          </div>
+
+          <div className="w-full h-1.5 bg-black rounded-full overflow-hidden border border-white/5 mb-3">
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${localRank === 'KNIGHT' ? 'w-full' : 'w-4/5'}`}
+              style={{ background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(184, 0, 165) 50%, rgb(125, 18, 165) 100%)' }}
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {['#ShadowGenesis', '#CreativeMesh', '#RankUpgrade'].map((tag) => (
+              <span
+                key={tag}
+                onClick={() => onToast(`Filter tag: ${tag}`)}
+                className="text-[10px] font-bold text-white/60 hover:text-white transition cursor-pointer"
+              >
+                {tag}
+              </span>
             ))}
           </div>
-        </div>
+        </section>
+        {/* END: Rank Status Futuristic Card */}
 
-        {/* ======================================================== */}
-        {/* 4. PRIMARY NAVIGATION TABS (Sem UI Segmented Tabs)       */}
-        {/* ======================================================== */}
-        <div
-          className={`sticky top-13 z-20 pt-2 pb-2 rounded-[22px] border transition-colors ${
-            isDarkTheme
-              ? 'bg-[#1A1B24]/95 border-white/10 shadow-xl'
-              : 'bg-[#FFFFFF]/95 border-[#E0E1E2] shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
-          }`}
-        >
-          {/* Main 4 Navigation Tabs */}
-          <div className="flex px-2 text-xs font-bold gap-1 overflow-x-auto no-scrollbar">
-            {/* Primary Prominent Tab: World Rankings */}
+        {/* BEGIN: Shadow Highlights (Stories) */}
+        <section className="pt-1" data-purpose="shadow-highlights">
+          <div className="flex items-center justify-between px-1 mb-2.5">
+            <h2 className="text-[11px] font-extrabold tracking-wider uppercase text-white/50">Shadow Highlights</h2>
+            <span
+              onClick={() => onToast('All 5 highlights active', 'sparkles')}
+              className="text-[11px] font-semibold hover:underline cursor-pointer"
+              style={{ color: 'rgb(255, 0, 127)' }}
+            >
+              Ver todos
+            </span>
+          </div>
+          {/* Horizontal Story Bubbles */}
+          <div className="flex items-center space-x-3 overflow-x-auto no-scrollbar py-1 px-1">
+            <div
+              onClick={() => onToast('Genesis: Foundation node record', 'sparkles')}
+              className="flex flex-col items-center space-y-1.5 shrink-0 cursor-pointer group"
+            >
+              <div
+                className="w-12 h-12 rounded-full p-[2px] border border-white/10 group-hover:border-white transition"
+                style={{ background: 'linear-gradient(135deg, rgb(255, 0, 127) 0%, rgb(184, 0, 165) 50%, rgb(125, 18, 165) 100%)' }}
+              >
+                <div className="w-full h-full rounded-full bg-[#0D0E14] flex items-center justify-center">
+                  <Crown size={15} className="text-white" />
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-white/70 tracking-tight group-hover:text-white">Genesis</span>
+            </div>
+
+            <div
+              onClick={() => onToast('Streaks: 48 consecutive telemetry days', 'sparkles')}
+              className="flex flex-col items-center space-y-1.5 shrink-0 cursor-pointer group"
+            >
+              <div className="w-12 h-12 rounded-full p-[2px] bg-white/10 border border-white/10 group-hover:border-white transition">
+                <div className="w-full h-full rounded-full bg-[#0D0E14] flex items-center justify-center">
+                  <Flame size={15} className="text-white/70 group-hover:text-white" />
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-white/70 tracking-tight group-hover:text-white">Streaks</span>
+            </div>
+
+            <div
+              onClick={() => onToast('Ranks: Active Rank I (Pawn)', 'sparkles')}
+              className="flex flex-col items-center space-y-1.5 shrink-0 cursor-pointer group"
+            >
+              <div className="w-12 h-12 rounded-full p-[2px] bg-white/10 border border-white/10 group-hover:border-white transition">
+                <div className="w-full h-full rounded-full bg-[#0D0E14] flex items-center justify-center">
+                  <PremiumPawnInsignia size={15} glow={false} className="text-white/70 group-hover:text-white" />
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-white/70 tracking-tight group-hover:text-white">Ranks</span>
+            </div>
+
+            <div
+              onClick={() => onToast('Nodes: 35 decentralized relays', 'sparkles')}
+              className="flex flex-col items-center space-y-1.5 shrink-0 cursor-pointer group"
+            >
+              <div className="w-12 h-12 rounded-full p-[2px] bg-white/10 border border-white/10 group-hover:border-white transition">
+                <div className="w-full h-full rounded-full bg-[#0D0E14] flex items-center justify-center">
+                  <Globe size={15} className="text-white/70 group-hover:text-white" />
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-white/70 tracking-tight group-hover:text-white">Nodes</span>
+            </div>
+
+            <div
+              onClick={() => onToast('Badges: 8 verified credentials', 'sparkles')}
+              className="flex flex-col items-center space-y-1.5 shrink-0 cursor-pointer group"
+            >
+              <div className="w-12 h-12 rounded-full p-[2px] bg-white/10 border border-white/10 group-hover:border-white transition">
+                <div className="w-full h-full rounded-full bg-[#0D0E14] flex items-center justify-center">
+                  <ShieldCheck size={15} className="text-white/70 group-hover:text-white" />
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-white/70 tracking-tight group-hover:text-white">Badges</span>
+            </div>
+          </div>
+        </section>
+        {/* END: Shadow Highlights */}
+
+        {/* BEGIN: Navigation Tabs & Search Filters */}
+        <section className="pt-2 space-y-3" data-purpose="tabs-and-filter-section">
+          {/* Horizontal Scrollable Tabs */}
+          <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar border-b border-white/10 pb-2">
+            {/* Active Tab: World Ranking */}
             <button
               onClick={() => setActiveMainTab('rankings')}
-              className={`flex-1 min-w-[110px] py-2.5 text-center relative rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`relative shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold border transition flex items-center space-x-1.5 cursor-pointer ${
                 activeMainTab === 'rankings'
-                  ? 'bg-black text-white border border-white/20 shadow-md'
-                  : isDarkTheme
-                  ? 'text-[#8E92A0] hover:text-white hover:bg-white/5'
-                  : 'bg-[#F7F8FA] text-[#767676] hover:text-[#1B1C1D] border border-[#E0E1E2]'
+                  ? 'text-white border-white/20 shadow-md'
+                  : 'bg-[#1F2230]/70 text-white/60 hover:text-white border-white/5'
               }`}
+              style={
+                activeMainTab === 'rankings'
+                  ? { background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(230, 0, 126) 30%, rgb(184, 0, 165) 70%, rgb(125, 18, 165) 100%)' }
+                  : undefined
+              }
             >
-              <Crown size={14} className={activeMainTab === 'rankings' ? 'text-white' : ''} />
-              <span className="truncate">World Rankings</span>
+              <Crown size={12} />
+              <span>World Ranking</span>
             </button>
-
-            {/* Tab 2: World Upgrades */}
             <button
               onClick={() => setActiveMainTab('world')}
-              className={`flex-1 min-w-[90px] py-2.5 text-center relative rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium border transition flex items-center space-x-1.5 cursor-pointer ${
                 activeMainTab === 'world'
-                  ? 'bg-black text-white border border-white/20 shadow-md'
-                  : isDarkTheme
-                  ? 'text-[#8E92A0] hover:text-white hover:bg-white/5'
-                  : 'bg-[#F7F8FA] text-[#767676] hover:text-[#1B1C1D] border border-[#E0E1E2]'
+                  ? 'text-white border-white/20 shadow-md'
+                  : 'bg-[#1F2230]/70 text-white/60 hover:text-white border-white/5'
               }`}
+              style={
+                activeMainTab === 'world'
+                  ? { background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(230, 0, 126) 30%, rgb(184, 0, 165) 70%, rgb(125, 18, 165) 100%)' }
+                  : undefined
+              }
             >
-              <Globe size={14} />
-              <span className="truncate">Upgrades ({upgrades.length})</span>
+              <Globe size={12} />
+              <span>Upgrades</span>
             </button>
-
-            {/* Tab 3: People You Follow */}
             <button
               onClick={() => setActiveMainTab('following')}
-              className={`flex-1 min-w-[85px] py-2.5 text-center relative rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium border transition flex items-center space-x-1.5 cursor-pointer ${
                 activeMainTab === 'following'
-                  ? 'bg-black text-white border border-white/20 shadow-md'
-                  : isDarkTheme
-                  ? 'text-[#8E92A0] hover:text-white hover:bg-white/5'
-                  : 'bg-[#F7F8FA] text-[#767676] hover:text-[#1B1C1D] border border-[#E0E1E2]'
+                  ? 'text-white border-white/20 shadow-md'
+                  : 'bg-[#1F2230]/70 text-white/60 hover:text-white border-white/5'
               }`}
+              style={
+                activeMainTab === 'following'
+                  ? { background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(230, 0, 126) 30%, rgb(184, 0, 165) 70%, rgb(125, 18, 165) 100%)' }
+                  : undefined
+              }
             >
-              <Users size={14} />
-              <span className="truncate">
-                Following ({upgrades.filter((u) => u.isFollowing).length})
-              </span>
+              <Users size={12} />
+              <span>Following</span>
             </button>
-
-            {/* Tab 4: All */}
             <button
               onClick={() => setActiveMainTab('all')}
-              className={`py-2.5 px-3 text-center relative rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium border transition flex items-center space-x-1.5 cursor-pointer ${
                 activeMainTab === 'all'
-                  ? 'bg-black text-white border border-white/20 shadow-md'
-                  : isDarkTheme
-                  ? 'text-[#8E92A0] hover:text-white hover:bg-white/5'
-                  : 'bg-[#F7F8FA] text-[#767676] hover:text-[#1B1C1D] border border-[#E0E1E2]'
+                  ? 'text-white border-white/20 shadow-md'
+                  : 'bg-[#1F2230]/70 text-white/60 hover:text-white border-white/5'
               }`}
+              style={
+                activeMainTab === 'all'
+                  ? { background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(230, 0, 126) 30%, rgb(184, 0, 165) 70%, rgb(125, 18, 165) 100%)' }
+                  : undefined
+              }
             >
-              <Trophy size={14} />
-              <span className="truncate">All</span>
+              <Trophy size={12} />
+              <span>Achievements</span>
             </button>
           </div>
 
-          {/* Search Bar & Tier Filters */}
-          <div className="px-3 pt-2.5 space-y-2">
-            <div className="flex items-center gap-2">
-              {/* Search Input */}
-              <div className="relative flex-1">
-                <Search size={13} className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'}`} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={
-                    activeMainTab === 'rankings'
-                      ? 'Search rank, @username, city, ID...'
-                      : 'Search creator, city, or rank...'
-                  }
-                  className={`w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border outline-none transition-colors ${
-                    isDarkTheme
-                      ? 'bg-white/5 border-white/10 text-white placeholder-[#8E92A0] focus:border-white/20'
-                      : 'bg-[#F4F5F7] border-[#E0E1E2] text-[#1B1C1D] placeholder-[#767676] focus:border-white/20'
-                  }`}
-                />
-              </div>
-
-              {/* Last Synced Indicator */}
-              {activeMainTab === 'rankings' && (
-                <div className="shrink-0 text-[10px] font-mono hidden sm:inline-flex items-center gap-1 text-[#767676]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                  <span>Synced: {lastSyncedTime}</span>
-                </div>
-              )}
+          {/* Modern Search Input Bar */}
+          <div className="relative flex items-center">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/40">
+              <Search size={14} />
             </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search rank, @username, city..."
+              className="w-full pl-9 pr-24 py-2 bg-[#171822] text-xs font-medium text-white placeholder-white/40 rounded-xl border border-white/10 focus:border-white/30 focus:outline-none transition"
+            />
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-1 text-[10px] text-white/40 pointer-events-none font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-0.5"></span>
+              <span>Synced {lastSyncedTime}</span>
+            </div>
+          </div>
 
-            {/* Tier Filters */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-              {['ALL', 'KING', 'QUEEN', 'ROOK', 'BISHOP', 'KNIGHT'].map((tier) => (
+          {/* Filter Chips Row (Chess Hierarchy) */}
+          <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar pt-0.5">
+            {['ALL', 'KING', 'QUEEN', 'ROOK', 'BISHOP', 'KNIGHT'].map((tier) => {
+              const isActive = filterTier === tier;
+              return (
                 <button
                   key={tier}
                   onClick={() => setFilterTier(tier)}
-                  className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-all cursor-pointer shrink-0 ${
-                    filterTier === tier
-                      ? 'bg-black text-white border-white/20 shadow-xs'
-                      : isDarkTheme
-                      ? 'bg-white/5 text-[#8E92A0] border-white/5 hover:text-white'
-                      : 'bg-[#F7F8FA] text-[#767676] border-[#E0E1E2] hover:text-[#1B1C1D]'
+                  className={`px-3.5 py-1 rounded-xl text-[11px] font-extrabold transition cursor-pointer shrink-0 ${
+                    isActive
+                      ? 'text-white shadow-sm'
+                      : 'bg-[#1F2230] text-white/70 hover:text-white border border-white/5 uppercase'
                   }`}
+                  style={
+                    isActive
+                      ? { background: 'linear-gradient(90deg, rgb(255, 0, 127) 0%, rgb(230, 0, 126) 30%, rgb(184, 0, 165) 70%, rgb(125, 18, 165) 100%)' }
+                      : undefined
+                  }
                 >
                   {tier}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        </div>
+        </section>
+        {/* END: Navigation Tabs & Search Filters */}
+
+        {/* BEGIN: Micro Feed Preview Cards */}
+        <section className="pt-1" data-purpose="feed-preview">
+          <div
+            onClick={() => onToast('Genesis Leaderboard Node: Top rank active', 'sparkles')}
+            className="rounded-xl p-3 bg-[#171822] border border-white/10 flex items-center justify-between cursor-pointer hover:border-white/20 transition"
+          >
+            <div className="flex items-center space-x-3">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center font-extrabold text-white text-xs border border-white/15 shrink-0"
+                style={{ background: 'linear-gradient(135deg, rgb(255, 0, 127) 0%, rgb(184, 0, 165) 50%, rgb(125, 18, 165) 100%)' }}
+              >
+                #1
+              </div>
+              <div>
+                <p className="text-xs font-bold text-white tracking-tight">Genesis Leaderboard Node</p>
+                <p className="text-[10px] text-white/50 font-medium">Top ranking updated 20m ago</p>
+              </div>
+            </div>
+            <span
+              className="text-xs font-bold hover:text-white transition flex items-center space-x-1 cursor-pointer"
+              style={{ color: 'rgb(255, 0, 127)' }}
+            >
+              <span>Explorar</span>
+              <ChevronRight size={13} />
+            </span>
+          </div>
+        </section>
+        {/* END: Micro Feed Preview Cards */}
 
         {/* ======================================================== */}
         {/* 5. TAB 1: DEDICATED WORLD RANKINGS LEADERBOARD           */}
@@ -1479,9 +1509,9 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
                     return (
                       <div
                         key={user.id}
-                        className={`relative rounded-[24px] p-4 border transition-all hover:border-white/20/50 ${
+                        className={`relative rounded-2xl p-4 border transition-all hover:border-white/20 ${
                           isDarkTheme
-                            ? 'bg-[#1C0D36] border-white/10 shadow-black/40'
+                            ? 'bg-[#171822] border-white/10 shadow-md'
                             : 'bg-[#FFFFFF] border-[#E0E1E2] shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
                         }`}
                       >
@@ -1637,9 +1667,7 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
                             onClick={() => handleToggleCheerRanking(user.id)}
                             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer active:scale-95 ${
                               user.hasCheered
-                                ? isDarkTheme
-                                  ? 'bg-black/30 border-white/20/60 text-white shadow-sm'
-                                  : 'bg-neutral-900 border-white/20 text-white shadow-xs'
+                                ? 'bg-[#FF007F]/15 border-[#FF007F]/40 text-[#FF007F] shadow-sm'
                                 : isDarkTheme
                                 ? 'bg-white/5 hover:bg-white/10 border-white/10 text-[#D4D4D5]'
                                 : 'bg-[#F7F8FA] hover:bg-[#F2F3F5] border-[#E0E1E2] text-[#1B1C1D]'
@@ -1650,7 +1678,7 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
                               size={13}
                               className={`transition-transform ${
                                 user.hasCheered
-                                  ? 'fill-white text-white scale-110 animate-bounce'
+                                  ? 'fill-[#FF007F] text-[#FF007F] scale-110 animate-bounce'
                                   : isDarkTheme ? 'text-[#8E92A0]' : 'text-[#767676]'
                               }`}
                             />
@@ -1706,9 +1734,9 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
                 return (
                   <div
                     key={person.id}
-                    className={`p-4 rounded-[24px] border transition-all hover:border-white/20/50 ${
+                    className={`p-4 rounded-2xl border transition-all hover:border-white/20 ${
                       isDarkTheme
-                        ? 'bg-[#1C0D36] border-white/10 shadow-black/40'
+                        ? 'bg-[#171822] border-white/10 shadow-md'
                         : 'bg-[#FFFFFF] border-[#E0E1E2] shadow-[0_2px_12px_rgba(0,0,0,0.03)]'
                     }`}
                   >
@@ -1846,7 +1874,7 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
             )}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -208,6 +208,26 @@
   animation: rankGloryPulse 1.4s ease-in-out forwards;
 }
 
+/* Floating Emoji Reaction Animation for Story Viewer */
+@keyframes floatReaction {
+  0% {
+    transform: translateY(0) scale(0.6) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-80px) scale(1.3) rotate(-8deg);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(-170px) scale(1) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-reaction {
+  animation: floatReaction 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
 /* Custom smooth dark background pattern for preview frame */
 body {
   margin: 0;

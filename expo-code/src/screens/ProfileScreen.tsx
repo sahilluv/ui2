@@ -25,6 +25,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState<'posts' | 'tags' | 'igtv'>('posts');
+  const [bio, setBio] = useState('Diseñador visual y Fotografía - Villahermosa, México');
+  const [isEditing, setIsEditing] = useState(false);
 
   // Story highlights matching reference screenshot: Mejores fotos, Mis viajes, Otoño, Comida
   const highlights: HighlightItem[] = [
@@ -111,6 +113,13 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
           activeTab={activeTab}
           onTabChange={setActiveTab}
           highlights={highlights}
+          bio={bio}
+          isEditing={isEditing}
+          onToggleEdit={() => setIsEditing((prev) => !prev)}
+          onSaveBio={(newBio: string) => {
+            setBio(newBio);
+            setIsEditing(false);
+          }}
         />
 
         {/* 3. Media Grid */}

@@ -34,6 +34,7 @@ import {
   Bell,
   ArrowDown,
   RotateCw,
+  Edit3,
 } from 'lucide-react';
 import {
   PawnRankBadge,
@@ -47,6 +48,8 @@ import { MyShadowScreen } from './MyShadowScreen';
 import { darkColors, lightColors, shadowGradients, ThemeColors } from '../../expo-code/src/theme';
 import { generateMoreFeedPosts, generateMoreReelData } from '../utils/endlessScrollData';
 import { ReelCircularProgress } from './ReelCircularProgress';
+import { StoryViewerModal } from './StoryViewerModal';
+import { INITIAL_STORIES as FULL_MOCK_STORIES, StoryItem } from '../data/mockData';
 
 export type UnifiedTab = 'home' | 'explore' | 'reels' | 'create' | 'notifications' | 'profile';
 
@@ -459,18 +462,51 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
 
   // Authenticated User State (Real Shadow Identity)
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Mauricio Lopez',
-    username: 'maoo.lopez',
-    email: 'mauricio@shadow.campus',
-    bio: 'Visual Designer & Photography - Campus Community',
-    shadowId: 'sh_89f02a91',
-    shadowRank: 'PAWN' as ShadowRankType,
-    verification: 'VERIFIED',
-    postsCount: 12,
-    followersCount: 876,
-    followingCount: 568,
+  const [currentUser, setCurrentUser] = useState(() => {
+    let savedBio = 'Visual Designer & Photography - Campus Community';
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const localBio = window.localStorage.getItem('shadow_user_bio');
+        if (localBio) savedBio = localBio;
+      }
+    } catch (_e) {
+      // Ignore
+    }
+    return {
+      name: 'Mauricio Lopez',
+      username: 'maoo.lopez',
+      email: 'mauricio@shadow.campus',
+      bio: savedBio,
+      shadowId: 'sh_89f02a91',
+      shadowRank: 'PAWN' as ShadowRankType,
+      verification: 'VERIFIED',
+      postsCount: 12,
+      followersCount: 876,
+      followingCount: 568,
+    };
   });
+
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [draftBio, setDraftBio] = useState(currentUser.bio);
+
+  const handleSaveBio = () => {
+    const trimmed = draftBio.trim() || 'Visual Designer & Photography - Campus Community';
+    setCurrentUser((prev) => ({ ...prev, bio: trimmed }));
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('shadow_user_bio', trimmed);
+      }
+    } catch (_e) {
+      // Ignore
+    }
+    setIsEditingProfile(false);
+    showToast('Profile bio updated! ✨');
+  };
+
+  const handleCancelBio = () => {
+    setDraftBio(currentUser.bio);
+    setIsEditingProfile(false);
+  };
 
   // Rank progression elevation transition state
   const [isPromotingRank, setIsPromotingRank] = useState(false);
@@ -511,7 +547,28 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
   // Share & Comments Modals
   const [selectedSharePost, setSelectedSharePost] = useState<FeedPost | null>(null);
   const [activeReelComments, setActiveReelComments] = useState<any | null>(null);
+  const [activeStory, setActiveStory] = useState<StoryItem | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const handleNextStory = () => {
+    if (!activeStory) return;
+    const currentIndex = FULL_MOCK_STORIES.findIndex((s) => s.id === activeStory.id);
+    if (currentIndex < FULL_MOCK_STORIES.length - 1) {
+      setActiveStory(FULL_MOCK_STORIES[currentIndex + 1]);
+    } else {
+      setActiveStory(null);
+    }
+  };
+
+  const handlePrevStory = () => {
+    if (!activeStory) return;
+    const currentIndex = FULL_MOCK_STORIES.findIndex((s) => s.id === activeStory.id);
+    if (currentIndex > 0) {
+      setActiveStory(FULL_MOCK_STORIES[currentIndex - 1]);
+    } else {
+      setActiveStory(null);
+    }
+  };
 
   const showToast = (text: string) => {
     setToastMsg(text);
@@ -1426,8 +1483,11 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                   {INITIAL_STORIES.map((story) => (
                     <div
                       key={story.id}
-                      className="flex flex-col items-center gap-1 shrink-0 cursor-pointer"
-                      onClick={() => showToast(`Viewing story by ${story.username}`)}
+                      className="flex flex-col items-center gap-1 shrink-0 cursor-pointer group"
+                      onClick={() => {
+                        const matched = FULL_MOCK_STORIES.find((s) => s.id === story.id) || FULL_MOCK_STORIES[0];
+                        setActiveStory(matched);
+                      }}
                     >
                       <div
                         className="w-16 h-16 rounded-[20px] p-0.5 shadow-md flex items-center justify-center"
@@ -1959,9 +2019,71 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                   <span className="text-xs font-semibold text-white mt-0.5">
                     {currentUser.email}
                   </span>
-                  <p className="text-xs mt-1 max-w-xs" style={{ color: colors.secondaryText }}>
-                    {currentUser.bio}
-                  </p>
+                  {isEditingProfile ? (
+                    <div
+                      className="w-full mt-2 p-3 rounded-2xl border text-left"
+                      style={{ backgroundColor: colors.surface, borderColor: colors.border }}
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider flex items-center gap-1" style={{ color: colors.text }}>
+                          <Edit3 size={11} className="text-[#FF0A78]" />
+                          Edit Profile Bio
+                        </span>
+                        <span className="text-[9px] font-mono" style={{ color: colors.secondaryText }}>
+                          {draftBio.length}/150
+                        </span>
+                      </div>
+                      <textarea
+                        value={draftBio}
+                        onChange={(e) => setDraftBio(e.target.value.slice(0, 150))}
+                        rows={2}
+                        placeholder="Tell the community about your work..."
+                        className="w-full p-2 rounded-xl text-xs border focus:outline-none resize-none leading-relaxed"
+                        style={{
+                          backgroundColor: colors.inputBackground,
+                          borderColor: colors.border,
+                          color: colors.text,
+                        }}
+                        aria-label="Edit Bio"
+                      />
+                      <div className="flex items-center justify-end gap-2 mt-2">
+                        <button
+                          type="button"
+                          onClick={handleCancelBio}
+                          className="px-3 py-1 rounded-full text-xs font-semibold border cursor-pointer"
+                          style={{
+                            borderColor: colors.border,
+                            color: colors.secondaryText,
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSaveBio}
+                          className="px-3 py-1 rounded-full text-xs font-bold text-white bg-black hover:bg-neutral-800 transition-all cursor-pointer"
+                        >
+                          Save Bio
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="relative group mt-1">
+                      <p className="text-xs max-w-xs" style={{ color: colors.secondaryText }}>
+                        {currentUser.bio}
+                      </p>
+                      <button
+                        onClick={() => {
+                          setDraftBio(currentUser.bio);
+                          setIsEditingProfile(true);
+                        }}
+                        className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold text-[#FF0A78] hover:underline cursor-pointer"
+                      >
+                        <Edit3 size={10} />
+                        <span>Edit Bio</span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Real Shadow Identity Card */}
                   <div
@@ -2077,10 +2199,18 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                   {/* Action Follow/Edit + Create Post Button */}
                   <div className="flex items-center gap-2 w-full mt-3">
                     <button
-                      onClick={() => showToast('Profile updated')}
-                      className="flex-1 py-2.5 rounded-full font-bold text-xs bg-black text-white hover:bg-neutral-800 shadow-md transition-transform active:scale-95 cursor-pointer"
+                      onClick={() => {
+                        if (isEditingProfile) {
+                          setIsEditingProfile(false);
+                        } else {
+                          setDraftBio(currentUser.bio);
+                          setIsEditingProfile(true);
+                        }
+                      }}
+                      className="flex-1 py-2.5 rounded-full font-bold text-xs bg-black text-white hover:bg-neutral-800 shadow-md transition-transform active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
                     >
-                      Edit Profile
+                      <Edit3 size={12} className="text-[#FF0A78]" />
+                      <span>{isEditingProfile ? 'Done Editing' : 'Edit Profile'}</span>
                     </button>
                     <button
                       onClick={() => handleTabChange('create')}
@@ -2307,6 +2437,15 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
             prev.map((r) => (r.id === reelId ? { ...r, commentsCount: r.commentsCount + 1 } : r))
           );
         }}
+      />
+
+      {/* Immersive Story Viewer Modal */}
+      <StoryViewerModal
+        story={activeStory}
+        stories={FULL_MOCK_STORIES}
+        onClose={() => setActiveStory(null)}
+        onNext={handleNextStory}
+        onPrev={handlePrevStory}
       />
     </div>
   );

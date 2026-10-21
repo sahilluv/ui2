@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { ThemeColors } from '../theme';
@@ -20,6 +20,9 @@ interface ProfileHeaderProps {
   verificationStatus?: string;
   shadowId?: string;
   onLogout?: () => void;
+  isEditing?: boolean;
+  onToggleEdit?: () => void;
+  onSaveBio?: (newBio: string) => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -37,9 +40,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   verificationStatus,
   shadowId,
   onLogout,
+  isEditing = false,
+  onToggleEdit,
+  onSaveBio,
 }) => {
   const name = displayName || 'Mauricio Lopez';
   const bioContent = bio || 'Diseñador visual y Fotografía - Campus Community';
+  const [draftBio, setDraftBio] = useState(bioContent);
+
+  useEffect(() => {
+    setDraftBio(bioContent);
+  }, [bioContent]);
 
   return (
     <View style={styles.container}>
@@ -76,9 +87,51 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {email}
           </Text>
         )}
-        <Text style={[styles.bioText, { color: colors.secondaryText }]}>
-          {bioContent}
-        </Text>
+
+        {isEditing ? (
+          <View style={[styles.editBioCard, { backgroundColor: colors.elevatedSurface, borderColor: colors.border }]}>
+            <View style={styles.editBioHeader}>
+              <Text style={[styles.editBioLabel, { color: colors.accent }]}>EDITAR BIO</Text>
+              <Text style={[styles.editBioCharCount, { color: colors.secondaryText }]}>{draftBio.length}/150</Text>
+            </View>
+            <TextInput
+              value={draftBio}
+              onChangeText={(text) => setDraftBio(text.slice(0, 150))}
+              placeholder="Escribe tu bio..."
+              placeholderTextColor={colors.secondaryText}
+              multiline
+              numberOfLines={3}
+              style={[
+                styles.bioInput,
+                {
+                  color: colors.text,
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border,
+                },
+              ]}
+            />
+            <View style={styles.editBioButtonsRow}>
+              <TouchableOpacity
+                onPress={onToggleEdit}
+                activeOpacity={0.7}
+                style={[styles.bioCancelBtn, { borderColor: colors.border }]}
+              >
+                <Text style={[styles.bioCancelBtnText, { color: colors.secondaryText }]}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => onSaveBio?.(draftBio.trim() || bioContent)}
+                activeOpacity={0.8}
+                style={[styles.bioSaveBtn, { backgroundColor: colors.accent }]}
+              >
+                <Text style={styles.bioSaveBtnText}>Guardar Bio</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <Text style={[styles.bioText, { color: colors.secondaryText }]}>
+            {bioContent}
+          </Text>
+        )}
 
         {/* Real Shadow Identity Badges if available */}
         {(shadowRank || shadowId) && (
@@ -200,6 +253,25 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
       {/* 3. Action Buttons Row: Follow / Edit & Real Logout */}
       <View style={styles.actionRowContainer}>
+        {onToggleEdit && (
+          <TouchableOpacity
+            onPress={onToggleEdit}
+            activeOpacity={0.8}
+            style={[
+              styles.editProfileButton,
+              {
+                borderColor: isEditing ? colors.accent : colors.border,
+                backgroundColor: isEditing ? colors.accent : colors.elevatedSurface,
+              },
+            ]}
+          >
+            <Feather name="edit-3" size={14} color={isEditing ? '#FFFFFF' : colors.text} />
+            <Text style={[styles.editProfileButtonText, { color: isEditing ? '#FFFFFF' : colors.text }]}>
+              {isEditing ? 'Listo' : 'Editar Bio'}
+            </Text>
+          </TouchableOpacity>
+        )}
+
         {onToggleFollow && (
           <TouchableOpacity
             onPress={onToggleFollow}
@@ -610,5 +682,74 @@ const styles = StyleSheet.create({
     width: 32,
     height: 2,
     borderRadius: 1,
+  },
+  editProfileButton: {
+    height: 40,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  editProfileButtonText: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  editBioCard: {
+    width: '100%',
+    padding: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginVertical: 6,
+  },
+  editBioHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  editBioLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  editBioCharCount: {
+    fontSize: 10,
+    fontFamily: 'monospace',
+  },
+  bioInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 8,
+    fontSize: 12,
+    textAlignVertical: 'top',
+    minHeight: 56,
+  },
+  editBioButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 8,
+    marginTop: 8,
+  },
+  bioCancelBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  bioCancelBtnText: {
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  bioSaveBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 14,
+  },
+  bioSaveBtnText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '700',
   },
 });

@@ -45,6 +45,7 @@ import {
   ArrowUpRight,
   Camera,
   LogIn,
+  Edit3,
 } from 'lucide-react';
 import {
   PawnRankBadge,
@@ -95,6 +96,7 @@ import { ReelCard } from './ReelCard';
 import { useReelIntersectionObserver } from '../hooks/useReelIntersectionObserver';
 import { MyShadowScreen } from './MyShadowScreen';
 import { ShhAuthScreen } from './ShhAuthScreen';
+import { StoryViewerModal } from './StoryViewerModal';
 
 export type TabType = 'home' | 'explore' | 'reels' | 'shop' | 'chat' | 'create' | 'notifications' | 'profile' | 'auth';
 
@@ -267,10 +269,6 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   const [isViewingMyShadow, setIsViewingMyShadow] = useState(false);
 
   const handleTabChange = (tab: TabType) => {
-    if (tab === 'create') {
-      setIsCameraOverlayOpen(true);
-      return;
-    }
     setIsNavShrunk(false);
     setIsViewingMyShadow(false);
     if (externalOnTabChange) {
@@ -357,9 +355,66 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   const [localStories, setLocalStories] = useState<StoryItem[]>(INITIAL_STORIES);
   const stories = externalStories ?? localStories;
   const [isCameraOverlayOpen, setIsCameraOverlayOpen] = useState(false);
+  const [internalStory, setInternalStory] = useState<StoryItem | null>(null);
+
+  const handleInternalNextStory = () => {
+    if (!internalStory) return;
+    const currentIndex = stories.findIndex((s) => s.id === internalStory.id);
+    if (currentIndex < stories.length - 1) {
+      setInternalStory(stories[currentIndex + 1]);
+    } else {
+      setInternalStory(null);
+    }
+  };
+
+  const handleInternalPrevStory = () => {
+    if (!internalStory) return;
+    const currentIndex = stories.findIndex((s) => s.id === internalStory.id);
+    if (currentIndex > 0) {
+      setInternalStory(stories[currentIndex - 1]);
+    } else {
+      setInternalStory(null);
+    }
+  };
+
   const [activeReelComments, setActiveReelComments] = useState<ReelItem | null>(null);
   const [isFollowingMauricio, setIsFollowingMauricio] = useState(false);
   const [activeProfileTab, setActiveProfileTab] = useState<'posts' | 'tags' | 'igtv'>('posts');
+
+  // Bio state & Edit Profile mode
+  const [profileBio, setProfileBio] = useState<string>(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = window.localStorage.getItem('shadow_user_bio');
+        if (saved) return saved;
+      }
+    } catch (_e) {
+      // Ignore
+    }
+    return 'UI/UX Design & Photography · Zihuatanejo, Mexico';
+  });
+  const [isEditingProfile, setIsEditingProfile] = useState<boolean>(false);
+  const [tempBioInput, setTempBioInput] = useState<string>(profileBio);
+
+  const handleSaveBio = () => {
+    const trimmed = tempBioInput.trim();
+    const finalBio = trimmed || 'UI/UX Design & Photography · Zihuatanejo, Mexico';
+    setProfileBio(finalBio);
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('shadow_user_bio', finalBio);
+      }
+    } catch (_e) {
+      // Ignore
+    }
+    setIsEditingProfile(false);
+    triggerToast('Profile bio updated! ✨', 'sparkles');
+  };
+
+  const handleCancelEditProfile = () => {
+    setTempBioInput(profileBio);
+    setIsEditingProfile(false);
+  };
   const [notifFilter, setNotifFilter] = useState<'all' | 'likes' | 'comments' | 'follows'>('all');
   const [hasUnreadNotifs, setHasUnreadNotifs] = useState(true);
   const [notificationsList, setNotificationsList] = useState(NOTIFICATIONS_DATA);
@@ -926,31 +981,51 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
   };
 
   const handlePublishPost = () => {
-    if (!newTitle.trim() && !newCaption.trim()) return;
+    const title = newTitle.trim() || 'NEW CREATION';
+    const caption = newCaption.trim() || 'Exploring new visual boundaries on Shadow.';
+
+    if (newType === 'story') {
+      handlePublishNewStory({
+        gradient: gradientPresets[selectedGradientIndex].gradient,
+        caption: title !== 'NEW CREATION' ? `${title} · ${caption}` : caption,
+      });
+      setNewTitle('');
+      setNewCaption('');
+      handleTabChange('home');
+      triggerToast('Story published to 24-hour feed! 🌟', 'sparkles');
+      return;
+    }
 
     const createdPost: PostItem = {
       id: `post_${Date.now()}`,
       author: {
         name: 'Mauricio Lopez',
-        username: 'Maoo.lopez',
+        username: 'maoo.lopez',
         avatarGradient: 'linear-gradient(135deg, #2A2A2A 0%, #161616 50%, #0A0A0A 100%)',
+        avatarUrl: '/src/assets/images/avatar_mauricio_designer_1792313922880.jpg',
+        location: 'Zihuatanejo, Mexico',
       },
-      timeAgo: 'Justo ahora',
+      timeAgo: 'Just now',
       gradient: gradientPresets[selectedGradientIndex].gradient,
       likesCount: 1,
       commentsCount: 0,
-      likedByText: 'Te gusta a ti',
-      captionTitle: newTitle.trim() || 'NEW CREATION',
-      captionBody: newCaption.trim() || 'Explorando nuevas fronteras visuales en Shadow.',
+      likedByText: 'Liked by you',
+      captionTitle: title,
+      captionBody: caption,
       totalPages: 1,
       currentPage: 1,
       isLiked: true,
+      postType: 'standard',
     };
 
     addNewPost(createdPost);
     setNewTitle('');
     setNewCaption('');
     handleTabChange('home');
+    if (viewportRef.current) {
+      viewportRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    triggerToast('Post published to Shadow feed! ✨', 'sparkles');
   };
 
   // Category Icon helper
@@ -1195,7 +1270,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       if (story.isCurrentUser && !hasActiveStory) {
                         setIsCameraOverlayOpen(true);
                       } else {
-                        onSelectStory?.(story);
+                        if (onSelectStory) {
+                          onSelectStory(story);
+                        } else {
+                          setInternalStory(story);
+                        }
                       }
                     }}
                     className="flex flex-col items-center gap-1.5 shrink-0 cursor-pointer group"
@@ -1422,17 +1501,15 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           </div>
                         </div>
 
-                        <div className="flex items-center opacity-80 hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => setShareModalPost(post)}
-                            className={`p-1.5 hover:scale-110 active:scale-95 transition-all cursor-pointer rounded-full ${
-                              isDark ? 'text-[#C1C1C9] hover:bg-white/10' : 'text-[#777982] hover:bg-black/5'
-                            }`}
-                            title="Share post"
-                          >
-                            <Share2 size={18} />
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => setShareModalPost(post)}
+                          className={`p-1.5 hover:scale-110 active:scale-95 transition-all cursor-pointer rounded-full ${
+                            isDark ? 'text-[#C1C1C9] hover:bg-white/10' : 'text-[#777982] hover:bg-black/5'
+                          }`}
+                          title="Share options"
+                        >
+                          <Share2 size={16} />
+                        </button>
                       </div>
 
                       {/* Rounded Media Card (Cinematic Artwork with Double-Tap to Like) */}
@@ -3250,97 +3327,93 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   @maoo.lopez
                 </span>
 
-                {/* Shadow Identity & Pawn Rank Card */}
+
+              {/* Profile Bio Section with Edit Profile Mode */}
+              {isEditingProfile ? (
                 <div
-                  className={`w-full max-w-[325px] rounded-[24px] p-3 mb-2.5 border transition-all duration-300 ${
+                  className={`w-full max-w-[325px] rounded-[22px] p-4 mb-3 border transition-all animate-in fade-in duration-200 ${
                     isDark
-                      ? 'bg-[#29292D] border-[#38383D] shadow-xl shadow-black/50 text-[#F7F7F9]'
-                      : 'bg-[#FFFFFF] border-[#E5E7EB] shadow-lg shadow-[#9295A6]/15 text-[#202024]'
+                      ? 'bg-[#1C1C20] border-[#38383D] shadow-xl text-[#F7F7F9]'
+                      : 'bg-[#FFFFFF] border-[#E1E4E9] shadow-lg text-[#202024]'
                   }`}
+                  data-testid="edit-profile-mode"
                 >
-                  {/* Header row: Shadow Identity label + Shadow ID */}
-                  <div className={`flex items-center justify-between pb-2 mb-2.5 border-b ${
-                    isDark ? 'border-white/5' : 'border-black/5'
-                  }`}>
+                  <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF0A78] animate-pulse" />
-                      <span className={`text-[10px] font-extrabold tracking-wider uppercase ${
-                        isDark ? 'text-[#92929B]' : 'text-[#777982]'
-                      }`}>
-                        Shadow Identity
+                      <Edit3 size={13} className="text-[#FF0A78]" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider">
+                        Edit Profile Mode
                       </span>
                     </div>
-                    <button
-                      onClick={() => triggerToast('Shadow ID copied: shdw_mlopez89')}
-                      className={`flex items-center gap-1 font-mono text-[10px] px-2 py-0.5 rounded-md border transition-colors cursor-pointer ${
-                        isDark ? 'bg-white/5 hover:bg-white/10 text-slate-300 border-white/10' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                    <span
+                      className={`text-[10px] font-mono ${
+                        tempBioInput.length > 140
+                          ? 'text-[#FF0A78] font-bold'
+                          : isDark
+                          ? 'text-[#92929B]'
+                          : 'text-[#777982]'
                       }`}
-                      title="Click to copy Shadow ID"
                     >
-                      <span className="font-bold">ID:</span>
-                      <span>shdw_mlopez89</span>
-                      <Copy size={10} className="ml-0.5 opacity-60" />
-                    </button>
+                      {tempBioInput.length}/150
+                    </span>
                   </div>
 
-                  {/* Primary Premium Status Indicator: Distinct Proportional Rank Badge with Visual Transition */}
-                  <div className="mb-2.5">
-                    <PawnRankBadge
-                      rank={mauricioRank}
-                      variant="profile"
-                      isDark={isDark}
-                      isPromoting={isRankTransitioning}
-                      onClick={() => setShowRankHierarchyModal(true)}
-                    />
-                  </div>
+                  <label className={`block text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-[#92929B]' : 'text-[#777982]'}`}>
+                    Bio
+                  </label>
+                  <textarea
+                    value={tempBioInput}
+                    onChange={(e) => setTempBioInput(e.target.value.slice(0, 150))}
+                    rows={3}
+                    placeholder="Tell your story or describe your aesthetic..."
+                    className={`w-full p-2.5 rounded-xl border text-xs focus:outline-none transition-colors resize-none leading-relaxed ${
+                      isDark
+                        ? 'bg-[#29292D] border-[#38383D] text-[#F7F7F9] focus:border-[#FF0A78] placeholder-[#777982]'
+                        : 'bg-[#F7F8FA] border-[#E1E4E9] text-[#202024] focus:border-[#FF0A78] placeholder-[#9295A6]'
+                    }`}
+                    aria-label="Profile Bio Input"
+                  />
 
-                  {/* Secondary Row: Independent Verification Status + Rank Progression Demo Button */}
-                  <div className={`flex items-center justify-between gap-2 pt-1 border-t ${
-                    isDark ? 'border-white/5' : 'border-black/5'
-                  }`}>
-                    {/* Rank Elevate Trigger Button */}
+                  <div className="flex items-center justify-end gap-2 mt-3">
                     <button
-                      onClick={handlePromoteRank}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[9.5px] font-extrabold transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 shadow-xs ${
-                        isDark ? 'bg-white/5 hover:bg-white/10 border-white/20 text-white' : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-800'
+                      type="button"
+                      onClick={handleCancelEditProfile}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                        isDark
+                          ? 'bg-[#29292D] hover:bg-[#38383D] border-[#38383D] text-[#C1C1C9]'
+                          : 'bg-[#F1F3F6] hover:bg-[#E5E7EB] border-[#E1E4E9] text-[#777982]'
                       }`}
-                      title="Simulate Shadow Rank Progression: PAWN ↔ KNIGHT"
                     >
-                      <Sparkles size={11} className="text-[#FF0A78] animate-pulse" />
-                      <span>{mauricioRank === 'PAWN' ? 'Elevate to KNIGHT' : 'Revert to PAWN'}</span>
+                      Cancel
                     </button>
-
-                    {/* Verification Status (Independent from Rank) */}
                     <button
-                      onClick={() => setShowVerificationModal(true)}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all hover:scale-105 active:scale-95 cursor-pointer ${
-                        isDark ? 'bg-white/5 border-white/20 text-white' : 'bg-slate-100 border-slate-200 text-slate-800'
-                      }`}
-                      title="Independent Verification Status - Tap to toggle & inspect"
+                      type="button"
+                      onClick={handleSaveBio}
+                      className="px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-md transition-all cursor-pointer hover:brightness-110 active:scale-95 flex items-center gap-1.5"
+                      style={{
+                        background: 'linear-gradient(90deg, #FF0A78 0%, #E1306C 45%, #8A2BE2 100%)',
+                      }}
                     >
-                      {isMauricioVerified ? (
-                        <ShieldCheck size={12} className="shrink-0 text-[#2ECC71]" />
-                      ) : (
-                        <ShieldAlert size={12} className="shrink-0 text-neutral-400" />
-                      )}
-                      <span className="text-[9.5px] font-extrabold tracking-wider">
-                        {isMauricioVerified ? 'VERIFIED' : 'UNVERIFIED'}
-                      </span>
+                      <Check size={12} strokeWidth={2.5} />
+                      <span>Save Bio</span>
                     </button>
                   </div>
                 </div>
+              ) : (
+                <p
+                  className={`text-xs text-center max-w-[290px] mb-1 leading-relaxed transition-colors ${
+                    isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'
+                  }`}
+                >
+                  {profileBio}
+                </p>
+              )}
 
-              <p
-                className={`text-xs text-center max-w-[290px] mb-1 ${
-                  isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'
-                }`}
-              >
-                UI/UX Design & Photography · Zihuatanejo, Mexico
-              </p>
-
-              <p className="text-xs text-[#4F46E5] font-bold text-center mb-4 tracking-tight">
-                #LifeStyle #Design #Photography #Urban #Art
-              </p>
+              {!isEditingProfile && (
+                <p className="text-xs text-[#4F46E5] font-bold text-center mb-4 tracking-tight">
+                  #LifeStyle #Design #Photography #Urban #Art
+                </p>
+              )}
 
               {/* 3 Stats: 735 post | 876 seguidores | 568 seguidos */}
               <div className="w-full flex items-center justify-around px-4 mb-4">
@@ -3384,11 +3457,34 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 </div>
               </div>
 
-              {/* Actions Row: Follow ("Seguir" vibrant gradient) + Create Post (+) */}
-              <div className="w-full max-w-[280px] flex items-center gap-2 mb-5">
+              {/* Actions Row: Edit Profile button, Follow button, and Create Post (+) */}
+              <div className="w-full max-w-[325px] flex items-center gap-2 mb-5 px-3">
+                {/* Edit Profile Button */}
+                <button
+                  onClick={() => {
+                    if (isEditingProfile) {
+                      setIsEditingProfile(false);
+                    } else {
+                      setTempBioInput(profileBio);
+                      setIsEditingProfile(true);
+                    }
+                  }}
+                  className={`flex-1 h-9.5 px-3 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border ${
+                    isEditingProfile
+                      ? 'bg-[#FF0A78] text-white border-[#FF0A78] shadow-md'
+                      : isDark
+                      ? 'bg-[#29292D] hover:bg-[#38383D] border-[#38383D] text-[#F7F7F9]'
+                      : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024] shadow-xs'
+                  }`}
+                  title="Edit Profile"
+                >
+                  <Edit3 size={13} className={isEditingProfile ? 'text-white' : 'text-[#FF0A78]'} />
+                  <span>{isEditingProfile ? 'Done Editing' : 'Edit Profile'}</span>
+                </button>
+
                 <button
                   onClick={() => setIsFollowingMauricio(!isFollowingMauricio)}
-                  className={`flex-1 h-10 rounded-full font-bold text-xs shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer text-white ${
+                  className={`h-9.5 px-3.5 rounded-full font-bold text-xs shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer text-white ${
                     isFollowingMauricio
                       ? isDark
                         ? 'bg-[#29292D] text-[#F7F7F9] border border-[#38383D]'
@@ -3401,35 +3497,21 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       : undefined
                   }
                 >
-                  {isFollowingMauricio ? 'Following' : 'Seguir'}
+                  {isFollowingMauricio ? 'Following' : 'Follow'}
                 </button>
 
                 {/* Create Post Button with Plus (+) icon */}
                 <button
                   onClick={() => handleTabChange('create')}
-                  className={`h-10 px-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border ${
+                  className={`h-9.5 px-3 rounded-full font-bold text-xs flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer border ${
                     isDark
                       ? 'bg-[#29292D] hover:bg-[#38383D] border-[#38383D] text-[#F7F7F9]'
                       : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024] shadow-xs'
                   }`}
                   title="Create New Post (+)"
                 >
-                  <Plus size={15} strokeWidth={2.6} />
+                  <Plus size={14} strokeWidth={2.6} />
                   <span>Post</span>
-                </button>
-
-                {/* Shadow Login & Auth Screen */}
-                <button
-                  onClick={() => handleTabChange('auth')}
-                  className={`h-10 px-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border ${
-                    isDark
-                      ? 'bg-[#29292D] text-[#F7F7F9] hover:bg-[#38383D] border-[#38383D]'
-                      : 'bg-[#FFFFFF] text-[#202024] hover:bg-[#F1F3F6] border-[#E1E4E9] shadow-xs'
-                  }`}
-                  title="Open Shadow Login Page"
-                >
-                  <LogIn size={14} />
-                  <span>Login</span>
                 </button>
               </div>
             </div>
@@ -3632,13 +3714,6 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
         onClose={() => setShareModalPost(null)}
         post={shareModalPost}
         isDark={isDark}
-        onShareToStory={(p) => {
-          handlePublishNewStory({
-            gradient: p.gradient,
-            caption: p.captionTitle,
-            sticker: '🎨 Artwork',
-          });
-        }}
       />
 
       {/* Shadow Rank Hierarchy Modal (Explains Pawn rank as reputation hierarchy) */}
@@ -3839,6 +3914,17 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
         onPublishStory={handlePublishNewStory}
         isDark={isDark}
       />
+
+      {/* Fullscreen Story Viewer (when PhoneSimulator is used without external story coordinator) */}
+      {!onSelectStory && (
+        <StoryViewerModal
+          story={internalStory}
+          stories={stories}
+          onClose={() => setInternalStory(null)}
+          onNext={handleInternalNextStory}
+          onPrev={handleInternalPrevStory}
+        />
+      )}
 
       {/* 5. Bottom Home Indicator Bar */}
       <div className="pb-1.5 pt-0.5 flex justify-center shrink-0">
