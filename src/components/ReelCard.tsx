@@ -210,10 +210,11 @@ export const ReelCard: React.FC<ReelCardProps> = ({
                   e.stopPropagation();
                   onToggleFollow(reel.author.username);
                 }}
-                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[8px] text-[10px] font-bold transition-all active:scale-90 cursor-pointer ${
+                style={{ borderColor: '#ff0a78' }}
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[8px] text-[10px] font-bold transition-all active:scale-90 cursor-pointer border border-[#FF0A78] ${
                   isFollowing
-                    ? 'bg-black/50 text-neutral-300 border border-white/20 backdrop-blur-md'
-                    : 'bg-neutral-900 border border-neutral-700 text-white shadow-md hover:bg-neutral-800'
+                    ? 'bg-black/50 text-[#FF0A78] backdrop-blur-md border-[#FF0A78]'
+                    : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-md border-[#FF0A78]'
                 }`}
               >
                 {isFollowing ? (

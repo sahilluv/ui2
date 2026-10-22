@@ -1773,12 +1773,13 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
                       {/* Follow / Following Toggle */}
                       <button
                         onClick={() => handleToggleFollowUpgrade(person.id)}
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10.5px] font-bold border transition-all cursor-pointer active:scale-95 shrink-0 ${
+                        style={{ borderColor: '#ff0a78' }}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10.5px] font-bold border border-[#FF0A78] transition-all cursor-pointer active:scale-95 shrink-0 ${
                           person.isFollowing
                             ? isDarkTheme
-                              ? 'bg-white/10 border-white/20 text-[#2ECC71]'
-                              : 'bg-[#F7F8FA] border-[#E0E1E2] text-[#1B1C1D]'
-                            : 'bg-[#1B1C1D] border-[#1B1C1D] text-white shadow-xs hover:opacity-90'
+                              ? 'bg-white/10 text-[#FF0A78] border-[#FF0A78]'
+                              : 'bg-[#F7F8FA] text-[#FF0A78] border-[#FF0A78]'
+                            : 'bg-[#FF0A78] hover:bg-[#E1306C] border-[#FF0A78] text-white shadow-xs'
                         }`}
                       >
                         {person.isFollowing ? (

@@ -1471,12 +1471,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                   e.stopPropagation();
                                   handleToggleFollowAuthor(post.author.username);
                                 }}
-                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all active:scale-90 cursor-pointer ${
+                                style={{ borderColor: '#ff0a78' }}
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all active:scale-90 cursor-pointer border border-[#FF0A78] ${
                                   followedAuthors[post.author.username]
                                     ? isDark
-                                      ? 'border border-[#38383D] text-[#C1C1C9] bg-[#1C1C20]'
-                                      : 'border border-[#E5E7EB] text-[#777982] bg-[#F1F3F6]'
-                                    : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-xs'
+                                      ? 'text-[#FF0A78] bg-[#1C1C20] border-[#FF0A78]'
+                                      : 'text-[#FF0A78] bg-[#F1F3F6] border-[#FF0A78]'
+                                    : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-xs border-[#FF0A78]'
                                 }`}
                               >
                                 {followedAuthors[post.author.username] ? (
@@ -1567,7 +1568,8 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             >
                               <Heart
                                 size={14}
-                                className="fill-white text-white"
+                                className="fill-white text-white border-[#FF0A78]"
+                                style={{ borderColor: '#ff0a78' }}
                               />
                             </button>
 
@@ -2006,10 +2008,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                                         <button
                                           onClick={() => handleToggleFollowAuthor(profile.username)}
-                                          className={`px-3 py-1 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer ${
+                                          style={{ borderColor: '#ff0a78' }}
+                                          className={`px-3 py-1 rounded-full text-xs font-bold transition-all active:scale-95 cursor-pointer border border-[#FF0A78] ${
                                             isFollowing
-                                              ? 'border border-white/20 text-white bg-white/10 hover:bg-white/20'
-                                              : 'bg-black hover:bg-neutral-900 text-white shadow-xs'
+                                              ? isDark
+                                                ? 'text-[#FF0A78] bg-white/10 hover:bg-white/20 border-[#FF0A78]'
+                                                : 'text-[#FF0A78] bg-black/5 hover:bg-black/10 border-[#FF0A78]'
+                                              : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white shadow-xs border-[#FF0A78]'
                                           }`}
                                         >
                                           {isFollowing ? 'Following' : 'Follow'}
@@ -3255,12 +3260,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             e.stopPropagation();
                             handleToggleFollowAuthor(notif.user.username);
                           }}
-                          className={`text-[10px] font-bold px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer shadow-xs ${
+                          style={{ borderColor: '#ff0a78' }}
+                          className={`text-[10px] font-bold px-3 py-1 rounded-full transition-all shrink-0 cursor-pointer shadow-xs border border-[#FF0A78] ${
                             followedAuthors[notif.user.username]
                               ? isDark
-                                ? 'bg-[#1C1C20] border border-[#38383D] text-[#C1C1C9]'
-                                : 'bg-[#F1F3F6] border border-[#E5E7EB] text-[#777982]'
-                              : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white'
+                                ? 'bg-[#1C1C20] border-[#FF0A78] text-[#FF0A78]'
+                                : 'bg-[#F1F3F6] border-[#FF0A78] text-[#FF0A78]'
+                              : 'bg-[#FF0A78] hover:bg-[#E1306C] text-white border-[#FF0A78]'
                           }`}
                         >
                           {followedAuthors[notif.user.username] ? 'Following' : 'Follow'}
@@ -3484,18 +3490,19 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                 <button
                   onClick={() => setIsFollowingMauricio(!isFollowingMauricio)}
-                  className={`h-9.5 px-3.5 rounded-full font-bold text-xs shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer text-white ${
+                  className={`h-9.5 px-3.5 rounded-full font-bold text-xs shadow-md flex items-center justify-center transition-all active:scale-95 cursor-pointer border border-[#FF0A78] ${
                     isFollowingMauricio
                       ? isDark
-                        ? 'bg-[#29292D] text-[#F7F7F9] border border-[#38383D]'
-                        : 'bg-[#F1F3F6] text-[#202024] border border-[#E1E4E9]'
-                      : 'hover:brightness-110 active:brightness-95'
+                        ? 'bg-[#29292D] text-[#FF0A78] border-[#FF0A78]'
+                        : 'bg-[#F1F3F6] text-[#FF0A78] border-[#FF0A78]'
+                      : 'text-white hover:brightness-110 active:brightness-95'
                   }`}
-                  style={
-                    !isFollowingMauricio
+                  style={{
+                    borderColor: '#ff0a78',
+                    ...(!isFollowingMauricio
                       ? { background: 'linear-gradient(90deg, #FF0A78 0%, #E1306C 45%, #8A2BE2 100%)' }
-                      : undefined
-                  }
+                      : {}),
+                  }}
                 >
                   {isFollowingMauricio ? 'Following' : 'Follow'}
                 </button>
