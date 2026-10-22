@@ -191,6 +191,62 @@ function offlineApiPlugin(): Plugin {
           return;
         }
 
+        if (req.url?.startsWith('/api/v1/auth/login') || req.url?.startsWith('/api/v1/auth/register')) {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(
+            JSON.stringify({
+              accessToken: 'mock_jwt_token_shadow_session',
+              user: {
+                id: 'usr_arjun_01',
+                email: 'arjun@goa.edu',
+                name: 'Arjun Mehta',
+                campus: 'Goa University',
+                role: 'STUDENT',
+                createdAt: new Date().toISOString(),
+              },
+            })
+          );
+          return;
+        }
+
+        if (req.url?.startsWith('/api/v1/auth/me')) {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(
+            JSON.stringify({
+              id: 'usr_arjun_01',
+              email: 'arjun@goa.edu',
+              name: 'Arjun Mehta',
+              campus: 'Goa University',
+              role: 'STUDENT',
+            })
+          );
+          return;
+        }
+
+        if (req.url?.startsWith('/api/v1/posts')) {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(
+            JSON.stringify({
+              posts: [
+                {
+                  id: 'post_1',
+                  content: 'Quiet floor at the central library is finally open for finals week!',
+                  authorId: 'usr_arjun_01',
+                  author: {
+                    id: 'usr_arjun_01',
+                    name: 'Arjun Mehta',
+                  },
+                  createdAt: new Date().toISOString(),
+                  likesCount: 14,
+                  commentsCount: 3,
+                },
+              ],
+              hasMore: false,
+            })
+          );
+          return;
+        }
+
         next();
       });
     },

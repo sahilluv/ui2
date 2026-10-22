@@ -13,6 +13,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await this.$connect();
+    try {
+      await this.$connect();
+    } catch {
+      console.warn('[AI Studio] Database not connected — using offline mock');
+    }
   }
 }
