@@ -32,6 +32,8 @@ model User {
   shadowRank     ShadowRank?
   verification   ShadowVerification?
   posts          Post[]
+  followers      Follow[]            @relation("UserFollowers")
+  following      Follow[]            @relation("UserFollowing")
 }
 
 model Profile {
@@ -81,6 +83,20 @@ model Post {
 
   @@index([createdAt, id])
   @@index([authorId, createdAt])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followingId, createdAt(sort: Desc), id(sort: Desc)])
+  @@index([followerId, createdAt(sort: Desc), id(sort: Desc)])
 }
 
 model EncounterPreference {
