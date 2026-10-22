@@ -71,7 +71,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
             background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 25%, #8A2BE2 50%, #FF8A00 75%, #FFB347 100%)',
           }}
         >
-          <div className="w-5 h-5 rounded-[6px] border-2 border-white flex items-center justify-center p-0.5">
+          <div className="w-5 h-5 rounded-[6px] border border-white flex items-center justify-center p-0.5">
             <div className="w-2 h-2 rounded-full border border-white" />
           </div>
         </div>

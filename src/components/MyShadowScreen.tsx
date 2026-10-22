@@ -839,12 +839,12 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
           >
             {/* Gradient Outer Ring */}
             <div
-              className="w-20 h-20 rounded-full p-[2px] border border-white/20 shadow-md transition-transform group-hover:scale-105"
+              className="w-20 h-20 rounded-full p-[1.5px] border border-white/20 shadow-md transition-transform group-hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, rgb(255, 0, 127) 0%, rgb(184, 0, 165) 50%, rgb(125, 18, 165) 100%)',
               }}
             >
-              <div className="w-full h-full rounded-full bg-[#0D0E14] p-[2px] flex items-center justify-center overflow-hidden">
+              <div className="w-full h-full rounded-full bg-[#0D0E14] p-[1px] flex items-center justify-center overflow-hidden">
                 <div className="w-full h-full rounded-full bg-[#181822] flex items-center justify-center relative">
                   {localRank === 'KNIGHT' ? (
                     <PremiumKnightInsignia size={32} glow={false} className="text-white drop-shadow" />
@@ -856,7 +856,7 @@ export const MyShadowScreen: React.FC<MyShadowScreenProps> = ({
             </div>
             {/* Verified Shield Badge */}
             <span
-              className="absolute -bottom-1 -right-1 bg-[#171822] w-6 h-6 rounded-full flex items-center justify-center border-2 border-black"
+              className="absolute -bottom-1 -right-1 bg-[#171822] w-6 h-6 rounded-full flex items-center justify-center border border-black"
               style={{ color: 'rgb(255, 0, 127)', boxShadow: 'rgba(255, 0, 127, 0.3) 0px 0px 0px 1px' }}
               title="Verified Digital Persona"
             >

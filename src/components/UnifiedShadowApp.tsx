@@ -694,6 +694,8 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
   const [pullDownDistance, setPullDownDistance] = useState(0);
   const [isPullRefreshing, setIsPullRefreshing] = useState(false);
   const [isPullDragging, setIsPullDragging] = useState(false);
+  const [refreshStatus, setRefreshStatus] = useState<'idle' | 'pulling' | 'refreshing' | 'success'>('idle');
+  const [newlyFetchedPostId, setNewlyFetchedPostId] = useState<string | null>(null);
   const pullStartYRef = useRef<number | null>(null);
   const freshPostIndexRef = useRef(0);
   const PULL_THRESHOLD = 58;
@@ -701,11 +703,14 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
   const executeRefreshFeed = async () => {
     if (isPullRefreshing) return;
     setIsPullRefreshing(true);
-    setPullDownDistance(54);
+    setRefreshStatus('refreshing');
+    setPullDownDistance(58);
+
+    let generatedId = '';
 
     try {
-      // Simulate real fetch with network latency
-      await new Promise((r) => setTimeout(r, 850));
+      // Smooth simulated latency for pleasant visual rhythm
+      await new Promise((r) => setTimeout(r, 750));
 
       // Attempt background endpoint fetch if online
       try {
@@ -718,6 +723,8 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
       const nextPostToInject = NEW_FEED_POSTS_POOL[freshPostIndexRef.current % NEW_FEED_POSTS_POOL.length];
       freshPostIndexRef.current += 1;
 
+      generatedId = `${nextPostToInject.id}_${Date.now()}`;
+
       setFeedPosts((prev) => {
         // Update likes slightly on existing posts to simulate live activity
         const updatedExisting = prev.map((p, idx) => ({
@@ -729,18 +736,35 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
         const postToAdd: FeedPost = exists
           ? {
               ...nextPostToInject,
-              id: `${nextPostToInject.id}_${Date.now()}`,
+              id: generatedId,
               timeAgo: 'Just now',
             }
-          : { ...nextPostToInject, timeAgo: 'Just now' };
+          : { ...nextPostToInject, id: generatedId, timeAgo: 'Just now' };
 
         return [postToAdd, ...updatedExisting];
       });
 
-      showToast('Feed updated with latest posts!');
+      // Track newly added post for smooth entrance animation & glow
+      setNewlyFetchedPostId(generatedId);
+
+      // Transition smoothly to success checkmark stage
+      setRefreshStatus('success');
+
+      // Smooth scroll back to top of feed to observe new incoming content
+      feedScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Keep success feedback visible briefly for tactile gratification
+      await new Promise((r) => setTimeout(r, 520));
+      showToast('✨ Feed updated with latest posts!');
     } finally {
       setIsPullRefreshing(false);
+      setRefreshStatus('idle');
       setPullDownDistance(0);
+
+      // Clear the fresh highlight after 4 seconds
+      setTimeout(() => {
+        setNewlyFetchedPostId((prev) => (prev === generatedId ? null : prev));
+      }, 4200);
     }
   };
 
@@ -760,8 +784,10 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
     if (diff > 0 && feedScrollRef.current && feedScrollRef.current.scrollTop <= 2) {
       const dampened = Math.min(Math.pow(diff, 0.82) * 1.8, 88);
       setPullDownDistance(dampened);
+      setRefreshStatus('pulling');
     } else {
       setPullDownDistance(0);
+      setRefreshStatus('idle');
     }
   };
 
@@ -773,6 +799,7 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
         void executeRefreshFeed();
       } else {
         setPullDownDistance(0);
+        setRefreshStatus('idle');
       }
     }
   };
@@ -793,8 +820,10 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
     if (diff > 0 && feedScrollRef.current && feedScrollRef.current.scrollTop <= 2) {
       const dampened = Math.min(Math.pow(diff, 0.82) * 1.8, 88);
       setPullDownDistance(dampened);
+      setRefreshStatus('pulling');
     } else {
       setPullDownDistance(0);
+      setRefreshStatus('idle');
     }
   };
 
@@ -806,6 +835,7 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
         void executeRefreshFeed();
       } else {
         setPullDownDistance(0);
+        setRefreshStatus('idle');
       }
     }
   };
@@ -1394,19 +1424,36 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                   </h1>
 
                   <div className="flex items-center gap-2">
-                    {/* Header Manual Refresh Button */}
+                    {/* Header Manual Refresh Button with smooth microinteraction */}
                     <button
                       onClick={() => void executeRefreshFeed()}
                       disabled={isPullRefreshing}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-80 active:scale-95 transition-all cursor-pointer"
-                      style={{ backgroundColor: colors.inputBackground }}
+                      className={`relative w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                        isPullRefreshing
+                          ? 'scale-105 shadow-[0_0_14px_rgba(123,82,185,0.6)] border border-[#7B52B9]'
+                          : refreshStatus === 'success'
+                          ? 'scale-105 border border-emerald-500/60 bg-emerald-500/20 text-emerald-400'
+                          : 'hover:opacity-90 active:scale-90 hover:scale-105'
+                      }`}
+                      style={{
+                        backgroundColor: refreshStatus === 'success' ? undefined : colors.inputBackground,
+                      }}
                       title="Fetch latest posts"
                       aria-label="Refresh feed"
                     >
-                      <RotateCw
-                        size={14}
-                        className={`text-white transition-all ${isPullRefreshing ? 'animate-spin' : ''}`}
-                      />
+                      {refreshStatus === 'success' ? (
+                        <Check size={14} className="text-emerald-400 animate-refresh-success" />
+                      ) : (
+                        <RotateCw
+                          size={14}
+                          className={`text-white transition-transform ${
+                            isPullRefreshing ? 'animate-spin' : ''
+                          }`}
+                          style={{
+                            transitionDuration: isPullRefreshing ? '0.75s' : '0.25s',
+                          }}
+                        />
+                      )}
                     </button>
 
                     <button
@@ -1434,46 +1481,128 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                       )}
                     </button>
                   </div>
+
+                  {/* Sleek Indeterminate Shimmer Scan Bar on Refresh */}
+                  {isPullRefreshing && (
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] overflow-hidden bg-black/20 z-20 pointer-events-none">
+                      <div
+                        className="h-full w-2/5 animate-refresh-bar rounded-full"
+                        style={{
+                          background: 'linear-gradient(90deg, transparent, #7B52B9, #C084FC, transparent)',
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {/* TOP PULL-TO-REFRESH VISUAL ACCORDION */}
+                {/* TOP PULL-TO-REFRESH VISUAL ACCORDION WITH SPRING PHYSICS & FEEDBACK */}
                 <div
                   style={{
-                    height: isPullRefreshing ? 54 : pullDownDistance,
-                    opacity: pullDownDistance > 6 || isPullRefreshing ? 1 : 0,
-                    transition: isPullDragging ? 'none' : 'all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                    height: isPullRefreshing ? 58 : pullDownDistance,
+                    opacity: pullDownDistance > 4 || isPullRefreshing ? 1 : 0,
+                    transition: isPullDragging
+                      ? 'none'
+                      : 'height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease-out',
                   }}
                   className="overflow-hidden flex items-center justify-center select-none relative z-10"
                 >
                   <div
-                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border shadow-md backdrop-blur-md transition-transform"
+                    className={`flex items-center gap-2.5 px-4 py-2 rounded-full border shadow-lg backdrop-blur-md transition-all ${
+                      isPullRefreshing ? 'animate-refresh-glow' : ''
+                    }`}
                     style={{
-                      backgroundColor: isDark ? 'rgba(24, 26, 38, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-                      borderColor: isPullRefreshing ? '#7B52B9' : colors.border,
-                      boxShadow: isPullRefreshing ? '0 0 16px rgba(123, 82, 185, 0.35)' : undefined,
-                      transform: `scale(${Math.min(0.7 + (pullDownDistance / PULL_THRESHOLD) * 0.3, 1)})`,
+                      backgroundColor: isDark ? 'rgba(20, 22, 34, 0.96)' : 'rgba(255, 255, 255, 0.97)',
+                      borderColor:
+                        refreshStatus === 'success'
+                          ? 'rgba(52, 211, 153, 0.7)'
+                          : isPullRefreshing
+                          ? '#7B52B9'
+                          : pullDownDistance >= PULL_THRESHOLD
+                          ? '#A855F7'
+                          : colors.border,
+                      boxShadow:
+                        refreshStatus === 'success'
+                          ? '0 0 16px rgba(52, 211, 153, 0.35)'
+                          : isPullRefreshing
+                          ? '0 0 20px rgba(123, 82, 185, 0.45)'
+                          : undefined,
+                      transform: `scale(${
+                        isPullRefreshing
+                          ? 1
+                          : Math.min(0.75 + (pullDownDistance / PULL_THRESHOLD) * 0.25, 1.05)
+                      })`,
+                      transition: isPullDragging
+                        ? 'transform 0.05s ease-out'
+                        : 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                   >
-                    {isPullRefreshing ? (
-                      <RotateCw size={15} className="animate-spin text-white" />
-                    ) : (
-                      <ArrowDown
-                        size={15}
-                        className="text-white transition-transform duration-200"
-                        style={{
-                          transform: `rotate(${pullDownDistance >= PULL_THRESHOLD ? 180 : (pullDownDistance / PULL_THRESHOLD) * 180}deg)`,
-                        }}
-                      />
-                    )}
+                    {/* Dynamic Circular Progress Meter / State Icon */}
+                    <div className="relative w-5 h-5 flex items-center justify-center shrink-0">
+                      {refreshStatus === 'success' ? (
+                        <Check size={15} className="text-emerald-400 animate-refresh-success" />
+                      ) : isPullRefreshing ? (
+                        <RotateCw size={15} className="animate-spin text-purple-400" />
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 -rotate-90" viewBox="0 0 24 24">
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              fill="none"
+                              stroke={isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.12)'}
+                              strokeWidth="2.5"
+                            />
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              fill="none"
+                              stroke="#A855F7"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeDasharray={56.5}
+                              strokeDashoffset={56.5 * (1 - Math.min(pullDownDistance / PULL_THRESHOLD, 1))}
+                              className="transition-all duration-75"
+                            />
+                          </svg>
+                          <ArrowDown
+                            size={11}
+                            className="absolute text-purple-300 transition-transform duration-200"
+                            style={{
+                              transform: `rotate(${pullDownDistance >= PULL_THRESHOLD ? 180 : 0}deg)`,
+                            }}
+                          />
+                        </>
+                      )}
+                    </div>
+
                     <span
-                      className="text-xs font-semibold"
-                      style={{ color: colors.text }}
+                      className="text-xs font-semibold tracking-wide flex items-center gap-1.5"
+                      style={{
+                        color:
+                          refreshStatus === 'success'
+                            ? '#34D399'
+                            : isPullRefreshing
+                            ? '#C084FC'
+                            : colors.text,
+                      }}
                     >
-                      {isPullRefreshing
-                        ? 'Fetching latest posts...'
-                        : pullDownDistance >= PULL_THRESHOLD
-                        ? 'Release to refresh feed'
-                        : 'Pull down to refresh'}
+                      {refreshStatus === 'success' ? (
+                        <span className="flex items-center gap-1">
+                          Feed up to date
+                          <span className="text-[10px] opacity-75">• Fresh posts</span>
+                        </span>
+                      ) : isPullRefreshing ? (
+                        <span className="flex items-center gap-1.5">
+                          <span>Fetching latest posts...</span>
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping" />
+                        </span>
+                      ) : pullDownDistance >= PULL_THRESHOLD ? (
+                        <span className="text-purple-300 font-bold">Release to refresh</span>
+                      ) : (
+                        'Pull down to refresh'
+                      )}
                     </span>
                   </div>
                 </div>
@@ -1490,17 +1619,17 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                       }}
                     >
                       <div
-                        className="w-16 h-16 rounded-[20px] p-0.5 shadow-md flex items-center justify-center"
+                        className="w-16 h-16 rounded-[20px] p-[1.5px] shadow-sm flex items-center justify-center"
                         style={{
                           background: `linear-gradient(135deg, ${story.gradient.join(', ')})`,
                         }}
                       >
                         <div
-                          className="w-full h-full rounded-[18px] p-0.5 flex items-center justify-center"
+                          className="w-full h-full rounded-[18px] p-[1px] flex items-center justify-center"
                           style={{ backgroundColor: colors.background }}
                         >
                           <div
-                            className="w-full h-full rounded-[16px] flex items-center justify-center text-white text-xs font-bold"
+                            className="w-full h-full rounded-[17px] flex items-center justify-center text-white text-xs font-bold"
                             style={{
                               background: `linear-gradient(135deg, ${story.gradient.join(', ')})`,
                             }}
@@ -1518,8 +1647,15 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
 
                 {/* Real Feed Posts Styled with Concept Cards */}
                 <div className="p-4 space-y-5">
-                  {feedPosts.map((post) => (
-                    <div key={post.id} className="relative">
+                  {feedPosts.map((post) => {
+                    const isNewlyFetched = post.id === newlyFetchedPostId;
+                    return (
+                    <div
+                      key={post.id}
+                      className={`relative transition-all duration-500 ${
+                        isNewlyFetched ? 'animate-new-post-entrance' : ''
+                      }`}
+                    >
                       {/* Middle Layer — Card Behind the Feed (exact same card background colour token) */}
                       <div
                         aria-hidden="true"
@@ -1530,12 +1666,27 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                         }}
                       />
                       <div
-                        className="relative z-10 rounded-3xl overflow-hidden shadow-lg border transition-all"
+                        className={`relative z-10 rounded-3xl overflow-hidden shadow-lg border transition-all ${
+                          isNewlyFetched
+                            ? 'ring-1 ring-[#7B52B9]/70 shadow-[0_0_24px_rgba(123,82,185,0.35)] animate-new-post-glow'
+                            : ''
+                        }`}
                         style={{
                           backgroundColor: colors.surface,
-                          borderColor: colors.cardBorder,
+                          borderColor: isNewlyFetched ? '#7B52B9' : colors.cardBorder,
                         }}
                       >
+                      {/* Freshly fetched post highlight banner */}
+                      {isNewlyFetched && (
+                        <div className="bg-gradient-to-r from-purple-600/30 via-indigo-500/25 to-purple-600/30 px-3.5 py-1.5 flex items-center justify-between border-b border-purple-500/30 text-[10px] font-bold text-purple-200">
+                          <span className="flex items-center gap-1.5">
+                            <Sparkles size={11} className="text-purple-300 animate-spin" style={{ animationDuration: '3s' }} />
+                            <span>Freshly fetched post</span>
+                          </span>
+                          <span className="text-[9px] uppercase tracking-wider text-purple-300/80 font-mono">Just now</span>
+                        </div>
+                      )}
+
                       {/* Post Header */}
                       <div className="p-3.5 flex items-center justify-between">
                         <div
@@ -1543,13 +1694,13 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                           onClick={() => setCurrentTab('profile')}
                         >
                           <div
-                            className="w-9 h-9 rounded-[11px] p-0.5 flex items-center justify-center"
+                            className="w-9 h-9 rounded-[11px] p-[1px] flex items-center justify-center"
                             style={{
                               background: `linear-gradient(135deg, ${post.avatarGradient.join(', ')})`,
                             }}
                           >
                             <div
-                              className="w-full h-full rounded-[9px] flex items-center justify-center text-white text-xs font-extrabold"
+                              className="w-full h-full rounded-[10px] flex items-center justify-center text-white text-xs font-extrabold"
                               style={{
                                 background: `linear-gradient(135deg, ${post.avatarGradient.join(', ')})`,
                               }}
@@ -1668,7 +1819,8 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                       </div>
                     </div>
                   </div>
-                  ))}
+                  );
+                })}
                 </div>
 
                 {/* Endless Feed Dynamic Loading Indicator */}
@@ -1990,17 +2142,17 @@ export const UnifiedShadowApp: React.FC<UnifiedShadowAppProps> = ({
                 {/* Profile Header Avatar Section */}
                 <div className="flex flex-col items-center text-center pt-2">
                   <div
-                    className="w-20 h-20 rounded-[26px] p-1 shadow-xl flex items-center justify-center mb-3"
+                    className="w-20 h-20 rounded-[26px] p-[1.5px] shadow-xl flex items-center justify-center mb-3"
                     style={{
                       background: 'linear-gradient(135deg, #2A2A2A 0%, #161616 100%)',
                     }}
                   >
                     <div
-                      className="w-full h-full rounded-[22px] p-1 flex items-center justify-center"
+                      className="w-full h-full rounded-[24px] p-[1px] flex items-center justify-center"
                       style={{ backgroundColor: colors.background }}
                     >
                       <div
-                        className="w-full h-full rounded-[19px] flex items-center justify-center text-white text-xl font-extrabold"
+                        className="w-full h-full rounded-[23px] flex items-center justify-center text-white text-xl font-extrabold"
                         style={{
                           background: 'linear-gradient(135deg, #2A2A2A 0%, #161616 100%)',
                         }}

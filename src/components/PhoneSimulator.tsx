@@ -1107,7 +1107,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               aria-label="Open My Shadow directly from Home Feed"
             >
               <div
-                className="w-9 h-9 rounded-full p-[1.5px] shadow-md shadow-black/30 flex items-center justify-center transition-all group-hover:scale-105"
+                className="w-9 h-9 rounded-full p-[1px] shadow-md shadow-black/30 flex items-center justify-center transition-all group-hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                 }}
@@ -1124,7 +1124,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                   />
                 </div>
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#FF0A78] border-2 border-white shadow-xs" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#FF0A78] border border-white shadow-xs" />
             </button>
           ) : currentTab === 'profile' ? (
             <button
@@ -1185,9 +1185,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               aria-label="User Profile"
             >
               <div
-                className={`w-7.5 h-7.5 rounded-[10px] p-[1.5px] transition-all ${
+                className={`w-7.5 h-7.5 rounded-[10px] p-[1px] transition-all ${
                   currentTab === 'profile'
-                    ? 'ring-2 ring-[#FF0A78] shadow-md shadow-black/20'
+                    ? 'ring-1 ring-[#FF0A78] shadow-md shadow-black/20'
                     : ''
                 }`}
                 style={{
@@ -1289,9 +1289,9 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div className="relative">
                       {/* Multi-stop gradient curved-square story ring */}
                       <div
-                        className={`w-16 h-16 rounded-[20px] p-[2.5px] transition-transform group-hover:scale-105 ${
+                        className={`w-16 h-16 rounded-[20px] p-[1.5px] transition-transform group-hover:scale-105 ${
                           story.hasUnseen || (story.isCurrentUser && hasActiveStory)
-                            ? 'shadow-md shadow-[#FF0A78]/25 ring-1 ring-[#FF0A78]'
+                            ? 'shadow-sm shadow-[#FF0A78]/25'
                             : ''
                         }`}
                         style={{
@@ -1304,12 +1304,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         }}
                       >
                         <div
-                          className={`w-full h-full rounded-[17px] p-[2px] ${
+                          className={`w-full h-full rounded-[18px] p-[1px] ${
                             isDark ? 'bg-[#101010]' : 'bg-[#F7F8FA]'
                           }`}
                         >
                           <div
-                            className="w-full h-full rounded-[15px] overflow-hidden flex items-center justify-center relative"
+                            className="w-full h-full rounded-[17px] overflow-hidden flex items-center justify-center relative"
                             style={{ background: story.avatarGradient }}
                           >
                             {story.storyImageUrl ? (
@@ -1340,7 +1340,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             e.stopPropagation();
                             setIsCameraOverlayOpen(true);
                           }}
-                          className={`absolute -bottom-0.5 -right-0.5 w-5.5 h-5.5 rounded-[7px] flex items-center justify-center text-white border-2 text-[10px] font-bold shadow-md hover:scale-110 active:scale-95 transition-transform cursor-pointer ${
+                          className={`absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-[6px] flex items-center justify-center text-white border text-[10px] font-bold shadow-sm hover:scale-110 active:scale-95 transition-transform cursor-pointer ${
                             isDark ? 'border-[#101010]' : 'border-[#F7F8FA]'
                           }`}
                           style={{
@@ -1348,7 +1348,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           }}
                           title="Open Camera · Create 24h Story"
                         >
-                          <Plus size={12} strokeWidth={3.2} />
+                          <Plus size={11} strokeWidth={2.8} />
                         </div>
                       )}
                     </div>
@@ -1426,11 +1426,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           onClick={() => handleTabChange('profile')}
                         >
                           <div
-                            className="w-9 h-9 rounded-[11px] p-[2px] shrink-0"
+                            className="w-9 h-9 rounded-[11px] p-[1px] shrink-0"
                             style={{ background: post.author.avatarGradient }}
                           >
                             <div
-                              className={`w-full h-full rounded-[9px] overflow-hidden ${
+                              className={`w-full h-full rounded-[10px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
@@ -1439,11 +1439,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                   src={post.author.avatarUrl}
                                   alt={post.author.name}
                                   referrerPolicy="no-referrer"
-                                  className="w-full h-full object-cover rounded-[7px]"
+                                  className="w-full h-full object-cover rounded-[9px]"
                                 />
                               ) : (
                                 <div
-                                  className="w-full h-full rounded-[7px]"
+                                  className="w-full h-full rounded-[9px]"
                                   style={{ background: post.author.avatarGradient }}
                                 />
                               )}
@@ -2959,7 +2959,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         {/* Avatar */}
                         <div className="relative shrink-0">
                           <div
-                            className={`w-12 h-12 rounded-[16px] p-[2px] ${
+                            className={`w-12 h-12 rounded-[16px] p-[1px] ${
                               user.unread
                                 ? ''
                                 : isDark
@@ -2976,7 +2976,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             }
                           >
                             <div
-                              className={`w-full h-full rounded-[14px] p-[1.5px] overflow-hidden ${
+                              className={`w-full h-full rounded-[15px] p-[1px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >
@@ -2985,11 +2985,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                   src={user.avatarUrl}
                                   alt={user.name}
                                   referrerPolicy="no-referrer"
-                                  className="w-full h-full rounded-[12px] object-cover"
+                                  className="w-full h-full rounded-[14px] object-cover"
                                 />
                               ) : (
                                 <div
-                                  className="w-full h-full rounded-[12px]"
+                                  className="w-full h-full rounded-[14px]"
                                   style={{ background: user.avatarGradient }}
                                 />
                               )}
@@ -2997,7 +2997,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           </div>
                           {user.online && (
                             <span
-                              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#2ECC71] border-2 ${
+                              className={`absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#2ECC71] border ${
                                 isDark ? 'border-[#101010]' : 'border-[#FFFFFF]'
                               }`}
                             />
@@ -3162,7 +3162,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       {/* Avatar with Action Icon Badge (Curved Squircle) */}
                       <div className="relative shrink-0">
                         <div
-                          className={`w-10 h-10 rounded-[14px] p-[2px] transition-transform hover:scale-105 ${
+                          className={`w-10 h-10 rounded-[14px] p-[1px] transition-transform hover:scale-105 ${
                             !notif.isRead ? '' : isDark ? 'border border-[#38383D]' : 'border border-[#E5E7EB]'
                           }`}
                           style={
@@ -3175,7 +3175,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           }
                         >
                           <div
-                            className={`w-full h-full rounded-[12px] p-[1px] overflow-hidden ${
+                            className={`w-full h-full rounded-[13px] p-[0.5px] overflow-hidden ${
                               isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                             }`}
                           >
@@ -3184,11 +3184,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                                 src={notif.user.avatarUrl}
                                 alt={notif.user.name}
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full rounded-[10px] object-cover"
+                                className="w-full h-full rounded-[12px] object-cover"
                               />
                             ) : (
                               <div
-                                className="w-full h-full rounded-[10px]"
+                                className="w-full h-full rounded-[12px]"
                                 style={{ background: notif.user.avatarGradient }}
                               />
                             )}
@@ -3197,7 +3197,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                         {/* Action Icon Badge with Reference Accents */}
                         <div
-                          className={`absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-[6px] flex items-center justify-center text-white text-[9px] shadow-sm border-2 ${
+                          className={`absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-[6px] flex items-center justify-center text-white text-[9px] shadow-sm border ${
                             isDark ? 'border-[#101010]' : 'border-[#FFFFFF]'
                           } ${
                             notif.actionType === 'like'
@@ -3293,14 +3293,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               <div className="flex flex-col items-center px-6 pt-3">
                 {/* Large Centered Avatar with vivid story ring */}
                 <div
-                  className="w-22 h-22 rounded-[28px] p-[3.5px] shadow-xl mb-3.5 group cursor-pointer"
+                  className="w-22 h-22 rounded-[28px] p-[1.5px] shadow-xl mb-3.5 group cursor-pointer"
                   style={{
                     background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                   }}
                   onClick={() => triggerToast('Mauricio Lopez · Founder @Shadow', 'sparkles')}
                 >
                   <div
-                    className={`w-full h-full rounded-[24px] p-[2.5px] overflow-hidden ${
+                    className={`w-full h-full rounded-[26px] p-[1px] overflow-hidden ${
                       isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                     }`}
                   >
@@ -3308,7 +3308,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       src="/src/assets/images/avatar_mauricio_designer_1792313922880.jpg"
                       alt="Mauricio Lopez"
                       referrerPolicy="no-referrer"
-                      className="w-full h-full rounded-[21px] object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="w-full h-full rounded-[25px] object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                 </div>
@@ -3457,7 +3457,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 </div>
               </div>
 
-              {/* Actions Row: Edit Profile button, Follow button, and Create Post (+) */}
+              {/* Actions Row: Edit Profile button and Follow button */}
               <div className="w-full max-w-[325px] flex items-center gap-2 mb-5 px-3">
                 {/* Edit Profile Button */}
                 <button
@@ -3499,20 +3499,6 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 >
                   {isFollowingMauricio ? 'Following' : 'Follow'}
                 </button>
-
-                {/* Create Post Button with Plus (+) icon */}
-                <button
-                  onClick={() => handleTabChange('create')}
-                  className={`h-9.5 px-3 rounded-full font-bold text-xs flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer border ${
-                    isDark
-                      ? 'bg-[#29292D] hover:bg-[#38383D] border-[#38383D] text-[#F7F7F9]'
-                      : 'bg-[#FFFFFF] hover:bg-[#F1F3F6] border-[#E1E4E9] text-[#202024] shadow-xs'
-                  }`}
-                  title="Create New Post (+)"
-                >
-                  <Plus size={14} strokeWidth={2.6} />
-                  <span>Post</span>
-                </button>
               </div>
             </div>
 
@@ -3525,18 +3511,18 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 >
                   <div className="relative">
                     <div
-                      className="w-15 h-15 rounded-[18px] p-[2px] transition-transform group-hover:scale-105"
+                      className="w-15 h-15 rounded-[18px] p-[1.5px] transition-transform group-hover:scale-105"
                       style={{
                         background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 40%, #8A2BE2 100%)',
                       }}
                     >
                       <div
-                        className={`w-full h-full rounded-[16px] p-[2px] ${
+                        className={`w-full h-full rounded-[16.5px] p-[1px] ${
                           isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                         }`}
                       >
                         <div
-                          className="w-full h-full rounded-[14px]"
+                          className="w-full h-full rounded-[15.5px]"
                           style={{ background: hl.gradient }}
                         />
                       </div>
@@ -3544,12 +3530,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                     {hl.isAdd && (
                       <div
-                        className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-[6px] text-white flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm"
+                        className="absolute -bottom-0.5 -right-0.5 w-4.5 h-4.5 rounded-[6px] text-white flex items-center justify-center text-[10px] font-bold border border-white shadow-sm"
                         style={{
                           background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 100%)',
                         }}
                       >
-                        <Plus size={10} strokeWidth={3} />
+                        <Plus size={10} strokeWidth={2.6} />
                       </div>
                     )}
                   </div>

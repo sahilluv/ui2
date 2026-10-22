@@ -465,7 +465,7 @@ export const StoryViewerModal: React.FC<StoryViewerModalProps> = ({
               return (
                 <div
                   key={item.id || idx}
-                  className="flex-1 bg-white/25 backdrop-blur-xs h-1 rounded-full overflow-hidden"
+                  className="flex-1 bg-white/25 backdrop-blur-xs h-[2.5px] rounded-full overflow-hidden"
                 >
                   <div
                     className={`h-full bg-white rounded-full ${
@@ -486,7 +486,7 @@ export const StoryViewerModal: React.FC<StoryViewerModalProps> = ({
             <div className="flex items-center gap-2.5 min-w-0">
               {/* Creator Avatar (Curved-Square Design System) */}
               <div
-                className="w-9 h-9 rounded-[12px] border-2 border-white/90 p-0.5 flex items-center justify-center shadow-md shrink-0 overflow-hidden"
+                className="w-9 h-9 rounded-[12px] border border-white/90 p-[1px] flex items-center justify-center shadow-md shrink-0 overflow-hidden"
                 style={{ background: activeStoryItem?.avatarGradient }}
               >
                 {activeStoryItem?.avatarUrl ? (
@@ -494,10 +494,10 @@ export const StoryViewerModal: React.FC<StoryViewerModalProps> = ({
                     src={activeStoryItem.avatarUrl}
                     alt={activeStoryItem.username}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full rounded-[9px] object-cover"
+                    className="w-full h-full rounded-[10px] object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-[9px] bg-black/20" />
+                  <div className="w-full h-full rounded-[10px] bg-black/20" />
                 )}
               </div>
 
