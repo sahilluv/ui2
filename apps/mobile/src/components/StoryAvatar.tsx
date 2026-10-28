@@ -16,7 +16,7 @@ export const StoryAvatar: React.FC<StoryAvatarProps> = ({
   story,
   colors,
   onPress,
-  size = 64,
+  size = 56,
 }) => {
   const isHighlighted = story.hasUnseen || (story.isCurrentUser && story.hasUnseen !== false);
   const outerBorderColor = isHighlighted ? '#FF0A78' : colors.isDark ? '#38383D' : '#D1D5DB';
@@ -84,15 +84,15 @@ export const StoryAvatar: React.FC<StoryAvatarProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginRight: 14,
-    width: 68,
+    marginRight: 12,
+    width: 58,
   },
   avatarWrapper: {
     position: 'relative',
     marginBottom: 6,
   },
   storyFrameOuter: {
-    borderRadius: 20,
+    borderRadius: 18,
     padding: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
@@ -100,15 +100,15 @@ const styles = StyleSheet.create({
   storyFrameInset: {
     width: '100%',
     height: '100%',
-    borderRadius: 18,
-    padding: 2,
+    borderRadius: 16,
+    padding: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   storyFrameInner: {
     width: '100%',
     height: '100%',
-    borderRadius: 16,
+    borderRadius: 14,
     overflow: 'hidden',
     backgroundColor: '#333333',
     alignItems: 'center',

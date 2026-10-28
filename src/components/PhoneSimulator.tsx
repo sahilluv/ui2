@@ -1297,7 +1297,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     <div className="relative">
                       {/* Exact reference rounded-square Story frame (image_4493ba12.png) */}
                       <div
-                        className={`w-[68px] h-[68px] rounded-[22px] p-[2px] transition-transform group-hover:scale-105 shrink-0 ${
+                        className={`w-14 h-14 rounded-[18px] p-[2px] transition-transform group-hover:scale-105 shrink-0 ${
                           story.hasUnseen || (story.isCurrentUser && hasActiveStory)
                             ? 'bg-[#FF0A78]'
                             : isDark
@@ -1306,29 +1306,29 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                         }`}
                       >
                         <div
-                          className={`w-full h-full rounded-[20px] p-[2px] ${
+                          className={`w-full h-full rounded-[16px] p-[1.5px] ${
                             isDark ? 'bg-[#101010]' : 'bg-[#F7F8FA]'
                           }`}
                         >
                           <div
-                            className="w-full h-full rounded-[18px] overflow-hidden flex items-center justify-center relative bg-[#333333]"
+                            className="w-full h-full rounded-[14px] overflow-hidden flex items-center justify-center relative bg-[#333333]"
                           >
                             {story.storyImageUrl ? (
                               <img
                                 src={story.storyImageUrl}
                                 alt="Current user story thumbnail"
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover rounded-[18px]"
+                                className="w-full h-full object-cover rounded-[14px]"
                               />
                             ) : story.avatarUrl ? (
                               <img
                                 src={story.avatarUrl}
                                 alt={story.username}
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover rounded-[18px]"
+                                className="w-full h-full object-cover rounded-[14px]"
                               />
                             ) : story.isCurrentUser && !hasActiveStory ? (
-                              <Camera size={20} className="text-white/80 drop-shadow-sm" />
+                              <Camera size={16} className="text-white/80 drop-shadow-sm" />
                             ) : null}
                           </div>
                         </div>
@@ -1341,7 +1341,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                             e.stopPropagation();
                             setIsCameraOverlayOpen(true);
                           }}
-                          className={`absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-[6px] flex items-center justify-center text-white border text-[10px] font-bold shadow-sm hover:scale-110 active:scale-95 transition-transform cursor-pointer ${
+                          className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-[5px] flex items-center justify-center text-white border text-[9px] font-bold shadow-sm hover:scale-110 active:scale-95 transition-transform cursor-pointer ${
                             isDark ? 'border-[#101010]' : 'border-[#F7F8FA]'
                           }`}
                           style={{
@@ -1349,13 +1349,13 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           }}
                           title="Open Camera · Create 24h Story"
                         >
-                          <Plus size={11} strokeWidth={2.8} />
+                          <Plus size={9.5} strokeWidth={2.8} />
                         </div>
                       )}
                     </div>
 
                     <span
-                      className={`text-[11px] font-medium tracking-tight text-center max-w-[66px] truncate ${
+                      className={`text-[10px] font-medium tracking-tight text-center max-w-[56px] truncate ${
                         story.hasUnseen || (story.isCurrentUser && hasActiveStory)
                           ? isDark ? 'text-[#F7F7F9] font-bold' : 'text-[#202024] font-bold'
                           : isDark
