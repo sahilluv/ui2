@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TabType } from '../types';
@@ -78,7 +78,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           </View>
         </TouchableOpacity>
 
-        {/* 3. Reels Section (TV Monitor with Play Icon) */}
+        {/* 3. Reels Section (Official Shadow Ghost Logo) */}
         <TouchableOpacity
           style={[
             styles.tabButton,
@@ -92,10 +92,13 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
           activeOpacity={0.7}
         >
           <View style={styles.iconWrapper}>
-            <MaterialCommunityIcons
-              name="television-play"
-              size={isCompact ? 20 : 24}
-              color={currentTab === 'reels' ? colors.tabActive : colors.tabInactive}
+            <Image
+              source={require('../../assets/shadow-ghost-purple.png')}
+              style={[
+                styles.reelsGhostIcon,
+                isCompact && styles.reelsGhostIconCompact,
+              ]}
+              resizeMode="contain"
             />
           </View>
         </TouchableOpacity>
@@ -221,6 +224,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+  },
+  reelsGhostIcon: {
+    width: 26,
+    height: 26,
+    borderRadius: 8,
+  },
+  reelsGhostIconCompact: {
+    width: 20,
+    height: 20,
+    borderRadius: 6,
   },
   chatBadge: {
     position: 'absolute',

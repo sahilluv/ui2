@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { ThemeColors } from '../theme';
@@ -16,6 +16,7 @@ interface ProfileHeaderProps {
   displayName?: string;
   email?: string;
   bio?: string;
+  avatarUrl?: string;
   shadowRank?: string;
   verificationStatus?: string;
   shadowId?: string;
@@ -36,6 +37,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   displayName,
   email,
   bio,
+  avatarUrl,
   shadowRank,
   verificationStatus,
   shadowId,
@@ -67,14 +69,19 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               colors={['#FF0A78', '#7928CA', '#4338CA']}
               style={styles.avatarGradient}
             >
-              <Text style={styles.avatarInitials}>
-                {name
-                  .split(' ')
-                  .map((p) => p[0])
-                  .join('')
-                  .toUpperCase()
-                  .slice(0, 2)}
-              </Text>
+              {avatarUrl ? (
+                <Image
+                  source={{ uri: avatarUrl }}
+                  style={styles.avatarImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  source={require('../../assets/shadow-ghost.png')}
+                  style={styles.avatarGhostLogo}
+                  resizeMode="contain"
+                />
+              )}
             </LinearGradient>
           </View>
         </LinearGradient>
@@ -420,6 +427,15 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 19,
+  },
+  avatarGhostLogo: {
+    width: 52,
+    height: 52,
   },
   avatarInitials: {
     color: '#FFFFFF',

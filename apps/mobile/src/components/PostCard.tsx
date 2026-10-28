@@ -105,7 +105,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           activeOpacity={0.8}
         >
           <GradientRing
-            size={36}
+            size={40}
             strokeWidth={2}
             gradientColors={avatarGradient}
             backgroundColor={colors.surface}

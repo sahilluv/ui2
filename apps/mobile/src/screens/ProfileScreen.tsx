@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Image } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { ProfileHeader } from '../components/ProfileHeader';
 import { MediaGrid } from '../components/MediaGrid';
@@ -82,7 +82,7 @@ export default function ProfileScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* 1. Header with Icons */}
+      {/* 1. Header with Icons & Ghost Brand Symbol */}
       <View style={[styles.header, { backgroundColor: colors.background }]}>
         <TouchableOpacity
           style={styles.headerBtn}
@@ -91,6 +91,14 @@ export default function ProfileScreen({ navigation }: any) {
         >
           <Feather name="plus" size={22} color={colors.text} />
         </TouchableOpacity>
+
+        <View style={styles.headerCenter}>
+          <Image
+            source={require('../../assets/shadow-ghost.png')}
+            style={styles.headerGhostLogo}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.headerRight}>
           <TouchableOpacity
@@ -118,6 +126,7 @@ export default function ProfileScreen({ navigation }: any) {
           highlights={highlights}
           displayName={identity?.name || undefined}
           email={identity?.email || undefined}
+          avatarUrl={identity?.profile?.avatarUrl || undefined}
           bio={bio}
           isEditing={isEditing}
           onToggleEdit={() => setIsEditing((prev) => !prev)}
@@ -159,6 +168,14 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headerCenter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerGhostLogo: {
+    width: 32,
+    height: 32,
   },
   headerRight: {
     flexDirection: 'row',

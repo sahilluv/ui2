@@ -1107,20 +1107,20 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
               aria-label="Open My Shadow directly from Home Feed"
             >
               <div
-                className="w-9 h-9 rounded-full p-[1px] shadow-md shadow-black/30 flex items-center justify-center transition-all group-hover:scale-105"
+                className="w-10 h-10 rounded-full p-[2px] shadow-md shadow-black/30 flex items-center justify-center transition-all group-hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 35%, #8A2BE2 70%, #4F46E5 100%)',
                 }}
               >
                 <div
-                  className={`w-full h-full rounded-full flex items-center justify-center transition-colors ${
+                  className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center p-1 transition-colors ${
                     isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                   }`}
                 >
-                  <PremiumPawnInsignia
-                    size={16}
-                    glow={false}
-                    className={isDark ? 'text-white' : 'text-[#202024]'}
+                  <img
+                    src="/assets/shadow-ghost.png"
+                    alt="Shadow Ghost"
+                    className="w-6.5 h-6.5 object-contain transition-transform group-hover:scale-110"
                   />
                 </div>
               </div>
@@ -1145,9 +1145,17 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             <div className="w-9 h-9" aria-hidden="true" />
           )}
 
-          {/* Center Brand: "Shadow" cursive script */}
+          {/* Center Brand: Ghost Symbol on Profile, cursive script on other screens */}
           <div className="flex items-center justify-center">
-            {currentTab !== 'profile' && (
+            {currentTab === 'profile' ? (
+              <div className="w-8 h-8 flex items-center justify-center" title="Shadow">
+                <img
+                  src="/assets/shadow-ghost.png"
+                  alt="Shadow Ghost Logo"
+                  className="w-7 h-7 object-contain drop-shadow-sm select-none"
+                />
+              </div>
+            ) : (
               <h1
                 className={`text-3xl font-shadow-script tracking-wide ${
                   isDark
@@ -1178,14 +1186,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             {/* Profile Button or Chat Icon with notification badge */}
             <button
               onClick={() => handleTabChange('profile')}
-              className={`relative w-8 h-8 rounded-[11px] flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
+              className={`relative w-10 h-10 rounded-[13px] flex items-center justify-center transition-transform active:scale-95 cursor-pointer ${
                 currentTab === 'profile' ? 'scale-105' : 'hover:scale-105'
               }`}
               title="User Profile (Mauricio Lopez)"
               aria-label="User Profile"
             >
               <div
-                className={`w-7.5 h-7.5 rounded-[10px] p-[1px] transition-all ${
+                className={`w-9 h-9 rounded-[12px] p-[2px] transition-all ${
                   currentTab === 'profile'
                     ? 'ring-1 ring-[#FF0A78] shadow-md shadow-black/20'
                     : ''
@@ -1195,12 +1203,12 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                 }}
               >
                 <div
-                  className={`w-full h-full rounded-[8px] p-[1px] ${
+                  className={`w-full h-full rounded-[10px] p-[1px] ${
                     isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                   }`}
                 >
                   <div
-                    className="w-full h-full rounded-[7px] overflow-hidden flex items-center justify-center relative"
+                    className="w-full h-full rounded-[9px] overflow-hidden flex items-center justify-center relative"
                     style={{
                       background: 'linear-gradient(135deg, #FF0A78 0%, #8A2BE2 100%)',
                     }}
@@ -1209,7 +1217,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       src={stories.find((s) => s.isCurrentUser)?.avatarUrl || '/src/assets/images/avatar_mauricio_designer_1792313922880.jpg'}
                       alt="Mauricio Lopez Profile"
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover rounded-[7px]"
+                      className="w-full h-full object-cover rounded-[9px]"
                     />
                   </div>
                 </div>
@@ -1287,47 +1295,40 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                     }
                   >
                     <div className="relative">
-                      {/* Multi-stop gradient curved-square story ring */}
+                      {/* Exact reference rounded-square Story frame (image_4493ba12.png) */}
                       <div
-                        className={`w-16 h-16 rounded-[20px] p-[1.5px] transition-transform group-hover:scale-105 ${
+                        className={`w-[68px] h-[68px] rounded-[22px] p-[2px] transition-transform group-hover:scale-105 shrink-0 ${
                           story.hasUnseen || (story.isCurrentUser && hasActiveStory)
-                            ? 'shadow-sm shadow-[#FF0A78]/25'
-                            : ''
+                            ? 'bg-[#FF0A78]'
+                            : isDark
+                            ? 'bg-[#38383D]'
+                            : 'bg-[#D1D5DB]'
                         }`}
-                        style={{
-                          background:
-                            story.isCurrentUser && !hasActiveStory
-                              ? isDark
-                                ? 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(50,50,50,0.4) 100%)'
-                                : 'linear-gradient(135deg, #E1E4E9 0%, #D5D9E0 100%)'
-                              : story.gradient,
-                        }}
                       >
                         <div
-                          className={`w-full h-full rounded-[18px] p-[1px] ${
+                          className={`w-full h-full rounded-[20px] p-[2px] ${
                             isDark ? 'bg-[#101010]' : 'bg-[#F7F8FA]'
                           }`}
                         >
                           <div
-                            className="w-full h-full rounded-[17px] overflow-hidden flex items-center justify-center relative"
-                            style={{ background: story.avatarGradient }}
+                            className="w-full h-full rounded-[18px] overflow-hidden flex items-center justify-center relative bg-[#333333]"
                           >
                             {story.storyImageUrl ? (
                               <img
                                 src={story.storyImageUrl}
                                 alt="Current user story thumbnail"
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover rounded-[18px]"
                               />
                             ) : story.avatarUrl ? (
                               <img
                                 src={story.avatarUrl}
                                 alt={story.username}
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover rounded-[18px]"
                               />
                             ) : story.isCurrentUser && !hasActiveStory ? (
-                              <Camera size={19} className="text-white/90 drop-shadow-sm" />
+                              <Camera size={20} className="text-white/80 drop-shadow-sm" />
                             ) : null}
                           </div>
                         </div>
@@ -1426,11 +1427,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                           onClick={() => handleTabChange('profile')}
                         >
                           <div
-                            className="w-9 h-9 rounded-[11px] p-[1px] shrink-0"
+                            className="w-10 h-10 rounded-[13px] p-[2px] shrink-0"
                             style={{ background: post.author.avatarGradient }}
                           >
                             <div
-                              className={`w-full h-full rounded-[10px] overflow-hidden ${
+                              className={`w-full h-full rounded-[11px] overflow-hidden ${
                                 isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
                               }`}
                             >

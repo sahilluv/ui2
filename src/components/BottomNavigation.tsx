@@ -61,19 +61,18 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
       icon: (active, shrunk) => (
         <div
           className={`${
-            shrunk ? 'w-8 h-8' : 'w-10 h-10'
-          } rounded-full flex items-center justify-center text-white shadow-lg transition-transform duration-300 border border-white/20 ${
+            shrunk ? 'w-8 h-8 rounded-full' : 'w-10 h-10 rounded-full'
+          } overflow-hidden flex items-center justify-center shadow-lg transition-all duration-300 border border-white/25 ${
             active
-              ? 'scale-110 shadow-[0_4px_16px_rgba(255,10,120,0.5)]'
+              ? 'scale-110 shadow-[0_4px_16px_rgba(104,80,174,0.65)] ring-2 ring-[#FF0A78]'
               : 'shadow-[0_2px_10px_rgba(0,0,0,0.3)] hover:scale-105'
           }`}
-          style={{
-            background: 'linear-gradient(135deg, #FF0A78 0%, #E1306C 25%, #8A2BE2 50%, #FF8A00 75%, #FFB347 100%)',
-          }}
         >
-          <div className="w-5 h-5 rounded-[6px] border border-white flex items-center justify-center p-0.5">
-            <div className="w-2 h-2 rounded-full border border-white" />
-          </div>
+          <img
+            src="/assets/shadow-ghost-purple.png"
+            alt="Reels"
+            className="w-full h-full object-cover select-none pointer-events-none"
+          />
         </div>
       ),
     },

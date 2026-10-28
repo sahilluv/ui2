@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
-import { GradientRing } from './GradientRing';
 import { StoryItem } from '../types';
 import { ThemeColors } from '../theme';
 
@@ -19,6 +18,9 @@ export const StoryAvatar: React.FC<StoryAvatarProps> = ({
   onPress,
   size = 64,
 }) => {
+  const isHighlighted = story.hasUnseen || (story.isCurrentUser && story.hasUnseen !== false);
+  const outerBorderColor = isHighlighted ? '#FF0A78' : colors.isDark ? '#38383D' : '#D1D5DB';
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -26,32 +28,35 @@ export const StoryAvatar: React.FC<StoryAvatarProps> = ({
       activeOpacity={0.8}
     >
       <View style={styles.avatarWrapper}>
-        <GradientRing
-          size={size}
-          strokeWidth={2.5}
-          gradientColors={story.gradientColors}
-          backgroundColor={colors.background}
+        <View
+          style={[
+            styles.storyFrameOuter,
+            {
+              width: size,
+              height: size,
+              backgroundColor: outerBorderColor,
+            },
+          ]}
         >
-          {story.avatarUrl ? (
-            <Image
-              source={{ uri: story.avatarUrl }}
-              style={[
-                styles.avatarImage,
-                { borderRadius: Math.round((size - 10) * 0.28) },
-              ]}
-            />
-          ) : (
-            <LinearGradient
-              colors={story.gradientColors}
-              start={{ x: 0.1, y: 0.1 }}
-              end={{ x: 0.9, y: 0.9 }}
-              style={[
-                styles.avatarImage,
-                { borderRadius: Math.round((size - 10) * 0.28) },
-              ]}
-            />
-          )}
-        </GradientRing>
+          <View
+            style={[
+              styles.storyFrameInset,
+              { backgroundColor: colors.background },
+            ]}
+          >
+            <View style={styles.storyFrameInner}>
+              {story.avatarUrl ? (
+                <Image
+                  source={{ uri: story.avatarUrl }}
+                  style={styles.avatarImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View style={styles.charcoalPlaceholder} />
+              )}
+            </View>
+          </View>
+        </View>
 
         {/* User Story Plus Badge */}
         {story.isCurrentUser && (
@@ -85,6 +90,34 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     position: 'relative',
     marginBottom: 6,
+  },
+  storyFrameOuter: {
+    borderRadius: 20,
+    padding: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  storyFrameInset: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 18,
+    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  storyFrameInner: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#333333',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  charcoalPlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#333333',
   },
   avatarImage: {
     width: '100%',
