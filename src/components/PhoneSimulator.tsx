@@ -1398,14 +1398,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
             </div>
 
             {/* Posts Feed */}
-            <div className="space-y-6 mt-3">
+            <div className="space-y-5 mt-2.5">
               {posts.map((post) => (
                 <div key={post.id} className="px-4">
                   <div className="relative">
                     {/* Middle Layer — Card Behind the Feed (exact same card background colour token, offset for stacked-card depth) */}
                     <div
                       aria-hidden="true"
-                      className={`absolute inset-0 translate-y-2.5 scale-[0.97] rounded-[32px] pointer-events-none transition-all duration-300 ${
+                      className={`absolute inset-0 translate-y-2 scale-[0.97] rounded-[26px] pointer-events-none transition-all duration-300 ${
                         isDark
                           ? 'bg-[#29292D] border border-[#38383D] shadow-lg shadow-black/40'
                           : 'bg-[#FFFFFF] border border-[#E9EBEF] shadow-lg shadow-[#9295A6]/15'
@@ -1414,14 +1414,14 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
 
                     {/* Front Layer — Main Feed Card (exact same card background colour token) */}
                     <div
-                      className={`relative z-10 rounded-[32px] p-3.5 transition-all duration-300 ${
+                      className={`relative z-10 rounded-[26px] p-3 transition-all duration-300 ${
                         isDark
                           ? 'bg-[#29292D] border border-[#38383D] shadow-xl shadow-black/50'
                           : 'bg-[#FFFFFF] border border-[#E9EBEF] shadow-xl shadow-[#9295A6]/18'
                       }`}
                     >
                       {/* Post Header */}
-                      <div className="flex items-center justify-between mb-2.5 px-1">
+                      <div className="flex items-center justify-between mb-2 px-0.5">
                         <div
                           className="flex items-center gap-2.5 cursor-pointer"
                           onClick={() => handleTabChange('profile')}
@@ -1517,7 +1517,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       {/* Rounded Media Card (Cinematic Artwork with Double-Tap to Like) */}
                       <div
                         onClick={() => handlePostMediaClick(post)}
-                        className="relative w-full h-[360px] rounded-[24px] overflow-hidden shadow-2xl p-4 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none group"
+                        className="relative w-full h-[310px] rounded-[20px] overflow-hidden shadow-xl p-3.5 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none group"
                         style={{ background: getPostGradient(post.id, post.gradient) }}
                       >
                         {/* Real Post Artwork Image */}
@@ -1643,7 +1643,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
                       </div>
 
                       {/* Caption & Metadata (Section 11) */}
-                      <div className="mt-2.5 px-1 space-y-1">
+                      <div className="mt-2 px-0.5 space-y-1">
                         <p
                           className={`text-xs ${
                             isDark ? 'text-[#C1C1C9]' : 'text-[#777982]'
