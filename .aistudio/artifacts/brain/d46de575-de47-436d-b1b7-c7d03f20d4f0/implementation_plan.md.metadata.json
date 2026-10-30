@@ -1,6 +1,0 @@
-{
-  "summary":  "Comprehensive Version 10 technical architecture and implementation plan for Verified Real-World Shadow Sightings & the Immutable Ranking Engine. Resolves all eight migration blockers: formal 9-level deadlock-free lock hierarchy, concurrency-safe reversal triggers, byte-level NTAG424 DNA Secure Dynamic Messaging (SDM) cryptographic specification with AN12196 test vectors, trusted server-challenge capture time verification, PostgreSQL range exclusion constraints for non-overlapping ownership with legitimate unowned gaps, complete 21-relation foreign-key inventory and account erasure detachment protocol, and outbox lease recovery. Freezes all five product policy parameters while guaranteeing zero repository mutations.",
-  "updatedAt":  "2026-10-30T08:02:57.370921428Z",
-  "requestFeedback":  true,
-  "userFacing":  true
-}
